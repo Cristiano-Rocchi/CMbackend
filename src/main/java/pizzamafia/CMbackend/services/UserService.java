@@ -5,9 +5,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pizzamafia.CMbackend.entities.User;
 import pizzamafia.CMbackend.enums.Role;
+import pizzamafia.CMbackend.exceptions.NotFoundException;
 import pizzamafia.CMbackend.payloads.user.NewUserDTO;
 import pizzamafia.CMbackend.payloads.user.NewUserRespDTO;
 import pizzamafia.CMbackend.repositories.UserRepository;
+
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -44,4 +47,10 @@ public class UserService {
                 savedUser.getRole().toString()
         );
     }
+    //FINDBYID
+    public User findById(UUID id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Utente con ID " + id + " non trovato"));
+    }
+
 }
