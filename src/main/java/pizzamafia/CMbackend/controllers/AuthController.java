@@ -6,6 +6,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import pizzamafia.CMbackend.payloads.user.NewUserDTO;
 import pizzamafia.CMbackend.payloads.user.NewUserRespDTO;
+import pizzamafia.CMbackend.payloads.user.UserLoginDTO;
+import pizzamafia.CMbackend.payloads.user.UserLoginRespDTO;
 import pizzamafia.CMbackend.services.UserService;
 
 @RestController
@@ -19,6 +21,12 @@ public class AuthController {
     @ResponseStatus(HttpStatus.CREATED)
     public NewUserRespDTO registerUser(@RequestBody @Valid NewUserDTO newUserDTO) {
         return userService.save(newUserDTO);
+    }
+
+    //Login
+    @PostMapping("/login")
+    public UserLoginRespDTO login(@RequestBody @Valid UserLoginDTO userLoginDTO) {
+        return userService.login(userLoginDTO);
     }
 }
 

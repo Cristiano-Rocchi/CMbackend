@@ -6,9 +6,13 @@ import org.springframework.stereotype.Service;
 import pizzamafia.CMbackend.entities.User;
 import pizzamafia.CMbackend.enums.Role;
 import pizzamafia.CMbackend.exceptions.NotFoundException;
+import pizzamafia.CMbackend.exceptions.UnauthorizedException;
 import pizzamafia.CMbackend.payloads.user.NewUserDTO;
 import pizzamafia.CMbackend.payloads.user.NewUserRespDTO;
+import pizzamafia.CMbackend.payloads.user.UserLoginDTO;
+import pizzamafia.CMbackend.payloads.user.UserLoginRespDTO;
 import pizzamafia.CMbackend.repositories.UserRepository;
+import pizzamafia.CMbackend.security.JWTTools;
 
 import java.util.UUID;
 
@@ -20,6 +24,9 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private JWTTools jwtTools;
 
     // CREA e salva un utente
     public NewUserRespDTO save(NewUserDTO newUserDTO) {
@@ -52,5 +59,28 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Utente con ID " + id + " non trovato"));
     }
+
+    //LOGIN
+    public UserLoginRespDTO login(UserLoginDTO credentials) {
+        User user = userRepository
+                .findByUsernameOrEmail(credentials.identifier(), credentials.identifier())
+                .orElseThrow(() -> new UnauthorizedException("Credenziali non valide"));
+
+        if (!passwordEncoder.matches(credentials.password(), user.getPassword())) {
+            throw new UnauthorizedException("Credenziali non valide");
+        }
+
+        String token = jwtTools.createToken(user);
+        NewUserRespDTO userDTO = new NewUserRespDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRole().toString()
+        );
+
+        return new UserLoginRespDTO(token, userDTO);
+    }
+
+
 
 }
