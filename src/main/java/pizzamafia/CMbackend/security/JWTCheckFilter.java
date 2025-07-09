@@ -6,28 +6,32 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.web.filter.OncePerRequestFilter;
 import pizzamafia.CMbackend.entities.User;
 import pizzamafia.CMbackend.exceptions.UnauthorizedException;
-import pizzamafia.CMbackend.services.UserService;
+import pizzamafia.CMbackend.repositories.UserRepository;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.UUID;
 
 @Component
 public class JWTCheckFilter extends OncePerRequestFilter {
 
-    private final JWTTools jwtTools;
-    private final UserService userService;
+    @Autowired
+    private JWTTools jwtTools;
 
     @Autowired
-    public JWTCheckFilter(JWTTools jwtTools, UserService userService) {
-        this.jwtTools = jwtTools;
-        this.userService = userService;
+    private UserRepository userRepository;
+
+    // ✅ Escludi /auth/**
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        return new AntPathMatcher().match("/auth/**", request.getServletPath());
     }
 
     @Override
@@ -37,23 +41,32 @@ public class JWTCheckFilter extends OncePerRequestFilter {
         String authHeader = request.getHeader("Authorization");
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            throw new UnauthorizedException("Token mancante o malformato nell'header Authorization.");
+            filterChain.doFilter(request, response);
+            return;
         }
 
-        String token = authHeader.substring(7);
-        jwtTools.verifyToken(token);
-        String id = jwtTools.extractIdFromToken(token);
+        try {
+            // ✅ Estrai l'ID utente dal token
+            String token = authHeader.replace("Bearer ", "");
+            String userId = jwtTools.extractIdFromToken(token);
 
-        User user = userService.findById(UUID.fromString(id));
+            // ✅ Trova l'utente nel DB
+            User user = userRepository.findById(UUID.fromString(userId))
+                    .orElseThrow(() -> new UnauthorizedException("Utente non trovato."));
 
-        Authentication auth = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(auth);
+            // ✅ Imposta le authorities (es. ROLE_ADMIN)
+            String ruolo = user.getRole().name();
+            SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + ruolo);
 
-        filterChain.doFilter(request, response);
-    }
+            // ✅ Autenticazione completa
+            UsernamePasswordAuthenticationToken authenticationToken =
+                    new UsernamePasswordAuthenticationToken(user, null, List.of(authority));
+            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
 
-    @Override
-    protected boolean shouldNotFilter(HttpServletRequest request) {
-        return new AntPathMatcher().match("/auth/**", request.getServletPath());
+            filterChain.doFilter(request, response);
+
+        } catch (Exception ex) {
+            throw new UnauthorizedException("Token non valido: " + ex.getMessage());
+        }
     }
 }
