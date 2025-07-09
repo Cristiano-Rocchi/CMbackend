@@ -64,10 +64,10 @@ public class UserService {
     public UserLoginRespDTO login(UserLoginDTO credentials) {
         User user = userRepository
                 .findByUsernameOrEmail(credentials.identifier(), credentials.identifier())
-                .orElseThrow(() -> new UnauthorizedException("Credenziali non valide"));
+                .orElseThrow(() -> new UnauthorizedException("Username o email non validi."));
 
         if (!passwordEncoder.matches(credentials.password(), user.getPassword())) {
-            throw new UnauthorizedException("Credenziali non valide");
+            throw new UnauthorizedException("Password non valida.");
         }
 
         String token = jwtTools.createToken(user);
@@ -80,6 +80,7 @@ public class UserService {
 
         return new UserLoginRespDTO(token, userDTO);
     }
+
 
 
 
