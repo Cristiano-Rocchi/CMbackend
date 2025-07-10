@@ -1,0 +1,14 @@
+package pizzamafia.CMbackend.enums;
+
+public enum Ruolo {
+    PORTIERE,
+    DIFENSORE_CENTRALE,
+    TERZINO,
+    CENTROCAMPISTA_DIFENSIVO,
+    CENTROCAMPISTA_OFFENSIVO,
+    ALA,
+    ATTACCANTE_ESTERNO,
+    BOMBER,
+    SECONDA_PUNTA
+}
+
