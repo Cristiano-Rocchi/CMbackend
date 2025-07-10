@@ -13,6 +13,7 @@ import pizzamafia.CMbackend.repositories.GiocatoreRepository;
 import pizzamafia.CMbackend.repositories.SquadraRepository;
 import pizzamafia.CMbackend.services.GiocatoreService;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,6 +66,7 @@ public class GiocatoreServiceImpl implements GiocatoreService {
 
         // =================== SALVATAGGIO ===================
         giocatoreRepository.save(giocatore);
+        aggiornaValoreTecnicoSquadra(squadra);
 
         return new GiocatoreRespDTO(
                 giocatore.getId(),
@@ -105,6 +107,29 @@ public class GiocatoreServiceImpl implements GiocatoreService {
         };
     }
 
+    // =================== AGGIORNA VALORE SQUADRA ===================
+    private void aggiornaValoreTecnicoSquadra(Squadra squadra) {
+        // Ricarica la squadra dal DB per ottenere la lista aggiornata di giocatori
+        squadra = squadraRepository.findById(squadra.getId())
+                .orElseThrow(() -> new NotFoundException("Squadra non trovata"));
+
+        List<Giocatore> rosa = squadra.getGiocatori();
+
+        // Calcola la media dei migliori 15 (o di tutti se meno di 15)
+        double media = rosa.stream()
+                .sorted(Comparator.comparingInt(Giocatore::getValoreTecnico).reversed())
+                .limit(15)
+                .mapToInt(Giocatore::getValoreTecnico)
+                .average()
+                .orElse(0);
+
+        squadra.setValoreTecnicoTotale((int) Math.round(media));
+        squadraRepository.save(squadra);
+
+    }
+
+
+
     // =================== GET BY ID ===================
     @Override
     public GiocatoreRespDTO getById(UUID id) {
@@ -128,10 +153,14 @@ public class GiocatoreServiceImpl implements GiocatoreService {
         Giocatore giocatore = giocatoreRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Giocatore con ID " + id + " non trovato."));
 
-        Squadra squadra = squadraRepository.findById(dto.squadraId())
+        // Salva la squadra prima della modifica (serve in caso cambi)
+        Squadra squadraPrecedente = giocatore.getSquadra();
+
+        // Carica la nuova squadra richiesta
+        Squadra nuovaSquadra = squadraRepository.findById(dto.squadraId())
                 .orElseThrow(() -> new NotFoundException("Squadra con ID " + dto.squadraId() + " non trovata."));
 
-        // Aggiorna i campi del giocatore
+        // Aggiorna i dati del giocatore
         giocatore.setNome(dto.nome());
         giocatore.setCognome(dto.cognome());
         giocatore.setDataDiNascita(dto.dataDiNascita());
@@ -139,7 +168,7 @@ public class GiocatoreServiceImpl implements GiocatoreService {
         giocatore.setAltezza(dto.altezza());
         giocatore.setPiede(dto.piede());
         giocatore.setRuolo(dto.ruolo());
-        giocatore.setSquadra(squadra);
+        giocatore.setSquadra(nuovaSquadra);
 
         // Aggiorna le statistiche
         StatisticheTecnicheGiocatore s = giocatore.getStatistiche();
@@ -152,22 +181,39 @@ public class GiocatoreServiceImpl implements GiocatoreService {
         s.setPassaggio(dtoStats.passaggio());
         s.setPortiere(dtoStats.portiere());
 
-        // Ricalcola il valore tecnico
+        // Ricalcola il valore tecnico in base al nuovo ruolo + statistiche
         double valore = calcolaValoreTecnico(dto.ruolo(), s);
         giocatore.setValoreTecnico((int) Math.round(valore));
 
+        // Salva il giocatore aggiornato
         giocatoreRepository.save(giocatore);
+
+        // Aggiorna il valore tecnico della nuova squadra
+        aggiornaValoreTecnicoSquadra(nuovaSquadra);
+
+        // Se è cambiata la squadra, aggiorna anche quella precedente
+        if (!squadraPrecedente.getId().equals(nuovaSquadra.getId())) {
+            aggiornaValoreTecnicoSquadra(squadraPrecedente);
+        }
 
         return mapToDTO(giocatore);
     }
+
 
     // =================== DELETE ===================
     @Override
     public void delete(UUID id) {
         Giocatore giocatore = giocatoreRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Giocatore con ID " + id + " non trovato."));
+
+        Squadra squadra = giocatore.getSquadra(); // salva la squadra prima dell'eliminazione
+
         giocatoreRepository.delete(giocatore);
+
+        // aggiorna il valore tecnico della squadra dopo la rimozione
+        aggiornaValoreTecnicoSquadra(squadra);
     }
+
 
     // =================== MAPPING ===================
     private GiocatoreRespDTO mapToDTO(Giocatore g) {
