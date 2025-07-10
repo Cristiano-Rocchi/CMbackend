@@ -22,5 +22,8 @@ public interface GiocatoreService {
 
     //Modifica un giocatore
     GiocatoreRespDTO update(UUID id, NewGiocatoreDTO dto);
+
+    List<GiocatoreRespDTO> findAllBySquadraId(UUID id);
+
 }
 

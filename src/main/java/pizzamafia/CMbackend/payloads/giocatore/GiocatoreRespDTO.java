@@ -17,5 +17,6 @@ public record GiocatoreRespDTO(
         Ruolo ruolo,
         Integer valoreTecnico,
         UUID squadraId,
+        String nomeSquadra,
         StatisticheTecnicheGiocatoreRespDTO statisticheTecniche
 ) {}

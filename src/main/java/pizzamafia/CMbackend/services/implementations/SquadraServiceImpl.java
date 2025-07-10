@@ -87,6 +87,8 @@ public class SquadraServiceImpl implements SquadraService {
         squadraRepository.delete(squadra);
     }
 
+    
+
     // =================== MAPPING ===================
     private SquadraRespDTO mapToDTO(Squadra s) {
         return new SquadraRespDTO(

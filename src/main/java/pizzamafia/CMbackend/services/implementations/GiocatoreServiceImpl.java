@@ -16,6 +16,7 @@ import pizzamafia.CMbackend.services.GiocatoreService;
 import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class GiocatoreServiceImpl implements GiocatoreService {
@@ -79,6 +80,7 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                 giocatore.getRuolo(),
                 giocatore.getValoreTecnico(),
                 squadra.getId(),
+                squadra.getNome(),
                 new StatisticheTecnicheGiocatoreRespDTO(
                         stats.getAttacco(),
                         stats.getDifesa(),
@@ -86,6 +88,7 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                         stats.getTiro(),
                         stats.getPassaggio(),
                         stats.getPortiere()
+
                 )
         );
 
@@ -200,6 +203,17 @@ public class GiocatoreServiceImpl implements GiocatoreService {
     }
 
 
+    // =================== GET BY SQUADRA ===================
+    @Override
+    public List<GiocatoreRespDTO> findAllBySquadraId(UUID id) {
+        List<Giocatore> giocatori = giocatoreRepository.findBySquadraId(id);
+        return giocatori.stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
+
+
     // =================== DELETE ===================
     @Override
     public void delete(UUID id) {
@@ -239,6 +253,7 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                 g.getRuolo(),
                 g.getValoreTecnico(),
                 g.getSquadra().getId(),
+                g.getSquadra().getNome(),
                 statsDTO
         );
     }

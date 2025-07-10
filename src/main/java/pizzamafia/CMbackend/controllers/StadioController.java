@@ -2,6 +2,7 @@ package pizzamafia.CMbackend.controllers;
 
 import pizzamafia.CMbackend.payloads.stadio.NewStadioDTO;
 import pizzamafia.CMbackend.payloads.stadio.StadioRespDTO;
+import pizzamafia.CMbackend.repositories.StadioRepository;
 import pizzamafia.CMbackend.services.StadioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class StadioController {
 
     @Autowired
     private StadioService stadioService;
+
+    @Autowired
+    private StadioRepository stadioRepository;
 
     // =================== CREATE ===================
     @PreAuthorize("hasRole('ADMIN')")
@@ -53,4 +57,18 @@ public class StadioController {
         stadioService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    // =================== SEARCH BY NOME ===================
+    @GetMapping("/search")
+    public List<StadioRespDTO> searchByNome(@RequestParam String q) {
+        return stadioRepository.findByNomeContainingIgnoreCase(q).stream()
+                .map(stadio -> new StadioRespDTO(
+                        stadio.getId(),
+                        stadio.getNome(),
+                        stadio.getLuogo(),
+                        stadio.getCapienza()
+                ))
+                .toList();
+    }
+
 }

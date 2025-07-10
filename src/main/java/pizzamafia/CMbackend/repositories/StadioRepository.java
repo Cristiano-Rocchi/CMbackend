@@ -4,9 +4,13 @@ import pizzamafia.CMbackend.entities.Stadio;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.UUID;
 
 @Repository
 public interface StadioRepository extends JpaRepository<Stadio, UUID> {
     boolean existsByNome(String nome);
+
+    //ricerca per nome o parte di esso
+    List<Stadio> findByNomeContainingIgnoreCase(String nome);
 }
