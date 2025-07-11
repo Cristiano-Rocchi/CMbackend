@@ -23,7 +23,12 @@ public interface GiocatoreService {
     //Modifica un giocatore
     GiocatoreRespDTO update(UUID id, NewGiocatoreDTO dto);
 
+    //cerca per squadra
     List<GiocatoreRespDTO> findAllBySquadraId(UUID id);
+
+    //cerca per nome o cognome
+    List<GiocatoreRespDTO> searchByNomeOCognome(String query);
+
 
 }
 

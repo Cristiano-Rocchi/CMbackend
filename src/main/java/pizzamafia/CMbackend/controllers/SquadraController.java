@@ -2,6 +2,7 @@ package pizzamafia.CMbackend.controllers;
 
 import pizzamafia.CMbackend.payloads.squadra.NewSquadraDTO;
 import pizzamafia.CMbackend.payloads.squadra.SquadraRespDTO;
+import pizzamafia.CMbackend.repositories.SquadraRepository;
 import pizzamafia.CMbackend.services.SquadraService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,9 @@ public class SquadraController {
 
     @Autowired
     private SquadraService squadraService;
+
+    @Autowired
+    private SquadraRepository squadraRepository;
 
     // =================== CREATE ===================
     @PreAuthorize("hasRole('ADMIN')")
@@ -52,4 +56,21 @@ public class SquadraController {
         squadraService.delete(id);
         return ResponseEntity.noContent().build();
     }
+
+    // ===================CERCA PER NOME ===================
+    @GetMapping("/search")
+    public List<SquadraRespDTO> searchSquadre(@RequestParam String q) {
+        return squadraRepository.findByNomeContainingIgnoreCase(q).stream()
+                .map(s -> new SquadraRespDTO(
+                        s.getId(),
+                        s.getNome(),
+                        s.getColoriSociali(),
+                        s.getMagliaColorePrimario(),
+                        s.getMagliaColoreSecondario(),
+                        s.getStadio() != null ? s.getStadio().getId() : null,
+                        s.getValoreTecnicoTotale()
+                ))
+                .toList();
+    }
+
 }

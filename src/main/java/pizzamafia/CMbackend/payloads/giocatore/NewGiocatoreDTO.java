@@ -9,7 +9,7 @@ import java.util.UUID;
 
 public record NewGiocatoreDTO(
 
-        @NotBlank(message = "Il nome è obbligatorio.")
+
         String nome,
 
         @NotBlank(message = "Il cognome è obbligatorio.")

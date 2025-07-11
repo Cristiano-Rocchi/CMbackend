@@ -10,5 +10,9 @@ import java.util.UUID;
 @Repository
 public interface GiocatoreRepository extends JpaRepository<Giocatore, UUID> {
     boolean existsByNomeAndCognome(String nome, String cognome);
+    //cerca per squadra
     List<Giocatore> findBySquadraId(UUID squadraId);
+    //cerca per nome o cognome
+    List<Giocatore> findByNomeContainingIgnoreCaseOrCognomeContainingIgnoreCase(String nome, String cognome);
+
 }

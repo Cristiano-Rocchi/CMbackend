@@ -212,6 +212,18 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                 .collect(Collectors.toList());
     }
 
+    //======CERCA PER NOME O COGNOME
+    @Override
+    public List<GiocatoreRespDTO> searchByNomeOCognome(String query) {
+        List<Giocatore> risultati = giocatoreRepository
+                .findByNomeContainingIgnoreCaseOrCognomeContainingIgnoreCase(query, query);
+
+        return risultati.stream()
+                .map(this::mapToDTO)
+                .toList();
+    }
+
+
 
 
     // =================== DELETE ===================

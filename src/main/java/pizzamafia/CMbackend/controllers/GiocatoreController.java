@@ -57,4 +57,7 @@ public class GiocatoreController {
         return giocatoreService.findAllBySquadraId(id);
     }
 
+
+
+
 }
