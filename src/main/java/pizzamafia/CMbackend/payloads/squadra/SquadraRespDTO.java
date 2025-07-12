@@ -8,6 +8,6 @@ public record SquadraRespDTO(
         String coloriSociali,
         String magliaColorePrimario,
         String magliaColoreSecondario,
-        UUID stadioId,
+        String nomeStadio,
         Integer valoreTecnicoTotale
 ) {}

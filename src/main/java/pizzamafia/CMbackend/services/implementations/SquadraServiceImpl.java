@@ -97,7 +97,7 @@ public class SquadraServiceImpl implements SquadraService {
                 s.getColoriSociali(),
                 s.getMagliaColorePrimario(),
                 s.getMagliaColoreSecondario(),
-                s.getStadio().getId(),
+                s.getStadio().getNome(),
                 s.getValoreTecnicoTotale()
         );
     }

@@ -67,7 +67,7 @@ public class SquadraController {
                         s.getColoriSociali(),
                         s.getMagliaColorePrimario(),
                         s.getMagliaColoreSecondario(),
-                        s.getStadio() != null ? s.getStadio().getId() : null,
+                        s.getStadio() != null ? s.getStadio().getNome() : null,
                         s.getValoreTecnicoTotale()
                 ))
                 .toList();
