@@ -12,6 +12,9 @@ import pizzamafia.CMbackend.payloads.giocatore.StatisticheTecnicheGiocatoreRespD
 import pizzamafia.CMbackend.repositories.GiocatoreRepository;
 import pizzamafia.CMbackend.repositories.SquadraRepository;
 import pizzamafia.CMbackend.services.GiocatoreService;
+import pizzamafia.CMbackend.helpers.ValutazioneGiocatoreHelper;
+import pizzamafia.CMbackend.helpers.ValutazioneSquadraHelper;
+
 
 import java.util.Comparator;
 import java.util.List;
@@ -62,7 +65,8 @@ public class GiocatoreServiceImpl implements GiocatoreService {
 
         // =================== CALCOLO VALORE TECNICO ===================
         // Usa la tabella dei pesi per calcolare il valore finale in base al ruolo
-        double valore = calcolaValoreTecnico(dto.ruolo(), stats);
+        double valore = ValutazioneGiocatoreHelper.calcolaValoreTecnico(dto.ruolo(), stats);
+
         giocatore.setValoreTecnico((int) Math.round(valore));
 
         // =================== SALVATAGGIO ===================
@@ -95,41 +99,21 @@ public class GiocatoreServiceImpl implements GiocatoreService {
     }
 
 
-    // =================== CALCOLO VALORE TECNICO ===================
-    private double calcolaValoreTecnico(Ruolo ruolo, StatisticheTecnicheGiocatore s) {
-        return switch (ruolo) {
-            case PORTIERE -> s.getPortiere() * 0.6 + s.getVelocita() * 0.2 + s.getDifesa() * 0.1 + s.getPassaggio() * 0.1;
-            case DIFENSORE_CENTRALE -> s.getDifesa() * 0.5 + s.getVelocita() * 0.2 + s.getPassaggio() * 0.2 + s.getAttacco() * 0.1;
-            case TERZINO -> s.getDifesa() * 0.3 + s.getVelocita() * 0.3 + s.getPassaggio() * 0.2 + s.getTiro() * 0.1 + s.getAttacco() * 0.1;
-            case CENTROCAMPISTA_DIFENSIVO -> s.getDifesa() * 0.3 + s.getAttacco() * 0.2 + s.getPassaggio() * 0.2 + s.getVelocita() * 0.2 + s.getTiro() * 0.1;
-            case CENTROCAMPISTA_OFFENSIVO -> s.getAttacco() * 0.3 + s.getTiro() * 0.2 + s.getVelocita() * 0.2 + s.getPassaggio() * 0.3;
-            case ALA -> s.getAttacco() * 0.3 + s.getVelocita() * 0.3 + s.getTiro() * 0.2 + s.getPassaggio() * 0.1 + s.getDifesa() * 0.1;
-            case ATTACCANTE_ESTERNO -> s.getAttacco() * 0.4 + s.getVelocita() * 0.3 + s.getTiro() * 0.2 + s.getPassaggio() * 0.1;
-            case SECONDA_PUNTA -> s.getAttacco() * 0.4 + s.getTiro() * 0.3 + s.getVelocita() * 0.2 + s.getPassaggio() * 0.2;
-            case BOMBER -> s.getAttacco() * 0.5 + s.getTiro() * 0.3 + s.getVelocita() * 0.2;
-        };
-    }
+
 
     // =================== AGGIORNA VALORE SQUADRA ===================
     private void aggiornaValoreTecnicoSquadra(Squadra squadra) {
-        // Ricarica la squadra dal DB per ottenere la lista aggiornata di giocatori
         squadra = squadraRepository.findById(squadra.getId())
                 .orElseThrow(() -> new NotFoundException("Squadra non trovata"));
 
         List<Giocatore> rosa = squadra.getGiocatori();
 
-        // Calcola la media dei migliori 15 (o di tutti se meno di 15)
-        double media = rosa.stream()
-                .sorted(Comparator.comparingInt(Giocatore::getValoreTecnico).reversed())
-                .limit(15)
-                .mapToInt(Giocatore::getValoreTecnico)
-                .average()
-                .orElse(0);
+        int valoreTotale = ValutazioneSquadraHelper.calcolaValoreSquadra(rosa);
 
-        squadra.setValoreTecnicoTotale((int) Math.round(media));
+        squadra.setValoreTecnicoTotale(valoreTotale);
         squadraRepository.save(squadra);
-
     }
+
 
 
 
@@ -185,7 +169,8 @@ public class GiocatoreServiceImpl implements GiocatoreService {
         s.setPortiere(dtoStats.portiere());
 
         // Ricalcola il valore tecnico in base al nuovo ruolo + statistiche
-        double valore = calcolaValoreTecnico(dto.ruolo(), s);
+        double valore = ValutazioneGiocatoreHelper.calcolaValoreTecnico(dto.ruolo(), s);
+
         giocatore.setValoreTecnico((int) Math.round(valore));
 
         // Salva il giocatore aggiornato
