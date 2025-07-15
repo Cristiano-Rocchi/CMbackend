@@ -1,6 +1,7 @@
 package pizzamafia.CMbackend.payloads.partita;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 public record PartitaRespDTO(
@@ -10,5 +11,6 @@ public record PartitaRespDTO(
         int goalCasa,
         int golTrasferta,
         LocalDateTime dataOra,
-        String competizione
+        String competizione,
+        List<MarcatoreRespDTO> marcatori
 ) {}

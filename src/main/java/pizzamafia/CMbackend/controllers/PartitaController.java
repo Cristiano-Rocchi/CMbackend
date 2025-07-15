@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pizzamafia.CMbackend.entities.Partita;
+import pizzamafia.CMbackend.payloads.partita.MarcatoreRespDTO;
 import pizzamafia.CMbackend.payloads.partita.PartitaRespDTO;
 import pizzamafia.CMbackend.services.PartitaService;
 
@@ -63,6 +64,16 @@ public class PartitaController {
     }
 
     private PartitaRespDTO toRespDTO(Partita p) {
+        List<MarcatoreRespDTO> marcatori = p.getMarcatori().stream()
+                .map(m -> new MarcatoreRespDTO(
+                        m.getGiocatore().getId(),
+                        m.getGiocatore().getNome(),
+                        m.getGiocatore().getCognome(),
+                        m.getSquadra().getNome(),
+                        m.getMinuto()
+                ))
+                .toList();
+
         return new PartitaRespDTO(
                 p.getId(),
                 p.getSquadraCasa().getNome(),
@@ -70,9 +81,11 @@ public class PartitaController {
                 p.getGoalCasa(),
                 p.getGolTrasferta(),
                 p.getDataOra(),
-                p.getCompetizione().toString()
+                p.getCompetizione().toString(),
+                marcatori
         );
     }
+
 
 
 }
