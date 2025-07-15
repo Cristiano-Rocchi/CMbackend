@@ -1,9 +1,13 @@
 package pizzamafia.CMbackend.controllers;
 
+import pizzamafia.CMbackend.payloads.giocatore.GiocatoreLiteDTO;
 import pizzamafia.CMbackend.payloads.squadra.NewSquadraDTO;
+import pizzamafia.CMbackend.payloads.squadra.SquadraLiteRespDTO;
 import pizzamafia.CMbackend.payloads.squadra.SquadraRespDTO;
 import pizzamafia.CMbackend.repositories.SquadraRepository;
 import pizzamafia.CMbackend.services.SquadraService;
+import pizzamafia.CMbackend.payloads.giocatore.GiocatoreLiteDTO;
+
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +27,7 @@ public class SquadraController {
     @Autowired
     private SquadraRepository squadraRepository;
 
+
     // =================== CREATE ===================
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
@@ -38,9 +43,10 @@ public class SquadraController {
 
     // =================== GET ALL ===================
     @GetMapping
-    public ResponseEntity<List<SquadraRespDTO>> getAll() {
+    public ResponseEntity<List<SquadraLiteRespDTO>> getAll() {
         return ResponseEntity.ok(squadraService.getAll());
     }
+
 
     // =================== UPDATE ===================
     @PreAuthorize("hasRole('ADMIN')")
@@ -58,10 +64,9 @@ public class SquadraController {
     }
 
     // ===================CERCA PER NOME ===================
-    @GetMapping("/search")
-    public List<SquadraRespDTO> searchSquadre(@RequestParam String q) {
+    public List<SquadraLiteRespDTO> searchSquadre(@RequestParam String q) {
         return squadraRepository.findByNomeContainingIgnoreCase(q).stream()
-                .map(s -> new SquadraRespDTO(
+                .map(s -> new SquadraLiteRespDTO(
                         s.getId(),
                         s.getNome(),
                         s.getColoriSociali(),
@@ -72,5 +77,7 @@ public class SquadraController {
                 ))
                 .toList();
     }
+
+
 
 }

@@ -1,18 +1,13 @@
 package pizzamafia.CMbackend.payloads.squadra;
 
-import pizzamafia.CMbackend.payloads.giocatore.GiocatoreLiteDTO;
-
-import java.util.List;
 import java.util.UUID;
 
-public record SquadraRespDTO(
+public record SquadraLiteRespDTO(
         UUID id,
         String nome,
         String coloriSociali,
         String magliaColorePrimario,
         String magliaColoreSecondario,
         String nomeStadio,
-        Integer valoreTecnicoTotale,
-        List<GiocatoreLiteDTO> giocatori
-
+        Integer valoreTecnicoTotale
 ) {}

@@ -1,6 +1,7 @@
 package pizzamafia.CMbackend.services;
 
 import pizzamafia.CMbackend.payloads.squadra.NewSquadraDTO;
+import pizzamafia.CMbackend.payloads.squadra.SquadraLiteRespDTO;
 import pizzamafia.CMbackend.payloads.squadra.SquadraRespDTO;
 
 import java.util.List;
@@ -15,7 +16,7 @@ public interface SquadraService {
     SquadraRespDTO getById(UUID id);
 
     // Restituisce tutte le squadre
-    List<SquadraRespDTO> getAll();
+    List<SquadraLiteRespDTO> getAll();
 
     // Modifica una squadra
     SquadraRespDTO update(UUID id, NewSquadraDTO dto);

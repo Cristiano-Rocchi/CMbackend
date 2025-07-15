@@ -1,4 +1,4 @@
-package pizzamafia.CMbackend.services.impl;
+package pizzamafia.CMbackend.services.implementations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +15,9 @@ import java.util.UUID;
 public class PartitaServiceImpl implements PartitaService {
 
     private final PartitaRepository partitaRepository;
+
+    private final pizzamafia.CMbackend.services.SimulazionePartitaService simulazionePartitaService;
+
 
     // =================== SAVE ===================
 
@@ -42,6 +45,14 @@ public class PartitaServiceImpl implements PartitaService {
     @Override
     public void deleteById(UUID id) {
         partitaRepository.deleteById(id);
+    }
+
+
+    // =================== SIMULA PARTITA ===================
+
+    @Override
+    public Partita simulaPartita(UUID id) {
+        return simulazionePartitaService.simula(id);
     }
 
 }

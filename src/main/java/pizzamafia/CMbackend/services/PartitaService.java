@@ -16,4 +16,7 @@ public interface PartitaService {
 
     void deleteById(UUID id);
 
+    Partita simulaPartita(UUID id);
+
+
 }

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pizzamafia.CMbackend.entities.Partita;
+import pizzamafia.CMbackend.payloads.partita.PartitaRespDTO;
 import pizzamafia.CMbackend.services.PartitaService;
 
 import java.util.List;
@@ -26,18 +27,24 @@ public class PartitaController {
     // =================== GET ALL ===================
 
     @GetMapping
-    public ResponseEntity<List<Partita>> getAllPartite() {
-        return ResponseEntity.ok(partitaService.findAll());
+    public ResponseEntity<List<PartitaRespDTO>> getAllPartite() {
+        List<PartitaRespDTO> response = partitaService.findAll().stream()
+                .map(this::toRespDTO)
+                .toList();
+        return ResponseEntity.ok(response);
     }
+
 
     // =================== GET BY ID ===================
 
     @GetMapping("/{id}")
-    public ResponseEntity<Partita> getPartitaById(@PathVariable UUID id) {
+    public ResponseEntity<PartitaRespDTO> getPartitaById(@PathVariable UUID id) {
         return partitaService.findById(id)
+                .map(this::toRespDTO)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
+
 
     // =================== DELETE ===================
 
@@ -46,4 +53,26 @@ public class PartitaController {
         partitaService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
+
+    // =================== SIMULA PARTITA ===================
+
+    @PostMapping("/{id}/simula")
+    public ResponseEntity<PartitaRespDTO> simulaPartita(@PathVariable UUID id) {
+        Partita partitaSimulata = partitaService.simulaPartita(id);
+        return ResponseEntity.ok(toRespDTO(partitaSimulata));
+    }
+
+    private PartitaRespDTO toRespDTO(Partita p) {
+        return new PartitaRespDTO(
+                p.getId(),
+                p.getSquadraCasa().getNome(),
+                p.getSquadraTrasferta().getNome(),
+                p.getGoalCasa(),
+                p.getGolTrasferta(),
+                p.getDataOra(),
+                p.getCompetizione().toString()
+        );
+    }
+
+
 }

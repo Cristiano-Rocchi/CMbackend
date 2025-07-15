@@ -3,7 +3,9 @@ package pizzamafia.CMbackend.services.implementations;
 import pizzamafia.CMbackend.entities.Squadra;
 import pizzamafia.CMbackend.entities.Stadio;
 import pizzamafia.CMbackend.exceptions.NotFoundException;
+import pizzamafia.CMbackend.payloads.giocatore.GiocatoreLiteDTO;
 import pizzamafia.CMbackend.payloads.squadra.NewSquadraDTO;
+import pizzamafia.CMbackend.payloads.squadra.SquadraLiteRespDTO;
 import pizzamafia.CMbackend.payloads.squadra.SquadraRespDTO;
 import pizzamafia.CMbackend.repositories.SquadraRepository;
 import pizzamafia.CMbackend.repositories.StadioRepository;
@@ -52,13 +54,12 @@ public class SquadraServiceImpl implements SquadraService {
     }
 
     // =================== GET ALL ===================
-    @Override
-    public List<SquadraRespDTO> getAll() {
-        return squadraRepository.findAll()
-                .stream()
-                .map(this::mapToDTO)
-                .collect(Collectors.toList());
+    public List<SquadraLiteRespDTO> getAll() {
+        return squadraRepository.findAll().stream()
+                .map(this::mapToLiteDTO)
+                .toList();
     }
+
 
     // =================== UPDATE ===================
     @Override
@@ -91,14 +92,38 @@ public class SquadraServiceImpl implements SquadraService {
 
     // =================== MAPPING ===================
     private SquadraRespDTO mapToDTO(Squadra s) {
+        List<GiocatoreLiteDTO> giocatori = s.getGiocatori().stream()
+                .map(g -> new GiocatoreLiteDTO(
+                        g.getId(),
+                        g.getNome(),
+                        g.getCognome(),
+                        g.getValoreTecnico()
+                ))
+                .toList();
+
         return new SquadraRespDTO(
                 s.getId(),
                 s.getNome(),
                 s.getColoriSociali(),
                 s.getMagliaColorePrimario(),
                 s.getMagliaColoreSecondario(),
-                s.getStadio().getNome(),
+                s.getStadio() != null ? s.getStadio().getNome() : null,
+                s.getValoreTecnicoTotale(),
+                giocatori
+        );
+    }
+    //====LITE MAPPING====
+    private SquadraLiteRespDTO mapToLiteDTO(Squadra s) {
+        return new SquadraLiteRespDTO(
+                s.getId(),
+                s.getNome(),
+                s.getColoriSociali(),
+                s.getMagliaColorePrimario(),
+                s.getMagliaColoreSecondario(),
+                s.getStadio() != null ? s.getStadio().getNome() : null,
                 s.getValoreTecnicoTotale()
         );
     }
+
+
 }
