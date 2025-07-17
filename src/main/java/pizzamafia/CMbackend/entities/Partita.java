@@ -32,7 +32,7 @@ public class Partita {
     private int goalCasa;
 
     @Column(nullable = false)
-    private int golTrasferta;
+    private int goalTrasferta;
 
     @Column(nullable = false)
     private LocalDateTime dataOra;

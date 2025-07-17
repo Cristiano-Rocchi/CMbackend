@@ -79,7 +79,7 @@ public class PartitaController {
                 p.getSquadraCasa().getNome(),
                 p.getSquadraTrasferta().getNome(),
                 p.getGoalCasa(),
-                p.getGolTrasferta(),
+                p.getGoalTrasferta(),
                 p.getDataOra(),
                 p.getCompetizione().toString(),
                 marcatori

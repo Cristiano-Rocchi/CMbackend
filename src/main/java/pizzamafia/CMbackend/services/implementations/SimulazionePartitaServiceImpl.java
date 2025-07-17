@@ -64,7 +64,7 @@ public class SimulazionePartitaServiceImpl implements pizzamafia.CMbackend.servi
         int goalTrasferta = risultato[1];
 
         partita.setGoalCasa(goalCasa);
-        partita.setGolTrasferta(goalTrasferta);
+        partita.setGoalTrasferta(goalTrasferta);
 
 
         // 7. Genera marcatori

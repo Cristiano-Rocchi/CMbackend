@@ -9,7 +9,7 @@ public record PartitaRespDTO(
         String squadraCasaNome,
         String squadraTrasfertaNome,
         int goalCasa,
-        int golTrasferta,
+        int goalTrasferta,
         LocalDateTime dataOra,
         String competizione,
         List<MarcatoreRespDTO> marcatori
