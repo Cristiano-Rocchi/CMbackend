@@ -1,8 +1,11 @@
 package pizzamafia.CMbackend.controllers;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pizzamafia.CMbackend.helpers.UserTeamContext;
 import pizzamafia.CMbackend.payloads.partita.FormazioneRespDTO;
 import pizzamafia.CMbackend.payloads.partita.NewFormazioneDTO;
 import pizzamafia.CMbackend.services.FormazioneService;
@@ -17,12 +20,31 @@ public class FormazioneController {
 
     private final FormazioneService formazioneService;
 
+    @Autowired
+    private UserTeamContext userTeamContext;
+
     // =================== CREATE ===================
 
     @PostMapping
-    public ResponseEntity<FormazioneRespDTO> createFormazione(@RequestBody NewFormazioneDTO dto) {
-        return ResponseEntity.ok(formazioneService.create(dto));
+    public ResponseEntity<Void> createFormazione(@RequestBody @Valid NewFormazioneDTO dto) {
+        UUID squadraId = dto.squadraId();
+        UUID partitaId = dto.partitaId();
+
+        // Solo la squadra utente può impostare la formazione
+        if (!userTeamContext.isUserTeam(squadraId)) {
+            return ResponseEntity.badRequest().build(); // oppure puoi lanciare una custom exception
+        }
+
+        // Salva la formazione della squadra utente
+        formazioneService.create(dto);
+
+        // Recupera l'altra squadra e genera la formazione CPU
+        UUID squadraCpuId = formazioneService.trovaAltraSquadra(partitaId, squadraId);
+        formazioneService.generaFormazioneAutomaticaCpu(partitaId, squadraCpuId);
+
+        return ResponseEntity.ok().build();
     }
+
 
     // =================== GET BY ID ===================
 

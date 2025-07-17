@@ -3,7 +3,9 @@ package pizzamafia.CMbackend.services.implementations;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import pizzamafia.CMbackend.entities.*;
+import pizzamafia.CMbackend.enums.Modulo;
 import pizzamafia.CMbackend.enums.Ruolo;
+import pizzamafia.CMbackend.helpers.SelezioneCpuHelper;
 import pizzamafia.CMbackend.payloads.partita.*;
 import pizzamafia.CMbackend.repositories.FormazioneRepository;
 import pizzamafia.CMbackend.repositories.GiocatoreRepository;
@@ -84,6 +86,49 @@ public class FormazioneServiceImpl implements FormazioneService {
     public void deleteById(UUID id) {
         formazioneRepository.deleteById(id);
     }
+
+    //TROVA SQUADRE
+    public UUID trovaAltraSquadra(UUID idPartita, UUID idSquadraUtente) {
+        Partita partita = partitaRepository.findById(idPartita)
+                .orElseThrow(() -> new RuntimeException("Partita non trovata"));
+
+        UUID idCasa = partita.getSquadraCasa().getId();
+        UUID idTrasferta = partita.getSquadraTrasferta().getId();
+
+        if (idCasa.equals(idSquadraUtente)) return idTrasferta;
+        if (idTrasferta.equals(idSquadraUtente)) return idCasa;
+
+        throw new RuntimeException("La squadra indicata non partecipa a questa partita.");
+    }
+
+    //GENRA FORMAZIONI
+    public void generaFormazioneAutomaticaCpu(UUID idPartita, UUID idSquadra) {
+        Partita partita = partitaRepository.findById(idPartita)
+                .orElseThrow(() -> new RuntimeException("Partita non trovata"));
+
+        Squadra squadra = squadraRepository.findById(idSquadra)
+                .orElseThrow(() -> new RuntimeException("Squadra non trovata"));
+
+        List<Giocatore> rosa = squadra.getGiocatori();
+
+        // 1. Ottieni i titolari migliori per il modulo 4-4-2
+        List<Titolari> titolari = SelezioneCpuHelper.generaTitolariDalModulo(rosa, "_4_4_2");
+
+        // 2. Crea e salva la formazione
+        Formazione formazione = Formazione.builder()
+                .partita(partita)
+                .squadra(squadra)
+                .modulo(Modulo.valueOf("_4_4_2"))
+                .titolari(titolari)
+                .build();
+
+        for (Titolari t : titolari) {
+            t.setFormazione(formazione);
+        }
+
+        formazioneRepository.save(formazione);
+    }
+
 
     // =================== MAPPING ===================
 

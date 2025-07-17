@@ -18,5 +18,9 @@ public interface FormazioneService {
 
     void deleteById(UUID id);
 
+    UUID trovaAltraSquadra(UUID idPartita, UUID idSquadraUtente);
+
+    void generaFormazioneAutomaticaCpu(UUID idPartita, UUID idSquadraCpu);
+
 }
 
