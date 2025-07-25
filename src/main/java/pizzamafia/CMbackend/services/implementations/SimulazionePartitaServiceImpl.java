@@ -79,7 +79,7 @@ public class SimulazionePartitaServiceImpl implements pizzamafia.CMbackend.servi
 
         // 8. Salva e ritorna la partita aggiornata
         return partitaRepository.save(partita);
-        // Temporaneo, continueremo nello step successivo
+
     }
 
 }

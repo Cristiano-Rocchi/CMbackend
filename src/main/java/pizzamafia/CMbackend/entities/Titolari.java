@@ -35,5 +35,9 @@ public class Titolari {
 
     // =================== VALORE EFFETTIVO USATO NEL CALCOLO ===================
     @Column(nullable = false)
+    private int malus;
+
+
+    @Column(nullable = false)
     private int valoreEffettivo;
 }

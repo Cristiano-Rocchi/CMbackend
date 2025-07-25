@@ -52,6 +52,7 @@ public class GiocatoreController {
         giocatoreService.delete(id);
         return ResponseEntity.noContent().build();
     }
+    //=========GET GIOCATORI PER SQUADRA==============
     @GetMapping("/squadra/{id}")
     public List<GiocatoreRespDTO> getGiocatoriBySquadra(@PathVariable UUID id) {
         return giocatoreService.findAllBySquadraId(id);

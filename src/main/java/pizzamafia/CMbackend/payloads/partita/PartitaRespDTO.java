@@ -12,5 +12,7 @@ public record PartitaRespDTO(
         int goalTrasferta,
         LocalDateTime dataOra,
         String competizione,
-        List<MarcatoreRespDTO> marcatori
+        List<MarcatoreRespDTO> marcatori,
+        List<TitolareRespDTO> titolariCasa,
+        List<TitolareRespDTO> titolariTrasferta
 ) {}

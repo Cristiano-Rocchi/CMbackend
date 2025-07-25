@@ -3,9 +3,13 @@ package pizzamafia.CMbackend.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pizzamafia.CMbackend.entities.Formazione;
 import pizzamafia.CMbackend.entities.Partita;
 import pizzamafia.CMbackend.payloads.partita.MarcatoreRespDTO;
 import pizzamafia.CMbackend.payloads.partita.PartitaRespDTO;
+import pizzamafia.CMbackend.payloads.partita.TitolareRespDTO;
+import pizzamafia.CMbackend.repositories.FormazioneRepository;
+import pizzamafia.CMbackend.repositories.TitolariRepository;
 import pizzamafia.CMbackend.services.PartitaService;
 
 import java.util.List;
@@ -17,6 +21,10 @@ import java.util.UUID;
 public class PartitaController {
 
     private final PartitaService partitaService;
+
+    private final TitolariRepository titolariRepository;
+
+    private final FormazioneRepository formazioneRepository;
 
     // =================== CREATE ===================
 
@@ -74,6 +82,46 @@ public class PartitaController {
                 ))
                 .toList();
 
+        // Recupera le due formazioni
+        List<Formazione> formazioni = formazioneRepository.findByPartitaId(p.getId());
+
+        UUID idCasa = p.getSquadraCasa().getId();
+        UUID idTrasferta = p.getSquadraTrasferta().getId();
+
+        Formazione formazioneCasa = formazioni.stream()
+                .filter(f -> f.getSquadra().getId().equals(idCasa))
+                .findFirst()
+                .orElse(null);
+
+        Formazione formazioneTrasferta = formazioni.stream()
+                .filter(f -> f.getSquadra().getId().equals(idTrasferta))
+                .findFirst()
+                .orElse(null);
+
+        List<TitolareRespDTO> titolariCasa = formazioneCasa != null
+                ? titolariRepository.findByFormazioneId(formazioneCasa.getId()).stream()
+                .map(t -> new TitolareRespDTO(
+                        t.getGiocatore().getId(),
+                        t.getGiocatore().getNome(),
+                        t.getGiocatore().getCognome(),
+                        t.getRuolo(),
+                        t.getValoreEffettivo()
+                ))
+                .toList()
+                : List.of();
+
+        List<TitolareRespDTO> titolariTrasferta = formazioneTrasferta != null
+                ? titolariRepository.findByFormazioneId(formazioneTrasferta.getId()).stream()
+                .map(t -> new TitolareRespDTO(
+                        t.getGiocatore().getId(),
+                        t.getGiocatore().getNome(),
+                        t.getGiocatore().getCognome(),
+                        t.getRuolo(),
+                        t.getValoreEffettivo()
+                ))
+                .toList()
+                : List.of();
+
         return new PartitaRespDTO(
                 p.getId(),
                 p.getSquadraCasa().getNome(),
@@ -82,10 +130,14 @@ public class PartitaController {
                 p.getGoalTrasferta(),
                 p.getDataOra(),
                 p.getCompetizione().toString(),
-                marcatori
+                marcatori,
+                titolariCasa,
+                titolariTrasferta
         );
     }
 
-
-
 }
+
+
+
+

@@ -48,13 +48,19 @@ public class FormazioneServiceImpl implements FormazioneService {
                 .map(titolareDTO -> {
                     Giocatore g = giocatoreRepository.findById(titolareDTO.giocatoreId())
                             .orElseThrow(() -> new RuntimeException("Giocatore non trovato"));
+
+                    int valoreEffettivo = ValutazioneGiocatoreHelper.calcolaValoreEffettivo(g, titolareDTO.ruolo());
+                    int malus = g.getValoreTecnico() - valoreEffettivo;
+
                     return Titolari.builder()
                             .formazione(formazione)
                             .giocatore(g)
                             .ruolo(titolareDTO.ruolo())
-                            .valoreEffettivo(ValutazioneGiocatoreHelper.calcolaValoreEffettivo(g, titolareDTO.ruolo()))
+                            .malus(malus)
+                            .valoreEffettivo(valoreEffettivo)
                             .build();
                 })
+
                 .toList();
 
         formazione.setTitolari(titolari);
@@ -114,20 +120,31 @@ public class FormazioneServiceImpl implements FormazioneService {
         // 1. Ottieni i titolari migliori per il modulo 4-4-2
         List<Titolari> titolari = SelezioneCpuHelper.generaTitolariDalModulo(rosa, "_4_4_2");
 
-        // 2. Crea e salva la formazione
+        // 2. Crea la formazione (prima del ciclo)
         Formazione formazione = Formazione.builder()
                 .partita(partita)
                 .squadra(squadra)
                 .modulo(Modulo.valueOf("_4_4_2"))
-                .titolari(titolari)
                 .build();
 
+        // 3. Applica malus e valore effettivo ai titolari
         for (Titolari t : titolari) {
+            Giocatore g = t.getGiocatore();
+            Ruolo ruolo = t.getRuolo();
+
+            int valoreEffettivo = ValutazioneGiocatoreHelper.calcolaValoreEffettivo(g, ruolo);
+            int malus = g.getValoreTecnico() - valoreEffettivo;
+
+            t.setValoreEffettivo(valoreEffettivo);
+            t.setMalus(malus);
             t.setFormazione(formazione);
         }
 
+        // 4. Salva la formazione
+        formazione.setTitolari(titolari);
         formazioneRepository.save(formazione);
     }
+
 
 
     // =================== MAPPING ===================

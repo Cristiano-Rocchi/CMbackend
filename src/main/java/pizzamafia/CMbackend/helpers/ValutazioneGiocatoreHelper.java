@@ -12,19 +12,307 @@ public class ValutazioneGiocatoreHelper {
     //===========VALORETECNICO GIOCATORE================
     // Questo metodo calcola il valore tecnico finale di un giocatore,
     // in base al ruolo assegnato e alle sue statistiche tecniche.
-    public static double calcolaValoreTecnico(Ruolo ruolo, StatisticheTecnicheGiocatore s) {
-        return switch (ruolo) {
-            case PORTIERE -> s.getPortiere() * 0.6 + s.getVelocita() * 0.2 + s.getDifesa() * 0.1 + s.getPassaggio() * 0.1;
-            case DIFENSORE_CENTRALE -> s.getDifesa() * 0.5 + s.getVelocita() * 0.2 + s.getPassaggio() * 0.2 + s.getAttacco() * 0.1;
-            case TERZINO -> s.getDifesa() * 0.3 + s.getVelocita() * 0.3 + s.getPassaggio() * 0.2 + s.getTiro() * 0.1 + s.getAttacco() * 0.1;
-            case CENTROCAMPISTA_DIFENSIVO -> s.getDifesa() * 0.3 + s.getAttacco() * 0.2 + s.getPassaggio() * 0.2 + s.getVelocita() * 0.2 + s.getTiro() * 0.1;
-            case CENTROCAMPISTA_OFFENSIVO -> s.getAttacco() * 0.3 + s.getTiro() * 0.2 + s.getVelocita() * 0.2 + s.getPassaggio() * 0.3;
-            case ALA -> s.getAttacco() * 0.3 + s.getVelocita() * 0.3 + s.getTiro() * 0.2 + s.getPassaggio() * 0.1 + s.getDifesa() * 0.1;
-            case ATTACCANTE_ESTERNO -> s.getAttacco() * 0.4 + s.getVelocita() * 0.3 + s.getTiro() * 0.2 + s.getPassaggio() * 0.1;
-            case SECONDA_PUNTA -> s.getAttacco() * 0.4 + s.getTiro() * 0.3 + s.getVelocita() * 0.2 + s.getPassaggio() * 0.2;
-            case BOMBER -> s.getAttacco() * 0.5 + s.getTiro() * 0.3 + s.getVelocita() * 0.2;
-        };
+    public int calcolaValoreTecnico(Map<String, Integer> attributi, Ruolo ruolo) {
+        // Ottiene i pesi specifici per il ruolo
+        Map<String, Double> pesi = getPesiPerRuolo(ruolo);
+
+        double sommaPesi = 0;
+        double punteggioGrezzo = 0;
+
+        // Somma i contributi di ogni attributo pesato
+        for (Map.Entry<String, Double> entry : pesi.entrySet()) {
+            String attributo = entry.getKey();
+            double peso = entry.getValue();
+            int valore = attributi.getOrDefault(attributo, 0);
+
+            punteggioGrezzo += valore * peso;
+            sommaPesi += peso;
+        }
+
+        // Normalizza il punteggio sulla scala 1–99
+        double maxPunteggio = 99 * sommaPesi;
+        double normalizzato = (punteggioGrezzo / maxPunteggio) * 99;
+
+        return (int) Math.round(normalizzato);
     }
+
+    //MAP DEI RUOLI CON PESI
+    private Map<String, Double> getPesiPerRuolo(Ruolo ruolo) {
+        switch (ruolo) {
+            case PORTIERE:
+                return Map.ofEntries(
+                        Map.entry("riflessi", 1.6),
+                        Map.entry("posizione", 1.5),
+                        Map.entry("intuito", 1.4),
+                        Map.entry("agilita", 1.3),
+                        Map.entry("elevazione", 1.1),
+                        Map.entry("carisma", 1.1),
+                        Map.entry("determinazione", 0.9),
+                        Map.entry("coraggio", 0.85),
+                        Map.entry("forza", 0.7),
+                        Map.entry("impegno", 0.7),
+                        Map.entry("resistenza", 0.5),
+                        Map.entry("gioco_di_squadra", 0.45),
+                        Map.entry("scatto", 0.3),
+                        Map.entry("tecnica", 0.2),
+                        Map.entry("aggressivita", 0.3)
+                );
+
+
+            case DIFENSORE_CENTRALE:
+                return Map.ofEntries(
+                        Map.entry("marcatura", 1.5),
+                        Map.entry("contrasti", 1.3),
+                        Map.entry("posizione", 1.4),
+                        Map.entry("colpoDiTesta", 1.2),
+                        Map.entry("elevazione", 1.0),
+                        Map.entry("aggressibita", 0.9),
+                        Map.entry("intuito", 0.8),
+                        Map.entry("carisma", 1.3),
+                        Map.entry("determinazione", 0.8),
+                        Map.entry("impegno", 0.7),
+                        Map.entry("coraggio", 0.7),
+                        Map.entry("resistenza", 0.6),
+                        Map.entry("giocoDiSquadra", 0.6),
+                        Map.entry("tecnica", 0.4),
+                        Map.entry("scatto", 0.4),
+                        Map.entry("agilita", 0.3),
+                        Map.entry("accellerazione", 0.3),
+                        Map.entry("riflessi", 0.25)
+                );
+            case TERZINO:
+                return Map.ofEntries(
+                        Map.entry("accelerazione", 1.4),
+                        Map.entry("resistenza", 1.4),
+                        Map.entry("scatto", 1.3),
+                        Map.entry("contrasti", 1.1),
+                        Map.entry("posizione", 1.1),
+                        Map.entry("marcatura", 1.0),
+                        Map.entry("impegno", 1.0),
+                        Map.entry("determinazione", 1.0),
+                        Map.entry("assist", 1.0),
+                        Map.entry("carisma", 1.0),
+                        Map.entry("agilita", 0.8),
+                        Map.entry("inserimento", 0.8),
+                        Map.entry("coraggio", 0.7),
+                        Map.entry("aggressivita", 0.6),
+                        Map.entry("giocoDiSquadra", 0.6),
+                        Map.entry("intuito", 0.4),
+                        Map.entry("forza", 0.4),
+                        Map.entry("dribbling", 0.4),
+                        Map.entry("riflessi", 0.3),
+                        Map.entry("tiriDaLontano", 0.3),
+                        Map.entry("calciPiazzati", 0.3),
+                        Map.entry("creativita", 0.2)
+                );
+            case CENTROCAMPISTA_DIFENSIVO:
+                return Map.ofEntries(
+                        Map.entry("contrasti", 1.5),
+                        Map.entry("marcatura", 1.35),
+                        Map.entry("posizione", 1.35),
+                        Map.entry("resistenza", 1.4),
+                        Map.entry("forza", 1.2),
+                        Map.entry("aggressivita", 1.25),
+                        Map.entry("impegno", 1.2),
+                        Map.entry("determinazione", 1.1),
+                        Map.entry("carisma", 1.1),
+                        Map.entry("giocoDiSquadra", 1.0),
+                        Map.entry("coraggio", 1.0),
+                        Map.entry("tiriDaLontano", 0.6),
+                        Map.entry("tecnica", 0.5),
+                        Map.entry("intuito", 0.5),
+                        Map.entry("scatto", 0.5),
+                        Map.entry("agilita", 0.4),
+                        Map.entry("colpoDiTesta", 0.35),
+                        Map.entry("riflessi", 0.35),
+                        Map.entry("dribbling", 0.3),
+                        Map.entry("assist", 0.3),
+                        Map.entry("accelerazione", 0.3),
+                        Map.entry("calciPiazzati", 0.2),
+                        Map.entry("creativita", 0.2),
+                        Map.entry("elevazione", 0.2),
+                        Map.entry("inserimento", 0.2),
+                        Map.entry("finalizzazione", 0.1)
+                );
+            case CENTROCAMPISTA_CENTRALE:
+                return Map.ofEntries(
+                        Map.entry("resistenza", 1.4),
+                        Map.entry("giocoDiSquadra", 1.4),
+                        Map.entry("posizione", 1.3),
+                        Map.entry("tecnica", 1.25),
+                        Map.entry("impegno", 1.25),
+                        Map.entry("determinazione", 1.2),
+                        Map.entry("intuito", 1.1),
+                        Map.entry("creativita", 1.1),
+                        Map.entry("carisma", 1.1),
+                        Map.entry("inserimento", 1.15),
+                        Map.entry("assist", 0.8),
+                        Map.entry("scatto", 1.0),
+                        Map.entry("forza", 0.9),
+                        Map.entry("contrasti", 1.0),
+                        Map.entry("marcatura", 0.65),
+                        Map.entry("tiriDaLontano", 0.6),
+                        Map.entry("coraggio", 0.6),
+                        Map.entry("accelerazione", 0.6),
+                        Map.entry("dribbling", 0.6),
+                        Map.entry("riflessi", 0.5),
+                        Map.entry("calciPiazzati", 0.5),
+                        Map.entry("colpoDiTesta", 0.45),
+                        Map.entry("agilita", 0.7),
+                        Map.entry("elevazione", 0.4),
+                        Map.entry("aggressivita", 0.4),
+                        Map.entry("finalizzazione", 0.4)
+                );
+            case CENTROCAMPISTA_OFFENSIVO:
+                return Map.ofEntries(
+                        Map.entry("creativita", 1.35),
+                        Map.entry("tecnica", 1.3),
+                        Map.entry("intuito", 1.2),
+                        Map.entry("dribbling", 1.2),
+                        Map.entry("assist", 1.2),
+                        Map.entry("giocoDiSquadra", 1.2),
+                        Map.entry("tiriDaLontano", 1.1),
+                        Map.entry("inserimento", 1.1),
+                        Map.entry("carisma", 1.1),
+                        Map.entry("agilita", 1.0),
+                        Map.entry("resistenza", 0.8),
+                        Map.entry("forza", 0.8),
+                        Map.entry("calciPiazzati", 0.8),
+                        Map.entry("coraggio", 0.85),
+                        Map.entry("determinazione", 0.7),
+                        Map.entry("impegno", 0.7),
+                        Map.entry("scatto", 0.6),
+                        Map.entry("accelerazione", 0.6),
+                        Map.entry("riflessi", 0.6),
+                        Map.entry("finalizzazione", 0.5),
+                        Map.entry("contrasti", 0.4),
+                        Map.entry("aggressivita", 0.4),
+                        Map.entry("elevazione", 0.3),
+                        Map.entry("colpoDiTesta", 0.3),
+                        Map.entry("marcatura", 0.25)
+                );
+            case ALA:
+                return Map.ofEntries(
+                        Map.entry("accelerazione", 1.4),
+                        Map.entry("scatto", 1.35),
+                        Map.entry("dribbling", 1.25),
+                        Map.entry("assist", 1.2),
+                        Map.entry("tecnica", 1.05),
+                        Map.entry("impegno", 1.1),
+                        Map.entry("inserimento", 1.1),
+                        Map.entry("agilita", 1.0),
+                        Map.entry("posizione", 1.0),
+                        Map.entry("carisma", 0.95),
+                        Map.entry("creativita", 0.85),
+                        Map.entry("marcatura", 0.8),
+                        Map.entry("giocoDiSquadra", 0.8),
+                        Map.entry("determinazione", 0.75),
+                        Map.entry("coraggio", 0.7),
+                        Map.entry("aggressivita", 0.7),
+                        Map.entry("tiriDaLontano", 0.65),
+                        Map.entry("intuito", 0.6),
+                        Map.entry("forza", 0.6),
+                        Map.entry("contrasti", 0.55),
+                        Map.entry("finalizzazione", 0.45),
+                        Map.entry("calciPiazzati", 0.45),
+                        Map.entry("riflessi", 0.45),
+                        Map.entry("colpoDiTesta", 0.3),
+                        Map.entry("elevazione", 0.3)
+                );
+            case ATTACCANTE_ESTERNO:
+                return Map.ofEntries(
+                        Map.entry("accelerazione", 1.3),
+                        Map.entry("scatto", 1.3),
+                        Map.entry("dribbling", 1.25),
+                        Map.entry("assist", 1.2),
+                        Map.entry("finalizzazione", 1.1),
+                        Map.entry("resistenza", 1.05),
+                        Map.entry("tiriDaLontano", 1.0),
+                        Map.entry("tecnica", 1.0),
+                        Map.entry("carisma", 1.0),
+                        Map.entry("agilita", 0.9),
+                        Map.entry("creativita", 0.9),
+                        Map.entry("inserimento", 0.85),
+                        Map.entry("impegno", 0.85),
+                        Map.entry("posizione", 0.8),
+                        Map.entry("giocoDiSquadra", 0.75),
+                        Map.entry("intuito", 0.75),
+                        Map.entry("determinazione", 0.7),
+                        Map.entry("forza", 0.7),
+                        Map.entry("riflessi", 0.6),
+                        Map.entry("calciPiazzati", 0.5),
+                        Map.entry("elevazione", 0.5),
+                        Map.entry("colpoDiTesta", 0.4),
+                        Map.entry("aggressivita", 0.4),
+                        Map.entry("contrasti", 0.3)
+                );
+            case SECONDA_PUNTA:
+                return Map.ofEntries(
+                        Map.entry("assist", 1.4),
+                        Map.entry("tecnica", 1.4),
+                        Map.entry("dribbling", 1.3),
+                        Map.entry("creativita", 1.3),
+                        Map.entry("finalizzazione", 1.2),
+                        Map.entry("coraggio", 1.1),
+                        Map.entry("intuito", 1.1),
+                        Map.entry("carisma", 1.1),
+                        Map.entry("determinazione", 1.0),
+                        Map.entry("agilita", 1.0),
+                        Map.entry("posizione", 0.8),
+                        Map.entry("calciPiazzati", 0.8),
+                        Map.entry("gioco_di_squadra", 0.75),
+                        Map.entry("inserimento", 0.7),
+                        Map.entry("tiriDaLontano", 0.7),
+                        Map.entry("scatto", 0.6),
+                        Map.entry("riflessi", 0.55),
+                        Map.entry("accelerazione", 0.5),
+                        Map.entry("resistenza", 0.4),
+                        Map.entry("impegno", 0.4),
+                        Map.entry("forza", 0.3),
+                        Map.entry("elevazione", 0.2),
+                        Map.entry("colpoDiTesta", 0.1)
+                );
+            case BOMBER:
+                return Map.ofEntries(
+                        Map.entry("finalizzazione", 1.5),
+                        Map.entry("posizione", 1.4),
+                        Map.entry("colpoDiT", 1.2),
+                        Map.entry("carisma", 1.2),
+                        Map.entry("intuito", 1.25),
+                        Map.entry("elevazione", 1.1),
+                        Map.entry("determinazione", 1.1),
+                        Map.entry("forza", 1.0),
+                        Map.entry("tiriDaLontano", 0.9),
+                        Map.entry("impegno", 0.9),
+                        Map.entry("tecnica", 0.8),
+                        Map.entry("coraggio", 0.8),
+                        Map.entry("calciPiazzati", 0.7),
+                        Map.entry("aggressivita", 0.6),
+                        Map.entry("scatto", 0.65),
+                        Map.entry("riflessi", 0.5),
+                        Map.entry("accelerazione", 0.45),
+                        Map.entry("dribbling", 0.45),
+                        Map.entry("giocoDiSquadra", 0.45),
+                        Map.entry("agilita", 0.45),
+                        Map.entry("creativita", 0.4),
+                        Map.entry("assist", 0.4),
+                        Map.entry("resistenza", 0.4),
+                        Map.entry("inserimento", 0.35)
+                );
+
+
+
+
+
+
+
+
+
+            default:
+                throw new IllegalArgumentException("Ruolo non supportato: " + ruolo);
+        }
+    }
+
 
     //===========VALORE EFFETTIVO in formazione============
 
@@ -43,6 +331,7 @@ public class ValutazioneGiocatoreHelper {
                         Ruolo.DIFENSORE_CENTRALE, 0.90,
                         Ruolo.TERZINO, 0.90,
                         Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.95,
+                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.95,
                         Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.95,
                         Ruolo.ALA, 0.98,
                         Ruolo.ATTACCANTE_ESTERNO, 0.98,
@@ -52,6 +341,7 @@ public class ValutazioneGiocatoreHelper {
                 Ruolo.DIFENSORE_CENTRALE, Map.of(
                         Ruolo.TERZINO, 0.15,
                         Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.30,
+                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.50,
                         Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.60,
                         Ruolo.ALA, 0.80,
                         Ruolo.ATTACCANTE_ESTERNO, 0.85,
@@ -64,6 +354,7 @@ public class ValutazioneGiocatoreHelper {
                         Ruolo.ATTACCANTE_ESTERNO, 0.30,
                         Ruolo.DIFENSORE_CENTRALE, 0.15,
                         Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.30,
+                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.40,
                         Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.50,
                         Ruolo.SECONDA_PUNTA, 0.80,
                         Ruolo.BOMBER, 0.90,
@@ -73,6 +364,18 @@ public class ValutazioneGiocatoreHelper {
                         Ruolo.DIFENSORE_CENTRALE, 0.20,
                         Ruolo.TERZINO, 0.35,
                         Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.20,
+                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.10,
+                        Ruolo.ALA, 0.50,
+                        Ruolo.ATTACCANTE_ESTERNO, 0.60,
+                        Ruolo.SECONDA_PUNTA, 0.70,
+                        Ruolo.BOMBER, 0.80,
+                        Ruolo.PORTIERE, 0.95
+                ),
+                Ruolo.CENTROCAMPISTA_CENTRALE, Map.of(
+                        Ruolo.DIFENSORE_CENTRALE, 0.30,
+                        Ruolo.TERZINO, 0.40,
+                        Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.10,
+                        Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.10,
                         Ruolo.ALA, 0.50,
                         Ruolo.ATTACCANTE_ESTERNO, 0.60,
                         Ruolo.SECONDA_PUNTA, 0.70,
@@ -85,6 +388,7 @@ public class ValutazioneGiocatoreHelper {
                         Ruolo.ALA, 0.30,
                         Ruolo.BOMBER, 0.35,
                         Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.15,
+                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.10,
                         Ruolo.TERZINO, 0.60,
                         Ruolo.DIFENSORE_CENTRALE, 0.75,
                         Ruolo.PORTIERE, 0.95
@@ -93,6 +397,7 @@ public class ValutazioneGiocatoreHelper {
                         Ruolo.ATTACCANTE_ESTERNO, 0.15,
                         Ruolo.TERZINO, 0.10,
                         Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.30,
+                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.30,
                         Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.40,
                         Ruolo.DIFENSORE_CENTRALE, 0.35,
                         Ruolo.SECONDA_PUNTA, 0.45,
@@ -103,6 +408,7 @@ public class ValutazioneGiocatoreHelper {
                         Ruolo.SECONDA_PUNTA, 0.10,
                         Ruolo.ALA, 0.15,
                         Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.20,
+                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.40,
                         Ruolo.BOMBER, 0.30,
                         Ruolo.TERZINO, 0.25,
                         Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.50,
@@ -110,9 +416,10 @@ public class ValutazioneGiocatoreHelper {
                         Ruolo.PORTIERE, 0.98
                 ),
                 Ruolo.BOMBER, Map.of(
-                        Ruolo.SECONDA_PUNTA, 0.15,
-                        Ruolo.ATTACCANTE_ESTERNO, 0.25,
-                        Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.25,
+                        Ruolo.SECONDA_PUNTA, 0.20,
+                        Ruolo.ATTACCANTE_ESTERNO, 0.30,
+                        Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.40,
+                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.50,
                         Ruolo.ALA, 0.50,
                         Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.60,
                         Ruolo.TERZINO, 0.75,
@@ -121,6 +428,7 @@ public class ValutazioneGiocatoreHelper {
                 ),
                 Ruolo.SECONDA_PUNTA, Map.of(
                         Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.10,
+                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.30,
                         Ruolo.BOMBER, 0.20,
                         Ruolo.ATTACCANTE_ESTERNO, 0.15,
                         Ruolo.ALA, 0.25,

@@ -6,22 +6,85 @@ import jakarta.validation.constraints.NotNull;
 
 public record NewStatisticheTecnicheGiocatoreDTO(
 
+        //FISICI
         @NotNull @Min(1) @Max(99)
-        Integer attacco,
+        Integer accelerazione,
 
         @NotNull @Min(1) @Max(99)
-        Integer difesa,
+        Integer agilita,
 
         @NotNull @Min(1) @Max(99)
-        Integer velocita,
+        Integer elevazione,
 
         @NotNull @Min(1) @Max(99)
-        Integer tiro,
+        Integer forza,
 
         @NotNull @Min(1) @Max(99)
-        Integer passaggio,
+        Integer resistenza,
 
         @NotNull @Min(1) @Max(99)
-        Integer portiere
+        Integer scatto,
+
+        @NotNull @Min(1) @Max(99)
+        Integer inserimento,
+
+        //MENTALI
+        @NotNull @Min(1) @Max(99)
+        Integer aggressivita,
+
+        @NotNull @Min(1) @Max(99)
+        Integer carisma,
+
+        @NotNull @Min(1) @Max(99)
+        Integer coraggio,
+
+        @NotNull @Min(1) @Max(99)
+        Integer creativita,
+
+        @NotNull @Min(1) @Max(99)
+        Integer determinazione,
+
+        @NotNull @Min(1) @Max(99)
+        Integer giocoDiSquadra,
+
+        @NotNull @Min(1) @Max(99)
+        Integer impegno,
+
+        @NotNull @Min(1) @Max(99)
+        Integer intuito,
+
+        @NotNull @Min(1) @Max(99)
+        Integer posizione,
+
+        //TECNICI
+        @NotNull @Min(1) @Max(99)
+        Integer calciPiazzati,
+
+        @NotNull @Min(1) @Max(99)
+        Integer colpoDiTesta,
+
+        @NotNull @Min(1) @Max(99)
+        Integer contrasti,
+
+        @NotNull @Min(1) @Max(99)
+        Integer dribbling,
+
+        @NotNull @Min(1) @Max(99)
+        Integer finalizazione,
+
+        @NotNull @Min(1) @Max(99)
+        Integer marcatura,
+
+        @NotNull @Min(1) @Max(99)
+        Integer riflessi,
+
+        @NotNull @Min(1) @Max(99)
+        Integer tecnica,
+
+        @NotNull @Min(1) @Max(99)
+        Integer assist,
+
+        @NotNull @Min(1) @Max(99)
+        Integer tiriDaLontano
 
 ) {}

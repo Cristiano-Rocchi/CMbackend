@@ -1,6 +1,8 @@
 package pizzamafia.CMbackend.repositories;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import pizzamafia.CMbackend.entities.Partita;
+import pizzamafia.CMbackend.entities.Squadra;
 import pizzamafia.CMbackend.entities.Titolari;
 
 import java.util.List;
@@ -9,5 +11,7 @@ import java.util.UUID;
 public interface TitolariRepository extends JpaRepository<Titolari, UUID> {
 
     List<Titolari> findByFormazioneId(UUID formazioneId);
+
+
 
 }

@@ -77,12 +77,17 @@ public class SelezioneCpuHelper {
 
     // Crea un oggetto Titolari con valore effettivo calcolato
     private static Titolari buildTitolare(Giocatore g, Ruolo ruolo) {
+        int valoreEffettivo = ValutazioneGiocatoreHelper.calcolaValoreEffettivo(g, ruolo);
+        int malus = g.getValoreTecnico() - valoreEffettivo;
+
         return Titolari.builder()
                 .giocatore(g)
                 .ruolo(ruolo)
-                .valoreEffettivo(ValutazioneGiocatoreHelper.calcolaValoreEffettivo(g, ruolo))
+                .malus(malus)
+                .valoreEffettivo(valoreEffettivo)
                 .build();
     }
+
 
     // === BLOCCO 3: ruoli alternativi per copertura intelligente ===
     private static Map<Ruolo, List<Ruolo>> getRuoliAlternativi() {

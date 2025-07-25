@@ -52,12 +52,31 @@ public class GiocatoreServiceImpl implements GiocatoreService {
         // Creo l'entità StatisticheTecnicheGiocatore e la collego al giocatore
         NewStatisticheTecnicheGiocatoreDTO s = dto.statisticheTecniche();
         StatisticheTecnicheGiocatore stats = StatisticheTecnicheGiocatore.builder()
-                .attacco(s.attacco())
-                .difesa(s.difesa())
-                .velocita(s.velocita())
-                .tiro(s.tiro())
-                .passaggio(s.passaggio())
-                .portiere(s.portiere())
+                .accelerazione(s.accelerazione())
+                .agilita(s.agilita())
+                .elevazione(s.elevazione())
+                .forza(s.forza())
+                .resistenza(s.resistenza())
+                .scatto(s.scatto())
+                .aggressivita(s.aggressivita())
+                .carisma(s.carisma())
+                .coraggio(s.coraggio())
+                .creativita(s.creativita())
+                .determinazione(s.determinazione())
+                .giocoDiSquadra(s.giocoDiSquadra())
+                .impegno(s.impegno())
+                .intuito(s.intuito())
+                .posizione(s.posizione())
+                .calciPiazzati(s.calciPiazzati())
+                .colpoDiTesta(s.colpoDiTesta())
+                .contrasti(s.contrasti())
+                .dribbling(s.dribbling())
+                .finalizzazione(s.finalizazione())
+                .marcatura(s.marcatura())
+                .riflessi(s.riflessi())
+                .tecnica(s.tecnica())
+                .assist(s.assist())
+                .tiriDaLontano(s.tiriDaLontano())
                 .giocatore(giocatore)
                 .build();
 
@@ -86,12 +105,32 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                 squadra.getId(),
                 squadra.getNome(),
                 new StatisticheTecnicheGiocatoreRespDTO(
-                        stats.getAttacco(),
-                        stats.getDifesa(),
-                        stats.getVelocita(),
-                        stats.getTiro(),
-                        stats.getPassaggio(),
-                        stats.getPortiere()
+                        stats.getAccelerazione(),
+                        stats.getAgilita(),
+                        stats.getElevazione(),
+                        stats.getForza(),
+                        stats.getResistenza(),
+                        stats.getScatto(),
+                        stats.getAggressivita(),
+                        stats.getCarisma(),
+                        stats.getCoraggio(),
+                        stats.getCreativita(),
+                        stats.getDeterminazione(),
+                        stats.getGiocoDiSquadra(),
+                        stats.getImpegno(),
+                        stats.getIntuito(),
+                        stats.getPosizione(),
+                        stats.getCalciPiazzati(),
+                        stats.getColpoDiTesta(),
+                        stats.getContrasti(),
+                        stats.getDribbling(),
+                        stats.getFinalizzazione(),
+                        stats.getMarcatura(),
+                        stats.getRiflessi(),
+                        stats.getTecnica(),
+                        stats.getAssist(),
+                        stats.getTiriDaLontano()
+
 
                 )
         );
@@ -161,12 +200,31 @@ public class GiocatoreServiceImpl implements GiocatoreService {
         StatisticheTecnicheGiocatore s = giocatore.getStatistiche();
         NewStatisticheTecnicheGiocatoreDTO dtoStats = dto.statisticheTecniche();
 
-        s.setAttacco(dtoStats.attacco());
-        s.setDifesa(dtoStats.difesa());
-        s.setVelocita(dtoStats.velocita());
-        s.setTiro(dtoStats.tiro());
-        s.setPassaggio(dtoStats.passaggio());
-        s.setPortiere(dtoStats.portiere());
+        s.setAccelerazione(dtoStats.accelerazione());
+        s.setAgilita(dtoStats.agilita());
+        s.setElevazione(dtoStats.elevazione());
+        s.setForza(dtoStats.forza());
+        s.setResistenza(dtoStats.resistenza());
+        s.setScatto(dtoStats.scatto());
+        s.setAggressivita(dtoStats.aggressivita());
+        s.setCarisma(dtoStats.carisma());
+        s.setCoraggio(dtoStats.coraggio());
+        s.setCreativita(dtoStats.creativita());
+        s.setDeterminazione(dtoStats.determinazione());
+        s.setGiocoDiSquadra(dtoStats.giocoDiSquadra());
+        s.setImpegno(dtoStats.impegno());
+        s.setIntuito(dtoStats.intuito());
+        s.setPosizione(dtoStats.posizione());
+        s.setCalciPiazzati(dtoStats.calciPiazzati());
+        s.setColpoDiTesta(dtoStats.colpoDiTesta());
+        s.setContrasti(dtoStats.contrasti());
+        s.setDribbling(dtoStats.dribbling());
+        s.setFinalizzazione(dtoStats.finalizazione());
+        s.setMarcatura(dtoStats.marcatura());
+        s.setRiflessi(dtoStats.riflessi());
+        s.setTecnica(dtoStats.tecnica());
+        s.setAssist(dtoStats.assist());
+        s.setTiriDaLontano(dtoStats.tiriDaLontano());
 
         // Ricalcola il valore tecnico in base al nuovo ruolo + statistiche
         double valore = ValutazioneGiocatoreHelper.calcolaValoreTecnico(dto.ruolo(), s);
@@ -231,12 +289,32 @@ public class GiocatoreServiceImpl implements GiocatoreService {
         StatisticheTecnicheGiocatore stats = g.getStatistiche();
 
         StatisticheTecnicheGiocatoreRespDTO statsDTO = new StatisticheTecnicheGiocatoreRespDTO(
-                stats.getAttacco(),
-                stats.getDifesa(),
-                stats.getVelocita(),
-                stats.getTiro(),
-                stats.getPassaggio(),
-                stats.getPortiere()
+                stats.getAccelerazione(),
+                stats.getAgilita(),
+                stats.getElevazione(),
+                stats.getForza(),
+                stats.getResistenza(),
+                stats.getScatto(),
+                stats.getAggressivita(),
+                stats.getCarisma(),
+                stats.getCoraggio(),
+                stats.getCreativita(),
+                stats.getDeterminazione(),
+                stats.getGiocoDiSquadra(),
+                stats.getImpegno(),
+                stats.getIntuito(),
+                stats.getPosizione(),
+                stats.getCalciPiazzati(),
+                stats.getColpoDiTesta(),
+                stats.getContrasti(),
+                stats.getDribbling(),
+                stats.getFinalizzazione(),
+                stats.getMarcatura(),
+                stats.getRiflessi(),
+                stats.getTecnica(),
+                stats.getAssist(),
+                stats.getTiriDaLontano()
+
         );
 
         return new GiocatoreRespDTO(

@@ -3,6 +3,9 @@ package pizzamafia.CMbackend.services.implementations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import pizzamafia.CMbackend.entities.Partita;
+import pizzamafia.CMbackend.entities.Squadra;
+import pizzamafia.CMbackend.entities.Titolari;
 import pizzamafia.CMbackend.payloads.partita.TitolareRespDTO;
 import pizzamafia.CMbackend.repositories.TitolariRepository;
 import pizzamafia.CMbackend.services.TitolariService;
@@ -38,5 +41,8 @@ public class TitolariServiceImpl implements TitolariService {
     public void deleteById(UUID id) {
         titolariRepository.deleteById(id);
     }
+
+
+
 }
 
