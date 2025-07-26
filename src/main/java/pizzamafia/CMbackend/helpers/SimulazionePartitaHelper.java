@@ -1,146 +1,108 @@
 package pizzamafia.CMbackend.helpers;
 
-import pizzamafia.CMbackend.entities.MarcatorePartita;
-import pizzamafia.CMbackend.entities.Partita;
-import pizzamafia.CMbackend.entities.Squadra;
-import pizzamafia.CMbackend.entities.Titolari;
+import pizzamafia.CMbackend.entities.*;
+import pizzamafia.CMbackend.helpers.eventi.DribblingHelper;
+import pizzamafia.CMbackend.helpers.eventi.TiroHelper;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class SimulazionePartitaHelper {
 
     private static final Random random = new Random();
 
-    /**
-     * Calcola il valore medio della formazione basato sui titolari schierati.
-     * @param titolari Lista di titolari effettivi della formazione (11)
-     * @return valore medio squadra
-     */
-    public static double calcolaValoreFormazione(List<Titolari> titolari) {
-        if (titolari == null || titolari.isEmpty()) return 0;
+    public static List<EventoPartita> simulaPartita(
+            Partita partita,
+            List<Titolari> titolariCasa,
+            List<Titolari> titolariTrasferta
+    ) {
+        List<EventoPartita> eventi = new ArrayList<>();
 
-        double somma = titolari.stream()
-                .mapToDouble(Titolari::getValoreEffettivo)
-                .sum();
+        Squadra squadraCasa = partita.getSquadraCasa();
+        Squadra squadraTrasferta = partita.getSquadraTrasferta();
 
-        return somma / titolari.size(); // dovrebbe essere sempre 11
-    }
-
-    /**
-     * Applica un piccolo bonus alla squadra di casa (fattore campo).
-     * @param valore originale
-     * @return valore con bonus
-     */
-    public static double applicaFattoreCasa(double valore) {
-        return valore + 2; // Bonus casa
-    }
-
-    /**
-     * Calcola il numero di goal da assegnare in base al rapporto tra i valori delle due squadre.
-     * @param forzaCasa valore squadra casa
-     * @param forzaTrasferta valore squadra trasferta
-     * @return array con goals: [goalCasa, goalTrasferta]
-     */
-    public static int[] generaRisultato(double forzaCasa, double forzaTrasferta) {
-        double diff = forzaCasa - forzaTrasferta;
-
-        double probCasa = 0.5 + (diff / 40.0); // scala realistica
-        probCasa = Math.min(0.9, Math.max(0.1, probCasa)); // clamp
-
-        double esito = random.nextDouble();
-
-        int goalCasa = 0;
-        int goalTrasferta = 0;
-
-        if (esito < probCasa - 0.1) {
-            // Vince trasferta
-            goalTrasferta = generaGoalRandom();
-            goalCasa = Math.max(0, goalTrasferta - random.nextInt(3));
-        } else if (esito <= probCasa + 0.1) {
-            // Pareggio
-            int gol = random.nextInt(3); // 0–2
-            goalCasa = gol;
-            goalTrasferta = gol;
-        } else {
-            // Vince casa
-            goalCasa = generaGoalRandom();
-            goalTrasferta = Math.max(0, goalCasa - random.nextInt(3));
+        for (int minuto = 1; minuto <= 90; minuto += 5) {
+            List<EventoPartita> eventiBlocco = simulaBlocco(
+                    minuto,
+                    minuto + 4,
+                    partita,
+                    titolariCasa,
+                    titolariTrasferta,
+                    squadraCasa,
+                    squadraTrasferta
+            );
+            eventi.addAll(eventiBlocco);
         }
 
-        return new int[]{goalCasa, goalTrasferta};
+        eventi.sort(Comparator.comparingInt(EventoPartita::getMinuto));
+        return eventi;
     }
 
-    /**
-     * Genera un numero realistico di goal (1–4)
-     */
-    private static int generaGoalRandom() {
-        return 1 + random.nextInt(4);
-    }
-
-
-
-    /**
-     * Genera la lista di marcatori per una partita.
-     * @param goalCasa numero di goal segnati dalla squadra di casa
-     * @param goalTrasferta numero di goal segnati dalla squadra in trasferta
-     * @param titolariCasa lista dei titolari della squadra di casa
-     * @param titolariTrasferta lista dei titolari della squadra in trasferta
-     * @param partita oggetto Partita a cui i marcatori sono legati
-     * @return lista completa di marcatori
-     */
-    public static List<MarcatorePartita> generaMarcatori(
-            int goalCasa,
-            int goalTrasferta,
+    private static List<EventoPartita> simulaBlocco(
+            int minutoInizio,
+            int minutoFine,
+            Partita partita,
             List<Titolari> titolariCasa,
             List<Titolari> titolariTrasferta,
-            Partita partita
+            Squadra squadraCasa,
+            Squadra squadraTrasferta
     ) {
-        List<MarcatorePartita> marcatori = new ArrayList<>();
+        List<EventoPartita> eventi = new ArrayList<>();
 
-        marcatori.addAll(
-                generaMarcatoriPerSquadra(goalCasa, titolariCasa, partita, partita.getSquadraCasa())
-        );
+        // =================== 1. Calcola la forza media effettiva ===================
+        double forzaCasa = titolariCasa.stream()
+                .mapToDouble(Titolari::getValoreEffettivo)
+                .average().orElse(0);
 
-        marcatori.addAll(
-                generaMarcatoriPerSquadra(goalTrasferta, titolariTrasferta, partita, partita.getSquadraTrasferta())
-        );
+        double forzaTrasferta = titolariTrasferta.stream()
+                .mapToDouble(Titolari::getValoreEffettivo)
+                .average().orElse(0);
 
-        //marcatori restituiti in ordine di minuto
-        return marcatori.stream()
-                .sorted(Comparator.comparingInt(MarcatorePartita::getMinuto))
-                .collect(Collectors.toList());
+        // Applichiamo un piccolo bonus casa
+        forzaCasa += 2.0;
 
-    }
+        // =================== 2. Probabilità di attacco pesata ===================
+        double totale = forzaCasa + forzaTrasferta;
+        double probabilitaAttaccoCasa = forzaCasa / totale;
+        boolean attaccaCasa = random.nextDouble() < probabilitaAttaccoCasa;
 
-    private static List<MarcatorePartita> generaMarcatoriPerSquadra(
-            int goal,
-            List<Titolari> titolari,
-            Partita partita,
-            Squadra squadra
-    ) {
-        List<MarcatorePartita> marcatori = new ArrayList<>();
-        Set<Integer> minutiUsati = new HashSet<>();
+        Squadra squadraAttaccante = attaccaCasa ? squadraCasa : squadraTrasferta;
+        Squadra squadraDifendente = attaccaCasa ? squadraTrasferta : squadraCasa;
 
-        for (int i = 0; i < goal; i++) {
-            Titolari marcatore = titolari.get(random.nextInt(titolari.size()));
+        List<Titolari> titolariAttacco = attaccaCasa ? titolariCasa : titolariTrasferta;
+        List<Titolari> titolariDifesa = attaccaCasa ? titolariTrasferta : titolariCasa;
 
-            int minuto;
-            do {
-                minuto = 1 + random.nextInt(90);
-            } while (minutiUsati.contains(minuto));
-            minutiUsati.add(minuto);
+        // =================== 3. Numero dinamico di azioni ===================
+        // Squadra forte = più probabilità di fare 2 azioni
+        int numeroAzioni;
+        double dominance = Math.abs(forzaCasa - forzaTrasferta);
 
-            MarcatorePartita m = new MarcatorePartita();
-            m.setPartita(partita);
-            m.setGiocatore(marcatore.getGiocatore());
-            m.setSquadra(squadra);
-            m.setMinuto(minuto);
-
-            marcatori.add(m);
+        if (dominance > 20) {
+            numeroAzioni = attaccaCasa ? (random.nextDouble() < 0.7 ? 2 : 1) : (random.nextDouble() < 0.7 ? 1 : 0);
+        } else if (dominance > 10) {
+            numeroAzioni = random.nextDouble() < 0.6 ? 1 : 0;
+        } else {
+            numeroAzioni = random.nextDouble() < 0.4 ? 1 : 0;
         }
 
-        return marcatori;
+        // =================== 4. Genera le azioni ===================
+
+        //azione 1 dribbling-tiro
+        for (int i = 0; i < numeroAzioni; i++) {
+            int minutoEvento = minutoInizio + random.nextInt(minutoFine - minutoInizio + 1);
+
+            EventoPartita eventoDribbling = DribblingHelper.genera(minutoEvento, partita, squadraAttaccante, titolariAttacco, titolariDifesa);
+            eventi.add(eventoDribbling);
+
+
+            if (eventoDribbling.getEsito().equals("RIUSCITO")) {
+                EventoPartita eventoTiro = TiroHelper.genera(minutoEvento, partita, squadraAttaccante, squadraDifendente, eventoDribbling.getGiocatorePrincipale(), titolariDifesa);
+                eventi.add(eventoTiro);
+            }
+
+        }
+
+        return eventi;
+
     }
 
 

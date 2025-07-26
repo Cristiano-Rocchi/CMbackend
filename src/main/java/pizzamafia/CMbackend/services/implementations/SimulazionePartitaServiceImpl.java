@@ -2,84 +2,71 @@ package pizzamafia.CMbackend.services.implementations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import pizzamafia.CMbackend.entities.Formazione;
-import pizzamafia.CMbackend.entities.Partita;
-import pizzamafia.CMbackend.entities.Titolari;
-import pizzamafia.CMbackend.entities.MarcatorePartita;
+import pizzamafia.CMbackend.entities.*;
+import pizzamafia.CMbackend.enums.TipoEvento;
 import pizzamafia.CMbackend.exceptions.NotFoundException;
 import pizzamafia.CMbackend.helpers.SimulazionePartitaHelper;
-import pizzamafia.CMbackend.repositories.FormazioneRepository;
-import pizzamafia.CMbackend.repositories.PartitaRepository;
-import pizzamafia.CMbackend.repositories.TitolariRepository;
+
+import pizzamafia.CMbackend.repositories.*;
+import pizzamafia.CMbackend.services.EventoPartitaService;
+import pizzamafia.CMbackend.services.SimulazionePartitaService;
 
 import java.util.List;
 import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class SimulazionePartitaServiceImpl implements pizzamafia.CMbackend.services.SimulazionePartitaService {
+public class SimulazionePartitaServiceImpl implements SimulazionePartitaService {
 
     private final PartitaRepository partitaRepository;
     private final FormazioneRepository formazioneRepository;
     private final TitolariRepository titolariRepository;
+    private final EventoPartitaRepository eventoPartitaRepository;
+    private final EventoPartitaService eventoPartitaService;
 
     // =================== SIMULAZIONE PARTITA ===================
     @Override
     public Partita simula(UUID partitaId) {
         // 1. Recupera la partita
         Partita partita = partitaRepository.findById(partitaId)
-                .orElseThrow(() -> new NotFoundException("Partita non trovata con ID: " + partitaId));
+                .orElseThrow(() -> new NotFoundException("Partita non trovata"));
 
-        // 2. Recupera le formazioni della partita
+        // 2. Recupera le formazioni
         List<Formazione> formazioni = formazioneRepository.findByPartitaId(partitaId);
-        if (formazioni.size() != 2) {
-            throw new NotFoundException("Devono esserci esattamente due formazioni per simulare la partita.");
-        }
+        if (formazioni.size() != 2) throw new IllegalStateException("Formazioni incomplete");
 
-        // Distinzione tra casa e trasferta
         Formazione formazioneCasa = formazioni.stream()
-                .filter(f -> f.getSquadra().getId().equals(partita.getSquadraCasa().getId()))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException("Formazione squadra casa non trovata."));
+                .filter(f -> f.getSquadra().equals(partita.getSquadraCasa()))
+                .findFirst().orElseThrow(() -> new NotFoundException("Formazione casa mancante"));
 
         Formazione formazioneTrasferta = formazioni.stream()
-                .filter(f -> f.getSquadra().getId().equals(partita.getSquadraTrasferta().getId()))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException("Formazione squadra trasferta non trovata."));
+                .filter(f -> f.getSquadra().equals(partita.getSquadraTrasferta()))
+                .findFirst().orElseThrow(() -> new NotFoundException("Formazione trasferta mancante"));
 
-        // 3. Recupera i titolari delle due formazioni
+        // 3. Recupera i titolari
         List<Titolari> titolariCasa = titolariRepository.findByFormazioneId(formazioneCasa.getId());
         List<Titolari> titolariTrasferta = titolariRepository.findByFormazioneId(formazioneTrasferta.getId());
 
-        // 4. Calcola il valore delle due formazioni
-        double valoreCasa = SimulazionePartitaHelper.calcolaValoreFormazione(titolariCasa);
-        double valoreTrasferta = SimulazionePartitaHelper.calcolaValoreFormazione(titolariTrasferta);
+        // 4. Simula la partita
+        List<EventoPartita> eventi = SimulazionePartitaHelper.simulaPartita(partita, titolariCasa, titolariTrasferta);
 
-        // 5. Applica bonus casa
-        valoreCasa = SimulazionePartitaHelper.applicaFattoreCasa(valoreCasa);
+        // 5. Salva gli eventi
+        eventoPartitaRepository.saveAll(eventi);
 
-        // 6. Simula il risultato
-        int[] risultato = SimulazionePartitaHelper.generaRisultato(valoreCasa, valoreTrasferta);
-        int goalCasa = risultato[0];
-        int goalTrasferta = risultato[1];
+        // 6. Conta i gol per squadra
+        long golCasa = eventi.stream()
+                .filter(e -> e.getTipoEvento() == TipoEvento.GOL && e.getSquadra().equals(partita.getSquadraCasa()))
+                .count();
 
-        partita.setGoalCasa(goalCasa);
-        partita.setGoalTrasferta(goalTrasferta);
+        long golTrasferta = eventi.stream()
+                .filter(e -> e.getTipoEvento() == TipoEvento.GOL && e.getSquadra().equals(partita.getSquadraTrasferta()))
+                .count();
 
+        // 7. Aggiorna il risultato nella partita
+        partita.setGoalCasa((int) golCasa);
+        partita.setGoalTrasferta((int) golTrasferta);
+        partitaRepository.save(partita);
 
-        // 7. Genera marcatori
-        List<MarcatorePartita> marcatori = SimulazionePartitaHelper.generaMarcatori(
-                goalCasa, goalTrasferta, titolariCasa, titolariTrasferta, partita
-        );
-
-
-        partita.getMarcatori().clear();
-        partita.getMarcatori().addAll(marcatori);
-
-
-        // 8. Salva e ritorna la partita aggiornata
-        return partitaRepository.save(partita);
-
+        return partita;
     }
-
 }
