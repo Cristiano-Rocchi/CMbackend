@@ -38,20 +38,52 @@ public class DribblingHelper {
                 sd.getAggressivita() * 0.1 +
                 random.nextInt(11); // bonus casuale
 
-        // =================== 4. Determina l’esito ===================
-        boolean riuscito = punteggioAttaccante > punteggioDifensore;
+        // =================== 4. Verifica se l'attaccante ha superato il difensore ===================
+        boolean superato = punteggioAttaccante > punteggioDifensore;
 
-        // =================== 5. Costruisci l’evento ===================
+        // =================== 5. Se superato, può fare fallo o subire il dribbling ===================
+        if (superato) {
+            int aggressivita = sd.getAggressivita();
+            double bonus = (aggressivita - 50) / 200.0;
+            double probabilitaFallo = 0.3 + Math.max(0, bonus);
+
+            boolean fallo = random.nextDouble() < probabilitaFallo;
+
+            if (fallo) {
+                return EventoPartita.builder()
+                        .minuto(minuto)
+                        .tipoEvento(TipoEvento.FALLO)
+                        .giocatorePrincipale(difensore)
+                        .giocatoreSecondario(attaccante)
+                        .esito("FALLO COMMESSO")
+                        .note("Fallo dopo dribbling superato")
+                        .partita(partita)
+                        .squadra(difensore.getSquadra())
+                        .build();
+            } else {
+                return EventoPartita.builder()
+                        .minuto(minuto)
+                        .tipoEvento(TipoEvento.DRIBBLING)
+                        .giocatorePrincipale(attaccante)
+                        .giocatoreSecondario(difensore)
+                        .esito("RIUSCITO")
+                        .note("Dribbling riuscito senza fallo")
+                        .partita(partita)
+                        .squadra(squadraAttaccante)
+                        .build();
+            }
+        }
+
+        // =================== 6. Se NON superato → intercetto ===================
         return EventoPartita.builder()
                 .minuto(minuto)
-                .tipoEvento(TipoEvento.DRIBBLING)
-                .giocatorePrincipale(attaccante)
-                .giocatoreSecondario(difensore)
-                .esito(riuscito ? "RIUSCITO" : "FALLITO")
-                .note("Confronto dribbling realistico")
+                .tipoEvento(TipoEvento.INTERCETTO)
+                .giocatorePrincipale(difensore)
+                .giocatoreSecondario(attaccante)
+                .esito("PALLA RECUPERATA")
+                .note("Dribbling fallito, intercetto del difensore")
                 .partita(partita)
-                .squadra(squadraAttaccante)
+                .squadra(difensore.getSquadra())
                 .build();
     }
 }
-

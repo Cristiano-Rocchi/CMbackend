@@ -12,6 +12,7 @@ public enum TipoEvento {
 
     // =================== ERRORI E FALLI ===================
     ERRORE_PASSAGGIO,
+    INTERCETTO,
     FALLO,
     AMMONIZIONE,
     ESPULSIONE,

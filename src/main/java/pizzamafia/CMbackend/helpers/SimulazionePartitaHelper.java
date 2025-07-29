@@ -1,7 +1,9 @@
 package pizzamafia.CMbackend.helpers;
 
 import pizzamafia.CMbackend.entities.*;
+import pizzamafia.CMbackend.enums.TipoEvento;
 import pizzamafia.CMbackend.helpers.eventi.DribblingHelper;
+import pizzamafia.CMbackend.helpers.eventi.PassaggioHelper;
 import pizzamafia.CMbackend.helpers.eventi.TiroHelper;
 
 import java.util.*;
@@ -86,20 +88,43 @@ public class SimulazionePartitaHelper {
 
         // =================== 4. Genera le azioni ===================
 
-        //azione 1 dribbling-tiro
+        // azione 1 passaggio-dribbling-tiro
         for (int i = 0; i < numeroAzioni; i++) {
             int minutoEvento = minutoInizio + random.nextInt(minutoFine - minutoInizio + 1);
 
+            // 1. PASSAGGIO
+            EventoPartita eventoPassaggio = PassaggioHelper.genera(minutoEvento, partita, squadraAttaccante, titolariAttacco, titolariDifesa);
+            eventi.add(eventoPassaggio);
+
+            // Se il passaggio non è riuscito → fine azione
+            if (!eventoPassaggio.getEsito().equals("RIUSCITO")) continue;
+
+            // 2. DRIBBLING
             EventoPartita eventoDribbling = DribblingHelper.genera(minutoEvento, partita, squadraAttaccante, titolariAttacco, titolariDifesa);
             eventi.add(eventoDribbling);
 
+            // Se il dribbling non è riuscito → intercetto automatico (già gestito dentro DribblingHelper o esternamente)
+            if (!eventoDribbling.getEsito().equals("RIUSCITO")) {
+                EventoPartita intercetto = EventoPartita.builder()
+                        .minuto(minutoEvento)
+                        .tipoEvento(TipoEvento.INTERCETTO)
+                        .giocatorePrincipale(eventoDribbling.getGiocatoreSecondario()) // difensore
+                        .giocatoreSecondario(eventoDribbling.getGiocatorePrincipale()) // attaccante
+                        .esito("PALLA RECUPERATA")
+                        .note("Intercetto dopo dribbling fallito")
+                        .partita(partita)
+                        .squadra(squadraDifendente)
+                        .build();
 
-            if (eventoDribbling.getEsito().equals("RIUSCITO")) {
-                EventoPartita eventoTiro = TiroHelper.genera(minutoEvento, partita, squadraAttaccante, squadraDifendente, eventoDribbling.getGiocatorePrincipale(), titolariDifesa);
-                eventi.add(eventoTiro);
+                eventi.add(intercetto);
+                continue;
             }
 
+            // 3. TIRO
+            EventoPartita eventoTiro = TiroHelper.genera(minutoEvento, partita, squadraAttaccante, squadraDifendente, eventoDribbling.getGiocatorePrincipale(), titolariDifesa);
+            eventi.add(eventoTiro);
         }
+
 
         return eventi;
 
