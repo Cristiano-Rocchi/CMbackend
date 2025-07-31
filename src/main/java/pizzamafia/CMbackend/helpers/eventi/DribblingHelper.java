@@ -12,6 +12,7 @@ public class DribblingHelper {
 
     public static EventoPartita genera(
             int minuto,
+            int secondo,
             Partita partita,
             Squadra squadraAttaccante,
             List<Titolari> titolariAttacco,
@@ -52,6 +53,8 @@ public class DribblingHelper {
             if (fallo) {
                 return EventoPartita.builder()
                         .minuto(minuto)
+                        .secondo(secondo)
+                        .durataStimata(3)
                         .tipoEvento(TipoEvento.FALLO)
                         .giocatorePrincipale(difensore)
                         .giocatoreSecondario(attaccante)
@@ -63,6 +66,8 @@ public class DribblingHelper {
             } else {
                 return EventoPartita.builder()
                         .minuto(minuto)
+                        .secondo(secondo)
+                        .durataStimata(3)
                         .tipoEvento(TipoEvento.DRIBBLING)
                         .giocatorePrincipale(attaccante)
                         .giocatoreSecondario(difensore)
@@ -77,6 +82,8 @@ public class DribblingHelper {
         // =================== 6. Se NON superato → intercetto ===================
         return EventoPartita.builder()
                 .minuto(minuto)
+                .secondo(secondo)
+                .durataStimata(3)
                 .tipoEvento(TipoEvento.INTERCETTO)
                 .giocatorePrincipale(difensore)
                 .giocatoreSecondario(attaccante)

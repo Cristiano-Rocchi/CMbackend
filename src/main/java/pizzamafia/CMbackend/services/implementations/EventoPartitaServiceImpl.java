@@ -39,6 +39,8 @@ public class EventoPartitaServiceImpl implements EventoPartitaService {
         return new EventoPartitaRespDTO(
                 evento.getId(),
                 evento.getMinuto(),
+                evento.getSecondo(),
+                evento.getDurataStimata(),
                 evento.getTipoEvento(),
                 evento.getEsito(),
                 evento.getNote(),
@@ -48,6 +50,7 @@ public class EventoPartitaServiceImpl implements EventoPartitaService {
                 giocatoreSecondarioId,
                 nomeGiocatoreSecondario,
                 evento.getSquadra().getId()
+
         );
     }
 }

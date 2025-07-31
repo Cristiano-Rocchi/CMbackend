@@ -13,6 +13,7 @@ public class TiroHelper {
 
     public static EventoPartita genera(
             int minuto,
+            int secondo,
             Partita partita,
             Squadra squadraAttaccante,
             Squadra squadraDifendente,
@@ -32,6 +33,8 @@ public class TiroHelper {
         if (punteggioTiro < 60) {
             return EventoPartita.builder()
                     .minuto(minuto)
+                    .secondo(secondo)
+                    .durataStimata(3)
                     .tipoEvento(TipoEvento.TIRO)
                     .giocatorePrincipale(tiratore)
                     .giocatoreSecondario(null)
@@ -63,6 +66,8 @@ public class TiroHelper {
         // =================== 5. Costruisci evento finale (GOL o PARATA) ===================
         return EventoPartita.builder()
                 .minuto(minuto)
+                .secondo(secondo)
+                .durataStimata(3)
                 .tipoEvento(parato ? TipoEvento.PARATA : TipoEvento.GOL)
                 .giocatorePrincipale(parato ? portiere : tiratore)
                 .giocatoreSecondario(parato ? tiratore : null)

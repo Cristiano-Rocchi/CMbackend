@@ -6,12 +6,13 @@ import pizzamafia.CMbackend.enums.TipoEvento;
 import java.util.List;
 import java.util.Random;
 
-public class PassaggioHelper {
+public class PassaggioCortoHelper {
 
     private static final Random random = new Random();
 
     public static EventoPartita genera(
             int minuto,
+            int secondo,
             Partita partita,
             Squadra squadraAttaccante,
             List<Titolari> titolariAttacco,
@@ -21,62 +22,67 @@ public class PassaggioHelper {
         Giocatore passatore = titolariAttacco.get(random.nextInt(titolariAttacco.size())).getGiocatore();
         Giocatore difensore = titolariDifesa.get(random.nextInt(titolariDifesa.size())).getGiocatore();
 
-        // =================== 2. Ottieni le statistiche ===================
+        // =================== 2. Statistiche ===================
         StatisticheTecnicheGiocatore sp = passatore.getStatistiche();
         StatisticheTecnicheGiocatore sd = difensore.getStatistiche();
 
-        // =================== 3. Calcola i punteggi (con random) ===================
+        // =================== 3. Punteggi ===================
         double punteggioPassatore = sp.getTecnica() * 0.45 +
                 sp.getCreativita() * 0.25 +
                 sp.getGiocoDiSquadra() * 0.2 +
                 sp.getCarisma() * 0.1 +
-                random.nextInt(11); // bonus casuale
+                random.nextInt(11);
 
         double punteggioDifensore = sd.getPosizione() * 0.4 +
                 sd.getIntuito() * 0.3 +
                 sd.getAggressivita() * 0.2 +
                 sd.getContrasti() * 0.1 +
-                random.nextInt(11); // bonus casuale
+                random.nextInt(11);
 
-        // =================== 4. Determina l’esito con logica a soglia ===================
+        // =================== 4. Esito: Riuscito ===================
         if (punteggioPassatore > punteggioDifensore) {
-            // PASSAGGIO riuscito
             return EventoPartita.builder()
                     .minuto(minuto)
+                    .secondo(secondo)
+                    .durataStimata(4)
                     .tipoEvento(TipoEvento.PASSAGGIO)
                     .giocatorePrincipale(passatore)
                     .giocatoreSecondario(null)
                     .esito("RIUSCITO")
-                    .note("Passaggio completato con successo")
-                    .partita(partita)
-                    .squadra(squadraAttaccante)
-                    .build();
-
-        } else if (punteggioDifensore - punteggioPassatore >= 10) {
-            // INTERCETTO (chiaro vantaggio del difensore)
-            return EventoPartita.builder()
-                    .minuto(minuto)
-                    .tipoEvento(TipoEvento.INTERCETTO)
-                    .giocatorePrincipale(difensore)
-                    .giocatoreSecondario(passatore)
-                    .esito("PALLA RECUPERATA")
-                    .note("Intercetto netto su passaggio sbagliato")
-                    .partita(partita)
-                    .squadra(difensore.getSquadra())
-                    .build();
-
-        } else {
-            // ERRORE PASSAGGIO (equilibrio)
-            return EventoPartita.builder()
-                    .minuto(minuto)
-                    .tipoEvento(TipoEvento.ERRORE_PASSAGGIO)
-                    .giocatorePrincipale(passatore)
-                    .giocatoreSecondario(null)
-                    .esito("FUORI MISURA")
-                    .note("Passaggio impreciso, palla persa")
+                    .note("Passaggio corto riuscito")
                     .partita(partita)
                     .squadra(squadraAttaccante)
                     .build();
         }
+
+        // =================== 5. Esito: Intercetto ===================
+        if (punteggioDifensore - punteggioPassatore >= 10) {
+            return EventoPartita.builder()
+                    .minuto(minuto)
+                    .secondo(secondo)
+                    .durataStimata(4)
+                    .tipoEvento(TipoEvento.INTERCETTO)
+                    .giocatorePrincipale(difensore)
+                    .giocatoreSecondario(passatore)
+                    .esito("PALLA RECUPERATA")
+                    .note("Intercetto su passaggio corto")
+                    .partita(partita)
+                    .squadra(difensore.getSquadra())
+                    .build();
+        }
+
+        // =================== 6. Esito: Errore passaggio ===================
+        return EventoPartita.builder()
+                .minuto(minuto)
+                .secondo(secondo)
+                .durataStimata(4)
+                .tipoEvento(TipoEvento.ERRORE_PASSAGGIO)
+                .giocatorePrincipale(passatore)
+                .giocatoreSecondario(null)
+                .esito("FUORI MISURA")
+                .note("Errore su passaggio corto")
+                .partita(partita)
+                .squadra(squadraAttaccante)
+                .build();
     }
 }

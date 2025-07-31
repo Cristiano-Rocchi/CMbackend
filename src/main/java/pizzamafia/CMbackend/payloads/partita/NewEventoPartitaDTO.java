@@ -6,6 +6,8 @@ import java.util.UUID;
 
 public record NewEventoPartitaDTO(
         int minuto,
+        int secondo,
+        int durataStimata,
         TipoEvento tipoEvento,
         String esito,
         String note,

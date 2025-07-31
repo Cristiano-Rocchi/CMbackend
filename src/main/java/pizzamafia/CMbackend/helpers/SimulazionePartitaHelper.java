@@ -3,7 +3,7 @@ package pizzamafia.CMbackend.helpers;
 import pizzamafia.CMbackend.entities.*;
 import pizzamafia.CMbackend.enums.TipoEvento;
 import pizzamafia.CMbackend.helpers.eventi.DribblingHelper;
-import pizzamafia.CMbackend.helpers.eventi.PassaggioHelper;
+import pizzamafia.CMbackend.helpers.eventi.PassaggioCortoHelper;
 import pizzamafia.CMbackend.helpers.eventi.TiroHelper;
 
 import java.util.*;
@@ -86,46 +86,20 @@ public class SimulazionePartitaHelper {
             numeroAzioni = random.nextDouble() < 0.4 ? 1 : 0;
         }
 
-        // =================== 4. Genera le azioni ===================
+        // =================== 4. Genera le azioni (DA COMPLETARE) ===================
+        int secondoCorrente = 0;
 
-        // azione 1 passaggio-dribbling-tiro
         for (int i = 0; i < numeroAzioni; i++) {
-            int minutoEvento = minutoInizio + random.nextInt(minutoFine - minutoInizio + 1);
+            if (secondoCorrente >= 300) break;
 
-            // 1. PASSAGGIO
-            EventoPartita eventoPassaggio = PassaggioHelper.genera(minutoEvento, partita, squadraAttaccante, titolariAttacco, titolariDifesa);
-            eventi.add(eventoPassaggio);
+            // TODO: Scegli e genera un'azione tra le disponibili (es. tiki-taka, palla lunga...)
+            // Per ora placeholder: nessuna azione viene generata
 
-            // Se il passaggio non è riuscito → fine azione
-            if (!eventoPassaggio.getEsito().equals("RIUSCITO")) continue;
+            // Esempio futuro:
+            // List<EventoPartita> azione = TikiTakaHelper.eseguiTikiTaka1(...);
+            // Assegna secondo, aggiungi eventi, ecc.
 
-            // 2. DRIBBLING
-            EventoPartita eventoDribbling = DribblingHelper.genera(minutoEvento, partita, squadraAttaccante, titolariAttacco, titolariDifesa);
-            eventi.add(eventoDribbling);
-
-            // Se il dribbling non è riuscito → intercetto automatico (già gestito dentro DribblingHelper o esternamente)
-            if (!eventoDribbling.getEsito().equals("RIUSCITO")) {
-                EventoPartita intercetto = EventoPartita.builder()
-                        .minuto(minutoEvento)
-                        .tipoEvento(TipoEvento.INTERCETTO)
-                        .giocatorePrincipale(eventoDribbling.getGiocatoreSecondario()) // difensore
-                        .giocatoreSecondario(eventoDribbling.getGiocatorePrincipale()) // attaccante
-                        .esito("PALLA RECUPERATA")
-                        .note("Intercetto dopo dribbling fallito")
-                        .partita(partita)
-                        .squadra(squadraDifendente)
-                        .build();
-
-                eventi.add(intercetto);
-                continue;
-            }
-
-            // 3. TIRO
-            EventoPartita eventoTiro = TiroHelper.genera(minutoEvento, partita, squadraAttaccante, squadraDifendente, eventoDribbling.getGiocatorePrincipale(), titolariDifesa);
-            eventi.add(eventoTiro);
         }
-
-
         return eventi;
 
     }

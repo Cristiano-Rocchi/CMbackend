@@ -23,6 +23,13 @@ public class EventoPartita {
     @Column(nullable = false)
     private int minuto;
 
+    @Column(nullable = false)
+    private int secondo;
+
+    @Column(nullable = false)
+    private int durataStimata; // in secondi
+
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private TipoEvento tipoEvento;

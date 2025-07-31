@@ -8,6 +8,8 @@ import java.util.UUID;
 public record EventoPartitaRespDTO(
         UUID id,
         int minuto,
+        int secondo,
+        int durataStimata,
         TipoEvento tipoEvento,
         String esito,
         String note,
