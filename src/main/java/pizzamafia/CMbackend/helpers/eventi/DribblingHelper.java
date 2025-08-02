@@ -1,15 +1,16 @@
 package pizzamafia.CMbackend.helpers.eventi;
 
 import pizzamafia.CMbackend.entities.*;
+import pizzamafia.CMbackend.enums.Ruolo;
 import pizzamafia.CMbackend.enums.TipoEvento;
 
 import java.util.List;
 import java.util.Random;
-
 public class DribblingHelper {
 
     private static final Random random = new Random();
 
+    // === Versione standard (compatibile con esistente) ===
     public static EventoPartita genera(
             int minuto,
             int secondo,
@@ -18,8 +19,43 @@ public class DribblingHelper {
             List<Titolari> titolariAttacco,
             List<Titolari> titolariDifesa
     ) {
+        return genera(minuto, secondo, partita, squadraAttaccante, titolariAttacco, titolariDifesa, null);
+    }
+
+    // === Versione con filtro per ruolo dell’attaccante ===
+    public static EventoPartita genera(
+            int minuto,
+            int secondo,
+            Partita partita,
+            Squadra squadraAttaccante,
+            List<Titolari> titolariAttacco,
+            List<Titolari> titolariDifesa,
+            Ruolo ruoloAttaccante
+    ) {
         // =================== 1. Estrai i giocatori coinvolti ===================
-        Giocatore attaccante = titolariAttacco.get(random.nextInt(titolariAttacco.size())).getGiocatore();
+        List<Giocatore> candidatiAttaccanti = (ruoloAttaccante == null)
+                ? titolariAttacco.stream().map(Titolari::getGiocatore).toList()
+                : titolariAttacco.stream()
+                .filter(t -> t.getRuolo() == ruoloAttaccante)
+                .map(Titolari::getGiocatore)
+                .toList();
+
+        if (candidatiAttaccanti.isEmpty()) {
+            return EventoPartita.builder()
+                    .minuto(minuto)
+                    .secondo(secondo)
+                    .durataStimata(3)
+                    .tipoEvento(TipoEvento.ERRORE_PASSAGGIO)
+                    .giocatorePrincipale(null)
+                    .giocatoreSecondario(null)
+                    .esito("NESSUN ATTACCANTE DISPONIBILE")
+                    .note("Dribbling fallito: nessun giocatore con ruolo " + ruoloAttaccante)
+                    .partita(partita)
+                    .squadra(squadraAttaccante)
+                    .build();
+        }
+
+        Giocatore attaccante = candidatiAttaccanti.get(random.nextInt(candidatiAttaccanti.size()));
         Giocatore difensore = titolariDifesa.get(random.nextInt(titolariDifesa.size())).getGiocatore();
 
         // =================== 2. Ottieni le statistiche ===================
