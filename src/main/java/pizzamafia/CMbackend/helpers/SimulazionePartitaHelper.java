@@ -1,10 +1,7 @@
 package pizzamafia.CMbackend.helpers;
 
 import pizzamafia.CMbackend.entities.*;
-import pizzamafia.CMbackend.enums.TipoEvento;
-import pizzamafia.CMbackend.helpers.eventi.DribblingHelper;
-import pizzamafia.CMbackend.helpers.eventi.PassaggioCortoHelper;
-import pizzamafia.CMbackend.helpers.eventi.TiroHelper;
+
 
 import java.util.*;
 

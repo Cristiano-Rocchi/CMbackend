@@ -1,9 +1,8 @@
-package pizzamafia.CMbackend.helpers.azioni;
+package pizzamafia.CMbackend.helpers.azioni.tikitaka;
 
 import pizzamafia.CMbackend.entities.*;
 import pizzamafia.CMbackend.enums.Ruolo;
 import pizzamafia.CMbackend.helpers.eventi.*;
-import pizzamafia.CMbackend.helpers.utility.TempoPartitaManager;
 import pizzamafia.CMbackend.helpers.utility.TempoPartitaManager;
 
 import java.util.ArrayList;
@@ -13,11 +12,11 @@ public class TikiTakaHelper {
 
 
     // Azione tiki-taka 1:
-    // Passaggio (difensore centrale → terzino) →
-    // Passaggio (terzino → centrocampista difensivo) →
-    // Passaggio (centrocampista difensivo → centrocampista offensivo) →
-    // Dribbling (centrocampista offensivo) →
-    // Passaggio (centrocampista offensivo → seconda punta) →
+    // Passaggio (difensore → difensore) →
+    // Passaggio (difensore → centrocampista) →
+    // Passaggio (centrocampista → centrocampista) →
+    // Dribbling (centrocampista) →
+    // Passaggio (centrocampista → seconda punta) →
     // Tiro (seconda punta)
 
 
@@ -27,57 +26,58 @@ public class TikiTakaHelper {
             Squadra squadraAttaccante,
             Squadra squadraDifendente,
             List<Titolari> titolariAttacco,
-            List<Titolari> titolariDifesa
+            List<Titolari> titolariDifesa,
+            List<Ruolo> ruoli
     ) {
         List<EventoPartita> eventi = new ArrayList<>();
         TempoPartitaManager tempo = new TempoPartitaManager(minuto);
 
-        // ===== 1. Passaggio (difensore centrale → terzino) =====
+        // ===== 1. Passaggio (difensore → difensore) =====
         EventoPartita p1 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.DIFENSORE_CENTRALE, Ruolo.TERZINO);
+                ruoli.get(0), ruoli.get(1));
         eventi.add(p1);
         if (!p1.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 2. Passaggio (terzino → centrocampista difensivo) =====
+        // ===== 2. Passaggio difensore → centrocampista) =====
         EventoPartita p2 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.TERZINO, Ruolo.CENTROCAMPISTA_DIFENSIVO);
+                ruoli.get(1), ruoli.get(2));
         eventi.add(p2);
         if (!p2.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 3. Passaggio (centrocampista difensivo → centrocampista offensivo) =====
+        // ===== 3. Passaggio (centrocampista → centrocampista) =====
         EventoPartita p3 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.CENTROCAMPISTA_DIFENSIVO, Ruolo.CENTROCAMPISTA_OFFENSIVO);
+                ruoli.get(2), ruoli.get(3));
         eventi.add(p3);
         if (!p3.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 4. Dribbling (centrocampista offensivo) =====
+        // ===== 4. Dribbling (centrocampista) =====
         EventoPartita d1 = DribblingHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.CENTROCAMPISTA_OFFENSIVO);
+                ruoli.get(3));
         eventi.add(d1);
         if (!d1.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(5);
 
-        // ===== 5. Passaggio (centrocampista offensivo → seconda punta) =====
+        // ===== 5. Passaggio (centrocampista → attaccante) =====
         EventoPartita p4 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.CENTROCAMPISTA_OFFENSIVO, Ruolo.SECONDA_PUNTA);
+                ruoli.get(3), ruoli.get(4));
         eventi.add(p4);
         if (!p4.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 6. Tiro (seconda punta) =====
+        // ===== 6. Tiro (attaccante) =====
         Giocatore tiratore = p4.getGiocatoreSecondario();
         EventoPartita t1 = TiroHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
@@ -94,12 +94,12 @@ public class TikiTakaHelper {
 
 
     // Azione tiki-taka 2:
-    // Passaggio (difensore centrale → centrocampista centrale) →
-    // Passaggio (centrocampista centrale → terzino) →
-    // Passaggio (terzino → centrocampista offensivo) →
-    // Passaggio (centrocampista offensivo → seconda punta) →
-    // Passaggio (seconda punta → centrocampista offensivo) →
-    // Tiro (centrocampista offensivo)
+    // Passaggio (difensore→ centrocampista) →
+    // Passaggio (centrocampista → difensore) →
+    // Passaggio (difensore → centrocampista) →
+    // Passaggio (centrocampista → attaccante) →
+    // Passaggio (attaccante → centrocampista) →
+    // Tiro (centrocampista)
 
 
     public static List<EventoPartita> eseguiTikiTaka2(
@@ -108,57 +108,58 @@ public class TikiTakaHelper {
             Squadra squadraAttaccante,
             Squadra squadraDifendente,
             List<Titolari> titolariAttacco,
-            List<Titolari> titolariDifesa
+            List<Titolari> titolariDifesa,
+            List<Ruolo> ruoli
     ) {
         List<EventoPartita> eventi = new ArrayList<>();
         TempoPartitaManager tempo = new TempoPartitaManager(minuto);
 
-        // ===== 1. Passaggio (difensore centrale → centrocampista centrale) =====
+        // ===== 1. Passaggio (difensore → centrocampista) =====
         EventoPartita p1 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.DIFENSORE_CENTRALE, Ruolo.CENTROCAMPISTA_CENTRALE);
+                ruoli.get(0), ruoli.get(1));
         eventi.add(p1);
         if (!p1.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 2. Passaggio (centrocampista centrale → terzino) =====
+        // ===== 2. Passaggio (centrocampista→ difensore) =====
         EventoPartita p2 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.CENTROCAMPISTA_CENTRALE, Ruolo.TERZINO);
+                ruoli.get(1), ruoli.get(2));
         eventi.add(p2);
         if (!p2.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 3. Passaggio (terzino → centrocampista offensivo) =====
+        // ===== 3. Passaggio (difensore → centrocampista) =====
         EventoPartita p3 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.TERZINO, Ruolo.CENTROCAMPISTA_OFFENSIVO);
+                ruoli.get(2), ruoli.get(3));
         eventi.add(p3);
         if (!p3.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 4. Passaggio (centrocampista offensivo → seconda punta) =====
+        // ===== 4. Passaggio (centrocampista → attaccante) =====
         EventoPartita p4 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.CENTROCAMPISTA_OFFENSIVO, Ruolo.SECONDA_PUNTA);
+                ruoli.get(3), ruoli.get(4));
         eventi.add(p4);
         if (!p4.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 5. Passaggio (seconda punta → centrocampista offensivo) =====
+        // ===== 5. Passaggio (attaccante → centrocampista) =====
         EventoPartita p5 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.SECONDA_PUNTA, Ruolo.CENTROCAMPISTA_OFFENSIVO);
+                ruoli.get(4), ruoli.get(3));
         eventi.add(p5);
         if (!p5.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 6. Tiro (centrocampista offensivo) =====
+        // ===== 6. Tiro (centrocampista) =====
         Giocatore tiratore = p5.getGiocatoreSecondario();
         EventoPartita t1 = TiroHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
@@ -172,13 +173,14 @@ public class TikiTakaHelper {
 
 
 
+
     // Azione tiki-taka 3:
-    // Passaggio (difensore centrale → centrocampista centrale) →
-    // Passaggio (centrocampista centrale → terzino) →
-    // Passaggio (terzino → difensore centrale) →
-    // Passaggio (difensore centrale → centrocampista offensivo) →
-    // Passaggio lungo (centrocampista offensivo → attaccante esterno) →
-    // Cross (attaccante esterno → bomber) →
+    // Passaggio (difensore → centrocampista) →
+    // Passaggio (centrocampista → difensore) →
+    // Passaggio (difensore → difensore) →
+    // Passaggio (difensore → centrocampista) →
+    // Passaggio lungo (centrocampista → attaccante) →
+    // Cross (attaccante → bomber) →
     // Colpo di testa (bomber)
 
 
@@ -188,61 +190,62 @@ public class TikiTakaHelper {
             Squadra squadraAttaccante,
             Squadra squadraDifendente,
             List<Titolari> titolariAttacco,
-            List<Titolari> titolariDifesa
+            List<Titolari> titolariDifesa,
+            List<Ruolo> ruoli
     ) {
         List<EventoPartita> eventi = new ArrayList<>();
         TempoPartitaManager tempo = new TempoPartitaManager(minuto);
 
-        // ===== 1. Passaggio (difensore centrale → centrocampista centrale) =====
+        // ===== 1. Passaggio (difensore → centrocampista) =====
         EventoPartita p1 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.DIFENSORE_CENTRALE, Ruolo.CENTROCAMPISTA_CENTRALE);
+                ruoli.get(0), ruoli.get(1));
         eventi.add(p1);
         if (!p1.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 2. Passaggio (centrocampista centrale → terzino) =====
+        // ===== 2. Passaggio (centrocampista → difensore) =====
         EventoPartita p2 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.CENTROCAMPISTA_CENTRALE, Ruolo.TERZINO);
+                ruoli.get(1), ruoli.get(2));
         eventi.add(p2);
         if (!p2.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 3. Passaggio (terzino → difensore centrale) =====
+        // ===== 3. Passaggio (difensore → difensore) =====
         EventoPartita p3 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.TERZINO, Ruolo.DIFENSORE_CENTRALE);
+                ruoli.get(2), ruoli.get(0));
         eventi.add(p3);
         if (!p3.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 4. Passaggio (difensore centrale → centrocampista difensivo) =====
+
+        // ===== 4. Passaggio (difensore → centrocampista) =====
         EventoPartita p4 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.DIFENSORE_CENTRALE, Ruolo.CENTROCAMPISTA_DIFENSIVO);
+                ruoli.get(0), ruoli.get(3));
         eventi.add(p4);
         if (!p4.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 5. Passaggio lungo (centrocampista difensivo → attaccante esterno) =====
+        // ===== 5. Passaggio lungo (centrocampista → attaccante) =====
         EventoPartita p5 = PassaggioLungoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.CENTROCAMPISTA_DIFENSIVO, Ruolo.ATTACCANTE_ESTERNO);
+                ruoli.get(3), ruoli.get(4));
         eventi.add(p5);
         if (!p5.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(6);
-
-        // ===== 6. Cross (attaccante esterno → bomber) =====
+        // ===== 6. Cross (attaccante → bomber) =====
         EventoPartita cross = CrossHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.ATTACCANTE_ESTERNO, Ruolo.BOMBER);
+                ruoli.get(4), ruoli.get(5));
         eventi.add(cross);
         if (!cross.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(3);
@@ -268,6 +271,7 @@ public class TikiTakaHelper {
     // Passaggio (centrocampista difensivo → difensore centrale) →
     // Passaggio (difensore centrale → centrocampista offensivo) →
     // Passaggio (centrocampista offensivo → centrocampista offensivo) →
+    // Passaggio (centrocampista offensivo → seconda punta) →
     // Dribbling (seconda punta) →
     // Tiro (seconda punta)
 
@@ -278,43 +282,44 @@ public class TikiTakaHelper {
             Squadra squadraAttaccante,
             Squadra squadraDifendente,
             List<Titolari> titolariAttacco,
-            List<Titolari> titolariDifesa
+            List<Titolari> titolariDifesa,
+            List<Ruolo> ruoli
     ) {
         List<EventoPartita> eventi = new ArrayList<>();
         TempoPartitaManager tempo = new TempoPartitaManager(minuto);
 
-        // ===== 1. Passaggio (centrocampista centrale → terzino) =====
+        // ===== 1. Passaggio (centrocampista → difensore) =====
         EventoPartita p1 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.CENTROCAMPISTA_CENTRALE, Ruolo.TERZINO);
+                ruoli.get(0), ruoli.get(1));
         eventi.add(p1);
         if (!p1.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 2. Passaggio (terzino → centrocampista difensivo) =====
+        // ===== 2. Passaggio (difensore → centrocampista) =====
         EventoPartita p2 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.TERZINO, Ruolo.CENTROCAMPISTA_DIFENSIVO);
+                ruoli.get(1), ruoli.get(2));
         eventi.add(p2);
         if (!p2.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 3. Passaggio (centrocampista difensivo → difensore centrale) =====
+        // ===== 3. Passaggio (centrocampista → difensore) =====
         EventoPartita p3 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.CENTROCAMPISTA_DIFENSIVO, Ruolo.DIFENSORE_CENTRALE);
+                ruoli.get(2), ruoli.get(3));
         eventi.add(p3);
         if (!p3.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 4. Passaggio (difensore centrale → centrocampista offensivo) =====
+        // ===== 4. Passaggio (difensore → centrocampista) =====
         EventoPartita p4 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.DIFENSORE_CENTRALE, Ruolo.CENTROCAMPISTA_OFFENSIVO);
+                ruoli.get(3), ruoli.get(4));
         eventi.add(p4);
         if (!p4.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
@@ -323,21 +328,30 @@ public class TikiTakaHelper {
         EventoPartita p5 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.CENTROCAMPISTA_OFFENSIVO, Ruolo.CENTROCAMPISTA_OFFENSIVO);
+                ruoli.get(4), ruoli.get(4));
         eventi.add(p5);
         if (!p5.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 6. Dribbling (seconda punta) =====
+        // ===== 6. Passaggio (centrocampista offensivo → seconda punta) =====
+        EventoPartita p6 = PassaggioCortoHelper.genera(
+                tempo.getMinuto(), tempo.getSecondo(),
+                partita, squadraAttaccante, titolariAttacco, titolariDifesa,
+                ruoli.get(4), ruoli.get(5));
+        eventi.add(p6);
+        if (!p6.getEsito().equals("RIUSCITO")) return eventi;
+        tempo.avanzaDi(4);
+
+        // ===== 7. Dribbling (seconda punta) =====
         EventoPartita dribbling = DribblingHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.SECONDA_PUNTA);
+                ruoli.get(5));
         eventi.add(dribbling);
         if (!dribbling.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(5);
 
-        // ===== 7. Tiro (seconda punta) =====
+        // ===== 8. Tiro (seconda punta) =====
         Giocatore tiratore = dribbling.getGiocatorePrincipale();
         EventoPartita tiro = TiroHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
@@ -346,19 +360,21 @@ public class TikiTakaHelper {
         eventi.add(tiro);
         tempo.avanzaDi(tiro.getDurataStimata());
 
+
         return eventi;
     }
 
 
 
+
     // Azione tiki-taka 5:
-    // Passaggio (centrocampista centrale → centrocampista offensivo) →
-    // Passaggio (centrocampista offensivo → seconda punta) →
-    // Passaggio (seconda punta → centrocampista centrale) →
-    // Passaggio (centrocampista centrale → centrocampista offensivo) →
-    // Dribbling (centrocampista offensivo) →
-    // Passaggio (centrocampista offensivo → centrocampista centrale) →
-    // Tiro (centrocampista centrale)
+    // Passaggio (centrocampista → centrocampista ) →
+    // Passaggio (centrocampista  → attaccante) →
+    // Passaggio (attaccante → centrocampista) →
+    // Passaggio (centrocampista → centrocampista) →
+    // Dribbling (centrocampista) →
+    // Passaggio (centrocampista → centrocampista) →
+    // Tiro (centrocampista)
 
 
     public static List<EventoPartita> eseguiTikiTaka5(
@@ -367,66 +383,68 @@ public class TikiTakaHelper {
             Squadra squadraAttaccante,
             Squadra squadraDifendente,
             List<Titolari> titolariAttacco,
-            List<Titolari> titolariDifesa
+            List<Titolari> titolariDifesa,
+            List<Ruolo> ruoli
     ) {
         List<EventoPartita> eventi = new ArrayList<>();
         TempoPartitaManager tempo = new TempoPartitaManager(minuto);
 
-        // ===== 1. Passaggio (centrocampista centrale → centrocampista offensivo) =====
+        // ===== 1. Passaggio (centrocampista → centrocampista) =====
         EventoPartita p1 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.CENTROCAMPISTA_CENTRALE, Ruolo.CENTROCAMPISTA_OFFENSIVO);
+                ruoli.get(0), ruoli.get(1));
         eventi.add(p1);
         if (!p1.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 2. Passaggio (centrocampista offensivo → seconda punta) =====
+        // ===== 2. Passaggio (centrocampista → attaccante) =====
         EventoPartita p2 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.CENTROCAMPISTA_OFFENSIVO, Ruolo.SECONDA_PUNTA);
+                ruoli.get(1), ruoli.get(2));
         eventi.add(p2);
         if (!p2.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 3. Passaggio (seconda punta → centrocampista centrale) =====
+        // ===== 3. Passaggio (attaccante → centrocampista) =====
         EventoPartita p3 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.SECONDA_PUNTA, Ruolo.CENTROCAMPISTA_CENTRALE);
+                ruoli.get(2), ruoli.get(0));
         eventi.add(p3);
         if (!p3.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 4. Passaggio (centrocampista centrale → centrocampista offensivo) =====
+        // ===== 4. Passaggio (centrocampista → centrocampista ) =====
         EventoPartita p4 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.CENTROCAMPISTA_CENTRALE, Ruolo.CENTROCAMPISTA_OFFENSIVO);
+                ruoli.get(0), ruoli.get(3));
         eventi.add(p4);
         if (!p4.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 5. Dribbling (centrocampista offensivo) =====
+        // ===== 5. Dribbling (centrocampista) =====
         EventoPartita d1 = DribblingHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.CENTROCAMPISTA_OFFENSIVO);
+                ruoli.get(3));
         eventi.add(d1);
         if (!d1.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(5);
 
-        // ===== 6. Passaggio (centrocampista offensivo → centrocampista centrale) =====
+        // ===== 6. Passaggio (centrocampista → centrocampista) =====
         EventoPartita p5 = PassaggioCortoHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
-                Ruolo.CENTROCAMPISTA_OFFENSIVO, Ruolo.CENTROCAMPISTA_CENTRALE);
+                ruoli.get(3), ruoli.get(0));
         eventi.add(p5);
         if (!p5.getEsito().equals("RIUSCITO")) return eventi;
         tempo.avanzaDi(4);
 
-        // ===== 7. Tiro (centrocampista centrale) =====
+
+        // ===== 7. Tiro (centrocampista) =====
         Giocatore tiratore = p5.getGiocatoreSecondario();
         EventoPartita tiro = TiroHelper.genera(
                 tempo.getMinuto(), tempo.getSecondo(),
@@ -436,6 +454,7 @@ public class TikiTakaHelper {
         tempo.avanzaDi(tiro.getDurataStimata());
 
         return eventi;
+
     }
 
 

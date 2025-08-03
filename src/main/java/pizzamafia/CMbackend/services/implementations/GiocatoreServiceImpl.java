@@ -129,7 +129,8 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                         stats.getRiflessi(),
                         stats.getTecnica(),
                         stats.getAssist(),
-                        stats.getTiriDaLontano()
+                        stats.getTiriDaLontano(),
+                        stats.getInserimento()
 
 
                 )
@@ -313,7 +314,8 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                 stats.getRiflessi(),
                 stats.getTecnica(),
                 stats.getAssist(),
-                stats.getTiriDaLontano()
+                stats.getTiriDaLontano(),
+                stats.getInserimento()
 
         );
 

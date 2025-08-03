@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pizzamafia.CMbackend.helpers.UserTeamContext;
+import pizzamafia.CMbackend.helpers.utility.ModuloUtils;
 import pizzamafia.CMbackend.payloads.partita.FormazioneRespDTO;
 import pizzamafia.CMbackend.payloads.partita.NewFormazioneDTO;
 import pizzamafia.CMbackend.services.FormazioneService;
@@ -32,8 +33,11 @@ public class FormazioneController {
 
         // Solo la squadra utente può impostare la formazione
         if (!userTeamContext.isUserTeam(squadraId)) {
-            return ResponseEntity.badRequest().build(); // oppure puoi lanciare una custom exception
+            return ResponseEntity.badRequest().build();
         }
+
+        // Validazione dei titolari rispetto al modulo selezionato
+        ModuloUtils.validaTitolariPerModulo(dto.modulo().name(), dto.titolari());
 
         // Salva la formazione della squadra utente
         formazioneService.create(dto);
@@ -44,6 +48,7 @@ public class FormazioneController {
 
         return ResponseEntity.ok().build();
     }
+
 
 
     // =================== GET BY ID ===================
