@@ -234,7 +234,7 @@ public class GiocoSulleFasceHelper {
     // Azione fascia 4:
     // Passaggio corto (terzino → centrocampista centrale) →
     // Passaggio corto (centrocampista centrale → esterno (ala o terzino o att. esterno)) →
-    // Dribbling (esterno ) →
+    // Dribbling (esterno) →
     // Passaggio corto (esterno → seconda punta) →
     // Passaggio corto (seconda punta → esterno) →
     // Tiro (esterno)

@@ -18,7 +18,7 @@ public class PallaLungaHelper {
 // Passaggio lungo (centrocampista → attaccante) →
 // Dribbling (attaccante) →
 // Dribbling (attaccante) →
-// Tiro (seconda punta)
+// Tiro (attaccante)
 
     public static List<EventoPartita> eseguiPallaLunga1(
             int minuto,
