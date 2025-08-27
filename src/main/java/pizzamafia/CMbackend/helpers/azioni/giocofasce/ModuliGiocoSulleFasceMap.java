@@ -13,7 +13,7 @@ public class ModuliGiocoSulleFasceMap {
             Modulo._4_4_2_1, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 1 / Passatore 2
-                    Ruolo.ALA,                      // Ricevente 2 / Dribbling / Cross
+                    Ruolo.ALA_DX,                      // Ricevente 2 / Dribbling / Cross
                     Ruolo.BOMBER                    // Ricevente cross / Colpo di testa
             ),
             Modulo._4_4_2_2, List.of(
@@ -25,13 +25,13 @@ public class ModuliGiocoSulleFasceMap {
             Modulo._4_3_3_1, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 1 / Passatore 2
-                    Ruolo.ATTACCANTE_ESTERNO,       // Ricevente 2 / Dribbling / Cross
+                    Ruolo.ATTACCANTE_ESTERNO_DX,       // Ricevente 2 / Dribbling / Cross
                     Ruolo.BOMBER                    // Ricevente cross / Colpo di testa
             ),
             Modulo._4_3_3_2, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 1 / Passatore 2
-                    Ruolo.ATTACCANTE_ESTERNO,       // Ricevente 2 / Dribbling / Cross
+                    Ruolo.ATTACCANTE_ESTERNO_DX,       // Ricevente 2 / Dribbling / Cross
                     Ruolo.BOMBER                    // Ricevente cross / Colpo di testa
             )
     );
@@ -40,25 +40,25 @@ public class ModuliGiocoSulleFasceMap {
     public static final Map<Modulo, List<Ruolo>> GIOCOFASCE2_MAP = Map.of(
             Modulo._4_4_2_1, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
-                    Ruolo.TERZINO,                  // Ricevente 1 / Passatore 2 / Ricevente 3 / Dribbling / Cross
+                    Ruolo.TERZINO_DX,                  // Ricevente 1 / Passatore 2 / Ricevente 3 / Dribbling / Cross
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 2 / Passatore 3
                     Ruolo.BOMBER                    // Ricevente cross / Colpo di testa
             ),
             Modulo._4_4_2_2, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
-                    Ruolo.TERZINO,                  // Ricevente 1 / Passatore 2 / Ricevente 3 / Dribbling / Cross
+                    Ruolo.TERZINO_DX,                  // Ricevente 1 / Passatore 2 / Ricevente 3 / Dribbling / Cross
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 2 / Passatore 3
                     Ruolo.BOMBER                    // Ricevente cross / Colpo di testa
             ),
             Modulo._4_3_3_1, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
-                    Ruolo.TERZINO,                  // Ricevente 1 / Passatore 2 / Ricevente 3 / Dribbling / Cross
+                    Ruolo.TERZINO_DX,                  // Ricevente 1 / Passatore 2 / Ricevente 3 / Dribbling / Cross
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 2 / Passatore 3
                     Ruolo.BOMBER                    // Ricevente cross / Colpo di testa
             ),
             Modulo._4_3_3_2, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
-                    Ruolo.TERZINO,                  // Ricevente 1 / Passatore 2 / Ricevente 3 / Dribbling / Cross
+                    Ruolo.TERZINO_DX,                  // Ricevente 1 / Passatore 2 / Ricevente 3 / Dribbling / Cross
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 2 / Passatore 3
                     Ruolo.BOMBER                    // Ricevente cross / Colpo di testa
             )
@@ -68,26 +68,26 @@ public class ModuliGiocoSulleFasceMap {
     public static final Map<Modulo, List<Ruolo>> GIOCOFASCE3_MAP = Map.of(
             Modulo._4_4_2_1, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
-                    Ruolo.TERZINO,                  // Ricevente 1 / Dribbling / Passatore 2
-                    Ruolo.ALA,                      // Ricevente 2 / Dribbling / Cross
+                    Ruolo.TERZINO_SX,                  // Ricevente 1 / Dribbling / Passatore 2
+                    Ruolo.ALA_SX,                      // Ricevente 2 / Dribbling / Cross
                     Ruolo.BOMBER                    // Ricevente cross / Colpo di testa
             ),
             Modulo._4_4_2_2, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
-                    Ruolo.TERZINO,                  // Ricevente 1 / Dribbling / Passatore 2
+                    Ruolo.TERZINO_SX,                  // Ricevente 1 / Dribbling / Passatore 2
                     Ruolo.CENTROCAMPISTA_OFFENSIVO, // Ricevente 2 / Dribbling / Cross
                     Ruolo.BOMBER                    // Ricevente cross / Colpo di testa
             ),
             Modulo._4_3_3_1, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
-                    Ruolo.TERZINO,                  // Ricevente 1 / Dribbling / Passatore 2
-                    Ruolo.ATTACCANTE_ESTERNO,       // Ricevente 2 / Dribbling / Cross
+                    Ruolo.TERZINO_SX,                  // Ricevente 1 / Dribbling / Passatore 2
+                    Ruolo.ATTACCANTE_ESTERNO_SX,       // Ricevente 2 / Dribbling / Cross
                     Ruolo.BOMBER                    // Ricevente cross / Colpo di testa
             ),
             Modulo._4_3_3_2, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
-                    Ruolo.TERZINO,                  // Ricevente 1 / Dribbling / Passatore 2
-                    Ruolo.ATTACCANTE_ESTERNO,       // Ricevente 2 / Dribbling / Cross
+                    Ruolo.TERZINO_SX,                  // Ricevente 1 / Dribbling / Passatore 2
+                    Ruolo.ATTACCANTE_ESTERNO_SX,       // Ricevente 2 / Dribbling / Cross
                     Ruolo.BOMBER                    // Ricevente cross / Colpo di testa
             )
     );
@@ -97,27 +97,27 @@ public class ModuliGiocoSulleFasceMap {
     // ----------------- GIOCO SULLE FASCE 4 --------------------
     public static final Map<Modulo, List<Ruolo>> GIOCOFASCE4_MAP = Map.of(
             Modulo._4_4_2_1, List.of(
-                    Ruolo.TERZINO,                  // Passatore 1 / Dribbling / Cross / Tiro
+                    Ruolo.TERZINO_SX,                  // Passatore 1 / Dribbling / Cross / Tiro
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 1 / Passatore 2
-                    Ruolo.ALA,                      // Ricevente 2 / Dribbling / Passatore 3 / Ricevente 5 / Tiro
+                    Ruolo.ALA_SX,                      // Ricevente 2 / Dribbling / Passatore 3 / Ricevente 5 / Tiro
                     Ruolo.SECONDA_PUNTA             // Ricevente 3 / Passatore 4
             ),
             Modulo._4_4_2_2, List.of(
-                    Ruolo.TERZINO,                  // Passatore 1 / Dribbling / Cross / Tiro
+                    Ruolo.TERZINO_SX,                  // Passatore 1 / Dribbling / Cross / Tiro
                     Ruolo.CENTROCAMPISTA_DIFENSIVO, // Ricevente 1 / Passatore 2
-                    Ruolo.TERZINO,                  // Ricevente 2 / Dribbling / Passatore 3 / Ricevente 5 / Tiro
+                    Ruolo.TERZINO_SX,                  // Ricevente 2 / Dribbling / Passatore 3 / Ricevente 5 / Tiro
                     Ruolo.SECONDA_PUNTA             // Ricevente 3 / Passatore 4
             ),
             Modulo._4_3_3_1, List.of(
-                    Ruolo.TERZINO,                  // Passatore 1
+                    Ruolo.TERZINO_SX,                  // Passatore 1
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 1 / Passatore 2
-                    Ruolo.ATTACCANTE_ESTERNO,       // Ricevente 2 / Dribbling / Passatore 3 / Ricevente 5 / Tiro
+                    Ruolo.ATTACCANTE_ESTERNO_SX,       // Ricevente 2 / Dribbling / Passatore 3 / Ricevente 5 / Tiro
                     Ruolo.CENTROCAMPISTA_OFFENSIVO  // Ricevente 3 / Passatore 4
             ),
             Modulo._4_3_3_2, List.of(
-                    Ruolo.TERZINO,                  // Passatore 1
+                    Ruolo.TERZINO_SX,                  // Passatore 1
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 1 / Passatore 2
-                    Ruolo.ATTACCANTE_ESTERNO,       // Ricevente 2 / Dribbling / Passatore 3 / Ricevente 5 / Tiro
+                    Ruolo.ATTACCANTE_ESTERNO_SX,       // Ricevente 2 / Dribbling / Passatore 3 / Ricevente 5 / Tiro
                     Ruolo.BOMBER                    // Ricevente 3 / Passatore 4
             )
     );
@@ -126,25 +126,25 @@ public class ModuliGiocoSulleFasceMap {
             Modulo._4_4_2_1, List.of(
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Passatore 1
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 1 / Passatore 2
-                    Ruolo.ALA,                      // Ricevente 2 / Dribbling x2 / Passatore 5
+                    Ruolo.ALA_DX,                      // Ricevente 2 / Dribbling x2 / Passatore 5
                     Ruolo.SECONDA_PUNTA             // Ricevente 5 / Tiro
             ),
             Modulo._4_4_2_2, List.of(
                     Ruolo.CENTROCAMPISTA_DIFENSIVO, // Passatore 1
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 1 / Passatore 2
-                    Ruolo.TERZINO,                  // Ricevente 2 / Dribbling x2 / Passatore 5
+                    Ruolo.TERZINO_DX,                  // Ricevente 2 / Dribbling x2 / Passatore 5
                     Ruolo.SECONDA_PUNTA             // Ricevente 5 / Tiro
             ),
             Modulo._4_3_3_1, List.of(
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Passatore 1
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 1 / Passatore 2
-                    Ruolo.ATTACCANTE_ESTERNO,       // Ricevente 2 / Dribbling x2 / Passatore 5
+                    Ruolo.ATTACCANTE_ESTERNO_DX,       // Ricevente 2 / Dribbling x2 / Passatore 5
                     Ruolo.BOMBER                    // Ricevente 5 / Tiro
             ),
             Modulo._4_3_3_2, List.of(
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Passatore 1
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 1 / Passatore 2
-                    Ruolo.ATTACCANTE_ESTERNO,       // Ricevente 2 / Dribbling x2 / Passatore 5
+                    Ruolo.ATTACCANTE_ESTERNO_DX,       // Ricevente 2 / Dribbling x2 / Passatore 5
                     Ruolo.BOMBER                    // Ricevente 5 / Tiro
             )
     );

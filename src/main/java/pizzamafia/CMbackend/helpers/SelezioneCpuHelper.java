@@ -85,15 +85,33 @@ public class SelezioneCpuHelper {
     private static Map<Ruolo, List<Ruolo>> getRuoliAlternativi() {
         Map<Ruolo, List<Ruolo>> map = new HashMap<>();
 
-        map.put(Ruolo.ALA, List.of(Ruolo.ATTACCANTE_ESTERNO, Ruolo.TERZINO));
-        map.put(Ruolo.SECONDA_PUNTA, List.of(Ruolo.CENTROCAMPISTA_OFFENSIVO, Ruolo.BOMBER));
-        map.put(Ruolo.CENTROCAMPISTA_OFFENSIVO, List.of(Ruolo.CENTROCAMPISTA_DIFENSIVO, Ruolo.SECONDA_PUNTA));
-        map.put(Ruolo.CENTROCAMPISTA_DIFENSIVO, List.of(Ruolo.CENTROCAMPISTA_OFFENSIVO, Ruolo.DIFENSORE_CENTRALE));
-        map.put(Ruolo.TERZINO, List.of(Ruolo.DIFENSORE_CENTRALE, Ruolo.ALA));
-        map.put(Ruolo.DIFENSORE_CENTRALE, List.of(Ruolo.TERZINO, Ruolo.CENTROCAMPISTA_DIFENSIVO));
-        map.put(Ruolo.BOMBER, List.of(Ruolo.SECONDA_PUNTA, Ruolo.ATTACCANTE_ESTERNO));
-        // PORTIERE non ha alternativi
+        // Ali: 1) lato opposto, 2) stesso lato att esterno, 3) stesso lato terzino
+        map.put(Ruolo.ALA_DX, List.of(Ruolo.ALA_SX, Ruolo.TERZINO_DX, Ruolo.ATTACCANTE_ESTERNO_DX));
+        map.put(Ruolo.ALA_SX, List.of(Ruolo.ALA_DX, Ruolo.TERZINO_SX, Ruolo.ATTACCANTE_ESTERNO_SX));
+
+        // Attaccanti esterni: 1) lato opposto, 2) stesso lato ala, 3) seconda punta
+        map.put(Ruolo.ATTACCANTE_ESTERNO_DX, List.of(Ruolo.ATTACCANTE_ESTERNO_SX, Ruolo.ALA_DX, Ruolo.SECONDA_PUNTA, Ruolo.CENTROCAMPISTA_OFFENSIVO));
+        map.put(Ruolo.ATTACCANTE_ESTERNO_SX, List.of(Ruolo.ATTACCANTE_ESTERNO_DX, Ruolo.ALA_SX, Ruolo.SECONDA_PUNTA, Ruolo.CENTROCAMPISTA_OFFENSIVO));
+
+        // Terzini: 1) lato opposto, 2) stesso lato ala, 3) difensore centrale
+        map.put(Ruolo.TERZINO_DX, List.of(Ruolo.TERZINO_SX, Ruolo.ALA_DX, Ruolo.DIFENSORE_CENTRALE));
+        map.put(Ruolo.TERZINO_SX, List.of(Ruolo.TERZINO_DX, Ruolo.ALA_SX, Ruolo.DIFENSORE_CENTRALE));
+
+        // Centrocampo
+        map.put(Ruolo.CENTROCAMPISTA_OFFENSIVO, List.of(Ruolo.CENTROCAMPISTA_CENTRALE, Ruolo.CENTROCAMPISTA_DIFENSIVO, Ruolo.SECONDA_PUNTA));
+        map.put(Ruolo.CENTROCAMPISTA_DIFENSIVO, List.of(Ruolo.CENTROCAMPISTA_CENTRALE, Ruolo.CENTROCAMPISTA_OFFENSIVO, Ruolo.DIFENSORE_CENTRALE));
+        map.put(Ruolo.CENTROCAMPISTA_CENTRALE, List.of(Ruolo.CENTROCAMPISTA_OFFENSIVO, Ruolo.CENTROCAMPISTA_DIFENSIVO));
+
+        // Punta
+        map.put(Ruolo.SECONDA_PUNTA, List.of(Ruolo.CENTROCAMPISTA_OFFENSIVO, Ruolo.BOMBER, Ruolo.ATTACCANTE_ESTERNO_DX, Ruolo.ATTACCANTE_ESTERNO_SX));
+        map.put(Ruolo.BOMBER, List.of(Ruolo.SECONDA_PUNTA, Ruolo.ATTACCANTE_ESTERNO_DX, Ruolo.ATTACCANTE_ESTERNO_SX));
+
+        // Difesa centrale
+        map.put(Ruolo.DIFENSORE_CENTRALE, List.of(Ruolo.TERZINO_DX, Ruolo.TERZINO_SX, Ruolo.CENTROCAMPISTA_DIFENSIVO));
+
+        // Portiere: nessun alternativo
 
         return map;
     }
+
 }

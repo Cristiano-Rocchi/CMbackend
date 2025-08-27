@@ -18,18 +18,18 @@ public class ModuliPallaLungaMap {
             Modulo._4_4_2_2, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
                     Ruolo.CENTROCAMPISTA_DIFENSIVO, // Ricevente 1 / Passatore lungo
-                    Ruolo.ATTACCANTE_ESTERNO        // Ricevente lungo / Dribbling / Tiro
+                    Ruolo.ATTACCANTE_ESTERNO_DX        // Ricevente lungo / Dribbling / Tiro
             ),
             Modulo._4_3_3_1, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 1 / Passatore lungo
-                    Ruolo.ATTACCANTE_ESTERNO        // Ricevente lungo / Dribbling / Tiro
+                    Ruolo.ATTACCANTE_ESTERNO_DX        // Ricevente lungo / Dribbling / Tiro
 
             ),
             Modulo._4_3_3_2, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 1 / Passatore lungo
-                    Ruolo.ATTACCANTE_ESTERNO        // Ricevente lungo / Dribbling / Tiro
+                    Ruolo.ATTACCANTE_ESTERNO_DX        // Ricevente lungo / Dribbling / Tiro
 
             )
     );
@@ -45,19 +45,19 @@ public class ModuliPallaLungaMap {
             Modulo._4_4_2_2, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
                     Ruolo.CENTROCAMPISTA_DIFENSIVO, // Ricevente 1 / Passatore lungo
-                    Ruolo.ATTACCANTE_ESTERNO,       // Ricevente lungo / Dribbling / Cross
+                    Ruolo.ATTACCANTE_ESTERNO_DX,       // Ricevente lungo / Dribbling / Cross
                     Ruolo.BOMBER                    // Ricevente cross / Colpo di testa
             ),
             Modulo._4_3_3_1, List.of(
                     Ruolo.DIFENSORE_CENTRALE,      //Passatore 1
                     Ruolo.CENTROCAMPISTA_CENTRALE, // Ricevente 1 / Passatore lungo
-                    Ruolo.ATTACCANTE_ESTERNO,      // Ricevente lungo / Dribbling / Cross
+                    Ruolo.ATTACCANTE_ESTERNO_DX,      // Ricevente lungo / Dribbling / Cross
                     Ruolo.BOMBER                   // Ricevente cross / Colpo di testa
             ),
             Modulo._4_3_3_2, List.of(
                     Ruolo.DIFENSORE_CENTRALE,      //Passatore 1
                     Ruolo.CENTROCAMPISTA_CENTRALE, // Ricevente 1 / Passatore lungo
-                    Ruolo.ATTACCANTE_ESTERNO,      // Ricevente lungo / Dribbling / Cross
+                    Ruolo.ATTACCANTE_ESTERNO_DX,      // Ricevente lungo / Dribbling / Cross
                     Ruolo.BOMBER                   // Ricevente cross / Colpo di testa
             )
     );
@@ -94,7 +94,7 @@ public class ModuliPallaLungaMap {
             ),
             Modulo._4_4_2_2, List.of(
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Dribbling / Passatore lungo
-                    Ruolo.ATTACCANTE_ESTERNO        // Ricevente lungo / Dribbling / Tiro
+                    Ruolo.ATTACCANTE_ESTERNO_SX        // Ricevente lungo / Dribbling / Tiro
             ),
             Modulo._4_3_3_1, List.of(
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Dribbling / Passatore lungo

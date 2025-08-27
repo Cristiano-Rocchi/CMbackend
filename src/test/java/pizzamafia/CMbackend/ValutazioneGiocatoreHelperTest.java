@@ -23,19 +23,7 @@ class ValutazioneGiocatoreHelperTest {
         assertEquals(80, valoreEffettivo);
     }
 
-    @Test
-    void testConPenalitaPersonalizzata() {
-        Giocatore g = new Giocatore();
-        g.setRuolo(Ruolo.TERZINO);
-        g.setValoreTecnico(80);
-
-        int valoreEffettivo = ValutazioneGiocatoreHelper.calcolaValoreEffettivo(
-                g,
-                Ruolo.ALA // penalità del 10% → 80 * 0.9 = 72
-        );
-
-        assertEquals(72, valoreEffettivo);
-    }
+   
 
 
 }

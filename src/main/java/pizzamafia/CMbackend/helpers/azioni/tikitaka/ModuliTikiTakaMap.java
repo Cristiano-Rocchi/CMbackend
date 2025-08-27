@@ -13,14 +13,14 @@ public class ModuliTikiTakaMap {
             //1.1 ------442------
             Modulo._4_4_2_1, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
-                    Ruolo.TERZINO,                  // Ricevente 1 / Passatore 2
+                    Ruolo.TERZINO_DX,                  // Ricevente 1 / Passatore 2
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 2 / Passatore 3
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 3 / Dribbling / Passatore 4
                     Ruolo.SECONDA_PUNTA             // Ricevente 4 / Tiro
             ),
             Modulo._4_4_2_2, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
-                    Ruolo.TERZINO,                  // Ricevente 1 / Passatore 2
+                    Ruolo.TERZINO_DX,                  // Ricevente 1 / Passatore 2
                     Ruolo.CENTROCAMPISTA_DIFENSIVO, // Ricevente 2 / Passatore 3
                     Ruolo.CENTROCAMPISTA_OFFENSIVO, // Ricevente 3 / Dribbling / Passatore 4
                     Ruolo.SECONDA_PUNTA             // Ricevente 4 / Tiro
@@ -28,14 +28,14 @@ public class ModuliTikiTakaMap {
             //1.2 ------433------
             Modulo._4_3_3_1, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
-                    Ruolo.TERZINO,                  // Ricevente 1 / Passatore 2
+                    Ruolo.TERZINO_DX,                  // Ricevente 1 / Passatore 2
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Ricevente 2 / Passatore 3
                     Ruolo.CENTROCAMPISTA_OFFENSIVO, // Ricevente 3 / Dribbling / Passatore 4
                     Ruolo.BOMBER                    // Ricevente 4 / Tiro
             ),
             Modulo._4_3_3_2, List.of(
                     Ruolo.DIFENSORE_CENTRALE,       // Passatore 1
-                    Ruolo.TERZINO,                  // Ricevente 1 / Passatore 2
+                    Ruolo.TERZINO_DX,                  // Ricevente 1 / Passatore 2
                     Ruolo.CENTROCAMPISTA_DIFENSIVO,  // Ricevente 2 / Passatore 3
                     Ruolo.CENTROCAMPISTA_CENTRALE,   // Ricevente 3 / Dribbling / Passatore 4
                     Ruolo.BOMBER                    // Ricevente 4 / Tiro
@@ -48,14 +48,14 @@ public class ModuliTikiTakaMap {
             Modulo._4_4_2_1, List.of(
                     Ruolo.DIFENSORE_CENTRALE,         // Passatore 1
                     Ruolo.CENTROCAMPISTA_CENTRALE,    // Ricevente 1 / Passatore 2
-                    Ruolo.TERZINO,                    // Ricevente 2 / Passatore 3
+                    Ruolo.TERZINO_SX,                    // Ricevente 2 / Passatore 3
                     Ruolo.CENTROCAMPISTA_CENTRALE,    // Ricevente 3 / Passatore 4 / Ricevente 5 / Tiro
                     Ruolo.SECONDA_PUNTA               // Ricevente 4 / Passatore 5
             ),
             Modulo._4_4_2_2, List.of(
                     Ruolo.DIFENSORE_CENTRALE,         // Passatore 1
                     Ruolo.CENTROCAMPISTA_CENTRALE,    // Ricevente 1 / Passatore 2
-                    Ruolo.TERZINO,                    // Ricevente 2 / Passatore 3
+                    Ruolo.TERZINO_SX,                    // Ricevente 2 / Passatore 3
                     Ruolo.CENTROCAMPISTA_OFFENSIVO,   // Ricevente 3 / Passatore 4 / Ricevente 5 / Tiro
                     Ruolo.SECONDA_PUNTA               // Ricevente 4 / Passatore 5
             ),
@@ -63,14 +63,14 @@ public class ModuliTikiTakaMap {
             Modulo._4_3_3_1, List.of(
                     Ruolo.DIFENSORE_CENTRALE,         // Passatore 1
                     Ruolo.CENTROCAMPISTA_CENTRALE,    // Ricevente 1 / Passatore 2
-                    Ruolo.TERZINO,                    // Ricevente 2 / Passatore 3
+                    Ruolo.TERZINO_SX,                    // Ricevente 2 / Passatore 3
                     Ruolo.CENTROCAMPISTA_OFFENSIVO,   // Ricevente 3 / Passatore 4 / Ricevente 5 / Tiro
                     Ruolo.BOMBER                      // Ricevente 4 / Passatore 5
             ),
             Modulo._4_3_3_2, List.of(
                     Ruolo.DIFENSORE_CENTRALE,         // Passatore 1
                     Ruolo.CENTROCAMPISTA_DIFENSIVO,   // Ricevente 1 / Passatore 2
-                    Ruolo.TERZINO,                    // Ricevente 2 / Passatore 3
+                    Ruolo.TERZINO_SX,                    // Ricevente 2 / Passatore 3
                     Ruolo.CENTROCAMPISTA_CENTRALE,    // Ricevente 3 / Passatore 4 / Ricevente 5 / Tiro
                     Ruolo.BOMBER                      // Ricevente 4 / Passatore 5
             )
@@ -82,15 +82,15 @@ public class ModuliTikiTakaMap {
             Modulo._4_4_2_1, List.of(
                     Ruolo.DIFENSORE_CENTRALE,        // Passatore 1 / Ricevente 3 / Passatore 4
                     Ruolo.CENTROCAMPISTA_CENTRALE,   // Ricevente 1 / Passatore 2
-                    Ruolo.TERZINO,                   // Ricevente 2 / Passatore 3
-                    Ruolo.ALA,                       // Ricevente 4 / Passatore lungo
+                    Ruolo.TERZINO_DX,                   // Ricevente 2 / Passatore 3
+                    Ruolo.ALA_DX,                       // Ricevente 4 / Passatore lungo
                     Ruolo.SECONDA_PUNTA,             // Ricevente lungo / Cross per bomber
                     Ruolo.BOMBER                     // Ricevente cross / Colpo di testa
             ),
             Modulo._4_4_2_2, List.of(
                     Ruolo.DIFENSORE_CENTRALE,        // Passatore 1 / Ricevente 3 / Passatore 4
                     Ruolo.CENTROCAMPISTA_CENTRALE,   // Ricevente 1 / Passatore 2
-                    Ruolo.TERZINO,                   // Ricevente 2 / Passatore 3
+                    Ruolo.TERZINO_DX,                   // Ricevente 2 / Passatore 3
                     Ruolo.CENTROCAMPISTA_OFFENSIVO,  // Ricevente 4 / Passatore lungo
                     Ruolo.SECONDA_PUNTA,             // Ricevente lungo / Cross per bomber
                     Ruolo.BOMBER                     // Ricevente cross / Colpo di testa
@@ -99,17 +99,17 @@ public class ModuliTikiTakaMap {
             Modulo._4_3_3_1, List.of(
                     Ruolo.DIFENSORE_CENTRALE,        // Passatore 1 / Ricevente 3 / Passatore 4
                     Ruolo.CENTROCAMPISTA_CENTRALE,   // Ricevente 1 / Passatore 2
-                    Ruolo.TERZINO,                   // Ricevente 2 / Passatore 3
+                    Ruolo.TERZINO_DX,                   // Ricevente 2 / Passatore 3
                     Ruolo.CENTROCAMPISTA_OFFENSIVO,  // Ricevente 4 / Passatore lungo
-                    Ruolo.ATTACCANTE_ESTERNO,        // Ricevente lungo / Cross per bomber
+                    Ruolo.ATTACCANTE_ESTERNO_DX,        // Ricevente lungo / Cross per bomber
                     Ruolo.BOMBER                     // Ricevente cross / Colpo di testa
             ),
             Modulo._4_3_3_2, List.of(
                     Ruolo.DIFENSORE_CENTRALE,        // Passatore 1 / Ricevente 3 / Passatore 4
                     Ruolo.CENTROCAMPISTA_DIFENSIVO,  // Ricevente 1 / Passatore 2
-                    Ruolo.TERZINO,                   // Ricevente 2 / Passatore 3
+                    Ruolo.TERZINO_DX,                   // Ricevente 2 / Passatore 3
                     Ruolo.CENTROCAMPISTA_CENTRALE,   // Ricevente 4 / Passatore lungo
-                    Ruolo.ATTACCANTE_ESTERNO,        // Ricevente lungo / Cross per bomber
+                    Ruolo.ATTACCANTE_ESTERNO_DX,        // Ricevente lungo / Cross per bomber
                     Ruolo.BOMBER                     // Ricevente cross / Colpo di testa
             )
     );
@@ -119,8 +119,8 @@ public class ModuliTikiTakaMap {
             //4.1 ------442-----
             Modulo._4_4_2_1, List.of(
                     Ruolo.CENTROCAMPISTA_CENTRALE,   // Passatore 1
-                    Ruolo.TERZINO,                   // Ricevente 1 / Passatore 2
-                    Ruolo.ALA,                       // Ricevente 2 / Passatore 3
+                    Ruolo.TERZINO_SX,                   // Ricevente 1 / Passatore 2
+                    Ruolo.ALA_SX,                       // Ricevente 2 / Passatore 3
                     Ruolo.DIFENSORE_CENTRALE,        // Ricevente 3 / Passatore 4
                     Ruolo.CENTROCAMPISTA_CENTRALE,   // Ricevente 4 / Passatore 5 / Passatore 6
                     Ruolo.SECONDA_PUNTA,             // Ricevente 6 / Dribbling / Tiro
@@ -128,7 +128,7 @@ public class ModuliTikiTakaMap {
             ),
             Modulo._4_4_2_2, List.of(
                     Ruolo.CENTROCAMPISTA_DIFENSIVO,  // Passatore 1
-                    Ruolo.TERZINO,                   // Ricevente 1 / Passatore 2
+                    Ruolo.TERZINO_SX,                   // Ricevente 1 / Passatore 2
                     Ruolo.CENTROCAMPISTA_CENTRALE,   // Ricevente 2 / Passatore 3
                     Ruolo.DIFENSORE_CENTRALE,        // Ricevente 3 / Passatore 4
                     Ruolo.CENTROCAMPISTA_CENTRALE,   // Ricevente 4 / Passatore 5 / Passatore 6
@@ -138,20 +138,20 @@ public class ModuliTikiTakaMap {
             //4.2------433------
             Modulo._4_3_3_1, List.of(
                     Ruolo.CENTROCAMPISTA_CENTRALE,   // Passatore 1
-                    Ruolo.TERZINO,                   // Ricevente 1 / Passatore 2
+                    Ruolo.TERZINO_SX,                   // Ricevente 1 / Passatore 2
                     Ruolo.CENTROCAMPISTA_OFFENSIVO,  // Ricevente 2 / Passatore 3
                     Ruolo.DIFENSORE_CENTRALE,        // Ricevente 3 / Passatore 4
                     Ruolo.CENTROCAMPISTA_OFFENSIVO,  // Ricevente 4 / Passatore 5 / Passatore 6
-                    Ruolo.ATTACCANTE_ESTERNO,        // Ricevente 6 / Dribbling / Tiro
+                    Ruolo.ATTACCANTE_ESTERNO_SX,        // Ricevente 6 / Dribbling / Tiro
                     Ruolo.CENTROCAMPISTA_OFFENSIVO   // Ricevente 5
             ),
             Modulo._4_3_3_2, List.of(
                     Ruolo.CENTROCAMPISTA_DIFENSIVO,  // Passatore 1
-                    Ruolo.TERZINO,                   // Ricevente 1 / Passatore 2
+                    Ruolo.TERZINO_SX,                   // Ricevente 1 / Passatore 2
                     Ruolo.CENTROCAMPISTA_CENTRALE,   // Ricevente 2 / Passatore 3
                     Ruolo.DIFENSORE_CENTRALE,        // Ricevente 3 / Passatore 4
                     Ruolo.CENTROCAMPISTA_CENTRALE,   // Ricevente 4 / Passatore 5 / Passatore 6
-                    Ruolo.ATTACCANTE_ESTERNO,        // Ricevente 6 / Dribbling / Tiro
+                    Ruolo.ATTACCANTE_ESTERNO_SX,        // Ricevente 6 / Dribbling / Tiro
                     Ruolo.CENTROCAMPISTA_CENTRALE    // Ricevente 5
             )
     );
@@ -160,7 +160,7 @@ public class ModuliTikiTakaMap {
     public static final Map<Modulo, List<Ruolo>> TIKITAKA5_MAP = Map.of(
             //5.1 ------442-----
             Modulo._4_4_2_1, List.of(
-                    Ruolo.ALA,                       // Passatore 1 / Ricevente 3 / Passatore 4 / Ricevente 6 / Tiro
+                    Ruolo.ALA_DX,                       // Passatore 1 / Ricevente 3 / Passatore 4 / Ricevente 6 / Tiro
                     Ruolo.CENTROCAMPISTA_CENTRALE,   // Ricevente 1 / Passatore 2
                     Ruolo.SECONDA_PUNTA,             // Ricevente 2 / Passatore 3
                     Ruolo.CENTROCAMPISTA_CENTRALE    // Ricevente 4 / Dribbling / Passatore 6
@@ -168,20 +168,20 @@ public class ModuliTikiTakaMap {
             Modulo._4_4_2_2, List.of(
                     Ruolo.CENTROCAMPISTA_CENTRALE,   // Passatore 1 / Ricevente 3 / Passatore 4 / Ricevente 6 / Tiro
                     Ruolo.CENTROCAMPISTA_DIFENSIVO,  // Ricevente 1 / Passatore 2
-                    Ruolo.ATTACCANTE_ESTERNO,        // Ricevente 2 / Passatore 3
+                    Ruolo.ATTACCANTE_ESTERNO_DX,        // Ricevente 2 / Passatore 3
                     Ruolo.CENTROCAMPISTA_OFFENSIVO   // Ricevente 4 / Dribbling / Passatore 6
             ),
             //5.2 ------433------
             Modulo._4_3_3_1, List.of(
                     Ruolo.CENTROCAMPISTA_CENTRALE,   // Passatore 1 / Ricevente 3 / Passatore 4 / Ricevente 6 / Tiro
                     Ruolo.CENTROCAMPISTA_OFFENSIVO,  // Ricevente 1 / Passatore 2
-                    Ruolo.ATTACCANTE_ESTERNO,        // Ricevente 2 / Passatore 3
+                    Ruolo.ATTACCANTE_ESTERNO_DX,        // Ricevente 2 / Passatore 3
                     Ruolo.CENTROCAMPISTA_OFFENSIVO   // Ricevente 4 / Dribbling / Passatore 6
             ),
             Modulo._4_3_3_2, List.of(
                     Ruolo.CENTROCAMPISTA_CENTRALE,  // Passatore 1 / Ricevente 3 / Passatore 4 / Ricevente 6 / Tiro
                     Ruolo.CENTROCAMPISTA_DIFENSIVO,  // Ricevente 1 / Passatore 2
-                    Ruolo.ATTACCANTE_ESTERNO,        // Ricevente 2 / Passatore 3
+                    Ruolo.ATTACCANTE_ESTERNO_DX,        // Ricevente 2 / Passatore 3
                     Ruolo.CENTROCAMPISTA_CENTRALE    // Ricevente 4 / Dribbling / Passatore 6
             )
     );

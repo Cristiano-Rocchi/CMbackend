@@ -18,19 +18,22 @@ public class ModuloUtils {
             case _4_4_2_1 -> Map.of(
                     Ruolo.PORTIERE, 1,
                     Ruolo.DIFENSORE_CENTRALE, 2,
-                    Ruolo.TERZINO, 2,
+                    Ruolo.TERZINO_DX, 1,
+                    Ruolo.TERZINO_SX, 1,
                     Ruolo.CENTROCAMPISTA_CENTRALE, 2,
-                    Ruolo.ALA, 2,
+                    Ruolo.ALA_DX, 1,
+                    Ruolo.ALA_SX, 1,
                     Ruolo.SECONDA_PUNTA, 1,
                     Ruolo.BOMBER, 1
             );
             case _4_4_2_2 -> Map.of(
                     Ruolo.PORTIERE, 1,
                     Ruolo.DIFENSORE_CENTRALE, 2,
-                    Ruolo.TERZINO, 2,
+                    Ruolo.TERZINO_DX, 1,
+                    Ruolo.TERZINO_SX, 1,
                     Ruolo.CENTROCAMPISTA_DIFENSIVO, 1,
                     Ruolo.CENTROCAMPISTA_OFFENSIVO, 1,
-                    Ruolo.ALA, 2,
+                    Ruolo.CENTROCAMPISTA_CENTRALE, 2,
                     Ruolo.SECONDA_PUNTA, 1,
                     Ruolo.BOMBER, 1
             );
@@ -39,19 +42,23 @@ public class ModuloUtils {
             case _4_3_3_1 -> Map.of(
                     Ruolo.PORTIERE, 1,
                     Ruolo.DIFENSORE_CENTRALE, 2,
-                    Ruolo.TERZINO, 2,
-                    Ruolo.CENTROCAMPISTA_CENTRALE, 1,
-                    Ruolo.CENTROCAMPISTA_OFFENSIVO, 2,
-                    Ruolo.ATTACCANTE_ESTERNO, 2,
+                    Ruolo.TERZINO_DX, 1,
+                    Ruolo.TERZINO_SX, 1,
+                    Ruolo.CENTROCAMPISTA_CENTRALE, 2,
+                    Ruolo.CENTROCAMPISTA_OFFENSIVO, 1,
+                    Ruolo.ATTACCANTE_ESTERNO_DX, 1,
+                    Ruolo.ATTACCANTE_ESTERNO_SX, 1,
                     Ruolo.BOMBER, 1
             );
             case _4_3_3_2 -> Map.of(
                     Ruolo.PORTIERE, 1,
                     Ruolo.DIFENSORE_CENTRALE, 2,
-                    Ruolo.TERZINO, 2,
+                    Ruolo.TERZINO_DX, 1,
+                    Ruolo.TERZINO_SX, 1,
                     Ruolo.CENTROCAMPISTA_DIFENSIVO, 1,
                     Ruolo.CENTROCAMPISTA_CENTRALE, 2,
-                    Ruolo.ATTACCANTE_ESTERNO, 2,
+                    Ruolo.ATTACCANTE_ESTERNO_DX, 1,
+                    Ruolo.ATTACCANTE_ESTERNO_SX, 1,
                     Ruolo.BOMBER, 1
             );
         };

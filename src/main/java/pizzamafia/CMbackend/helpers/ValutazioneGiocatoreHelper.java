@@ -52,7 +52,7 @@ public class ValutazioneGiocatoreHelper {
                         Map.entry("forza", 0.7),
                         Map.entry("impegno", 0.7),
                         Map.entry("resistenza", 0.5),
-                        Map.entry("gioco_di_squadra", 0.45),
+                        Map.entry("giocoDiSquadra", 0.45),
                         Map.entry("scatto", 0.3),
                         Map.entry("tecnica", 0.2),
                         Map.entry("aggressivita", 0.3)
@@ -66,7 +66,7 @@ public class ValutazioneGiocatoreHelper {
                         Map.entry("posizione", 1.4),
                         Map.entry("colpoDiTesta", 1.2),
                         Map.entry("elevazione", 1.0),
-                        Map.entry("aggressibita", 0.9),
+                        Map.entry("aggressivita", 0.9),
                         Map.entry("intuito", 0.8),
                         Map.entry("carisma", 1.3),
                         Map.entry("determinazione", 0.8),
@@ -77,10 +77,10 @@ public class ValutazioneGiocatoreHelper {
                         Map.entry("tecnica", 0.4),
                         Map.entry("scatto", 0.4),
                         Map.entry("agilita", 0.3),
-                        Map.entry("accellerazione", 0.3),
+                        Map.entry("accelerazione", 0.3),
                         Map.entry("riflessi", 0.25)
                 );
-            case TERZINO:
+            case TERZINO_DX, TERZINO_SX:
                 return Map.ofEntries(
                         Map.entry("accelerazione", 1.4),
                         Map.entry("resistenza", 1.4),
@@ -191,7 +191,7 @@ public class ValutazioneGiocatoreHelper {
                         Map.entry("colpoDiTesta", 0.3),
                         Map.entry("marcatura", 0.25)
                 );
-            case ALA:
+            case ALA_DX,ALA_SX:
                 return Map.ofEntries(
                         Map.entry("accelerazione", 1.4),
                         Map.entry("scatto", 1.35),
@@ -219,7 +219,7 @@ public class ValutazioneGiocatoreHelper {
                         Map.entry("colpoDiTesta", 0.3),
                         Map.entry("elevazione", 0.3)
                 );
-            case ATTACCANTE_ESTERNO:
+            case ATTACCANTE_ESTERNO_DX, ATTACCANTE_ESTERNO_SX:
                 return Map.ofEntries(
                         Map.entry("accelerazione", 1.3),
                         Map.entry("scatto", 1.3),
@@ -260,7 +260,7 @@ public class ValutazioneGiocatoreHelper {
                         Map.entry("agilita", 1.0),
                         Map.entry("posizione", 0.8),
                         Map.entry("calciPiazzati", 0.8),
-                        Map.entry("gioco_di_squadra", 0.75),
+                        Map.entry("giocoDiSquadra", 0.75),
                         Map.entry("inserimento", 0.7),
                         Map.entry("tiriDaLontano", 0.7),
                         Map.entry("scatto", 0.6),
@@ -276,7 +276,7 @@ public class ValutazioneGiocatoreHelper {
                 return Map.ofEntries(
                         Map.entry("finalizzazione", 1.5),
                         Map.entry("posizione", 1.4),
-                        Map.entry("colpoDiT", 1.2),
+                        Map.entry("colpoDiTesta", 1.2),
                         Map.entry("carisma", 1.2),
                         Map.entry("intuito", 1.25),
                         Map.entry("elevazione", 1.1),
@@ -326,118 +326,195 @@ public class ValutazioneGiocatoreHelper {
         if (ruoloReale == ruoloAssegnato) return base;
 
         // Mappa delle penalità tra ruoli (in percentuale)
-        Map<Ruolo, Map<Ruolo, Double>> malusMatrix = Map.of(
-                Ruolo.PORTIERE, Map.of(
-                        Ruolo.DIFENSORE_CENTRALE, 0.90,
-                        Ruolo.TERZINO, 0.90,
-                        Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.95,
-                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.95,
-                        Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.95,
-                        Ruolo.ALA, 0.98,
-                        Ruolo.ATTACCANTE_ESTERNO, 0.98,
-                        Ruolo.BOMBER, 0.98,
-                        Ruolo.SECONDA_PUNTA, 0.98
-                ),
-                Ruolo.DIFENSORE_CENTRALE, Map.of(
-                        Ruolo.TERZINO, 0.15,
-                        Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.30,
-                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.50,
-                        Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.60,
-                        Ruolo.ALA, 0.80,
-                        Ruolo.ATTACCANTE_ESTERNO, 0.85,
-                        Ruolo.BOMBER, 0.95,
-                        Ruolo.SECONDA_PUNTA, 0.90,
-                        Ruolo.PORTIERE, 0.98
-                ),
-                Ruolo.TERZINO, Map.of(
-                        Ruolo.ALA, 0.10,
-                        Ruolo.ATTACCANTE_ESTERNO, 0.30,
-                        Ruolo.DIFENSORE_CENTRALE, 0.15,
-                        Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.30,
-                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.40,
-                        Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.50,
-                        Ruolo.SECONDA_PUNTA, 0.80,
-                        Ruolo.BOMBER, 0.90,
-                        Ruolo.PORTIERE, 0.98
-                ),
-                Ruolo.CENTROCAMPISTA_DIFENSIVO, Map.of(
-                        Ruolo.DIFENSORE_CENTRALE, 0.20,
-                        Ruolo.TERZINO, 0.35,
-                        Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.20,
-                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.10,
-                        Ruolo.ALA, 0.50,
-                        Ruolo.ATTACCANTE_ESTERNO, 0.60,
-                        Ruolo.SECONDA_PUNTA, 0.70,
-                        Ruolo.BOMBER, 0.80,
-                        Ruolo.PORTIERE, 0.95
-                ),
-                Ruolo.CENTROCAMPISTA_CENTRALE, Map.of(
-                        Ruolo.DIFENSORE_CENTRALE, 0.30,
-                        Ruolo.TERZINO, 0.40,
-                        Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.10,
-                        Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.10,
-                        Ruolo.ALA, 0.50,
-                        Ruolo.ATTACCANTE_ESTERNO, 0.60,
-                        Ruolo.SECONDA_PUNTA, 0.70,
-                        Ruolo.BOMBER, 0.80,
-                        Ruolo.PORTIERE, 0.95
-                ),
-                Ruolo.CENTROCAMPISTA_OFFENSIVO, Map.of(
-                        Ruolo.SECONDA_PUNTA, 0.10,
-                        Ruolo.ATTACCANTE_ESTERNO, 0.15,
-                        Ruolo.ALA, 0.30,
-                        Ruolo.BOMBER, 0.35,
-                        Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.15,
-                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.10,
-                        Ruolo.TERZINO, 0.60,
-                        Ruolo.DIFENSORE_CENTRALE, 0.75,
-                        Ruolo.PORTIERE, 0.95
-                ),
-                Ruolo.ALA, Map.of(
-                        Ruolo.ATTACCANTE_ESTERNO, 0.15,
-                        Ruolo.TERZINO, 0.10,
-                        Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.30,
-                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.30,
-                        Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.40,
-                        Ruolo.DIFENSORE_CENTRALE, 0.35,
-                        Ruolo.SECONDA_PUNTA, 0.45,
-                        Ruolo.BOMBER, 0.50,
-                        Ruolo.PORTIERE, 0.98
-                ),
-                Ruolo.ATTACCANTE_ESTERNO, Map.of(
-                        Ruolo.SECONDA_PUNTA, 0.10,
-                        Ruolo.ALA, 0.15,
-                        Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.20,
-                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.40,
-                        Ruolo.BOMBER, 0.30,
-                        Ruolo.TERZINO, 0.25,
-                        Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.50,
-                        Ruolo.DIFENSORE_CENTRALE, 0.70,
-                        Ruolo.PORTIERE, 0.98
-                ),
-                Ruolo.BOMBER, Map.of(
-                        Ruolo.SECONDA_PUNTA, 0.20,
-                        Ruolo.ATTACCANTE_ESTERNO, 0.30,
-                        Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.40,
-                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.50,
-                        Ruolo.ALA, 0.50,
-                        Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.60,
-                        Ruolo.TERZINO, 0.75,
-                        Ruolo.DIFENSORE_CENTRALE, 0.90,
-                        Ruolo.PORTIERE, 0.98
-                ),
-                Ruolo.SECONDA_PUNTA, Map.of(
-                        Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.10,
-                        Ruolo.CENTROCAMPISTA_CENTRALE, 0.30,
-                        Ruolo.BOMBER, 0.20,
-                        Ruolo.ATTACCANTE_ESTERNO, 0.15,
-                        Ruolo.ALA, 0.25,
-                        Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.45,
-                        Ruolo.TERZINO, 0.60,
-                        Ruolo.DIFENSORE_CENTRALE, 0.80,
-                        Ruolo.PORTIERE, 0.98
-                )
-        );
+        Map<Ruolo, Map<Ruolo, Double>> malusMatrix = Map.ofEntries(
+                Map.entry(Ruolo.PORTIERE, Map.ofEntries(
+                        Map.entry(Ruolo.DIFENSORE_CENTRALE, 0.90),
+                        Map.entry(Ruolo.TERZINO_DX, 0.90),
+                        Map.entry(Ruolo.TERZINO_SX, 0.90),
+                        Map.entry(Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.95),
+                        Map.entry(Ruolo.CENTROCAMPISTA_CENTRALE, 0.95),
+                        Map.entry(Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.95),
+                        Map.entry(Ruolo.ALA_DX, 0.98),
+                        Map.entry(Ruolo.ALA_SX, 0.98),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_DX, 0.98),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_SX, 0.98),
+                        Map.entry(Ruolo.BOMBER, 0.98),
+                        Map.entry(Ruolo.SECONDA_PUNTA, 0.98)
+                )),
+                Map.entry(Ruolo.DIFENSORE_CENTRALE, Map.ofEntries(
+                        Map.entry(Ruolo.TERZINO_DX, 0.15),
+                        Map.entry(Ruolo.TERZINO_SX, 0.15),
+                        Map.entry(Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.30),
+                        Map.entry(Ruolo.CENTROCAMPISTA_CENTRALE, 0.50),
+                        Map.entry(Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.60),
+                        Map.entry(Ruolo.ALA_DX, 0.80),
+                        Map.entry(Ruolo.ALA_SX, 0.80),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_DX, 0.85),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_SX, 0.85),
+                        Map.entry(Ruolo.BOMBER, 0.95),
+                        Map.entry(Ruolo.SECONDA_PUNTA, 0.90),
+                        Map.entry(Ruolo.PORTIERE, 0.98)
+                )),
+                Map.entry(Ruolo.TERZINO_DX, Map.ofEntries(
+                        Map.entry(Ruolo.TERZINO_SX, 0.05),
+                        Map.entry(Ruolo.ALA_DX, 0.10),
+                        Map.entry(Ruolo.ALA_SX, 0.20),
+                        Map.entry(Ruolo.DIFENSORE_CENTRALE, 0.15),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_DX, 0.30),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_SX, 0.40),
+                        Map.entry(Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.30),
+                        Map.entry(Ruolo.CENTROCAMPISTA_CENTRALE, 0.40),
+                        Map.entry(Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.50),
+                        Map.entry(Ruolo.SECONDA_PUNTA, 0.80),
+                        Map.entry(Ruolo.BOMBER, 0.90),
+                        Map.entry(Ruolo.PORTIERE, 0.98)
+                )),
+                Map.entry(Ruolo.TERZINO_SX, Map.ofEntries(
+                        Map.entry(Ruolo.TERZINO_DX, 0.05),
+                        Map.entry(Ruolo.ALA_SX, 0.10),
+                        Map.entry(Ruolo.ALA_DX, 0.20),
+                        Map.entry(Ruolo.DIFENSORE_CENTRALE, 0.15),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_SX, 0.30),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_DX, 0.40),
+                        Map.entry(Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.30),
+                        Map.entry(Ruolo.CENTROCAMPISTA_CENTRALE, 0.40),
+                        Map.entry(Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.50),
+                        Map.entry(Ruolo.SECONDA_PUNTA, 0.80),
+                        Map.entry(Ruolo.BOMBER, 0.90),
+                        Map.entry(Ruolo.PORTIERE, 0.98)
+                )),
+                Map.entry(Ruolo.CENTROCAMPISTA_DIFENSIVO, Map.ofEntries(
+                        Map.entry(Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.20),
+                        Map.entry(Ruolo.CENTROCAMPISTA_CENTRALE, 0.10),
+                        Map.entry(Ruolo.DIFENSORE_CENTRALE, 0.20),
+                        Map.entry(Ruolo.TERZINO_DX, 0.35),
+                        Map.entry(Ruolo.TERZINO_SX, 0.35),
+                        Map.entry(Ruolo.ALA_DX, 0.50),
+                        Map.entry(Ruolo.ALA_SX, 0.50),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_DX, 0.60),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_SX, 0.60),
+                        Map.entry(Ruolo.SECONDA_PUNTA, 0.70),
+                        Map.entry(Ruolo.BOMBER, 0.80),
+                        Map.entry(Ruolo.PORTIERE, 0.95)
+                )),
+                Map.entry(Ruolo.CENTROCAMPISTA_CENTRALE, Map.ofEntries(
+                        Map.entry(Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.10),
+                        Map.entry(Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.10),
+                        Map.entry(Ruolo.DIFENSORE_CENTRALE, 0.30),
+                        Map.entry(Ruolo.TERZINO_DX, 0.40),
+                        Map.entry(Ruolo.TERZINO_SX, 0.40),
+                        Map.entry(Ruolo.ALA_DX, 0.50),
+                        Map.entry(Ruolo.ALA_SX, 0.50),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_DX, 0.60),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_SX, 0.60),
+                        Map.entry(Ruolo.SECONDA_PUNTA, 0.70),
+                        Map.entry(Ruolo.BOMBER, 0.80),
+                        Map.entry(Ruolo.PORTIERE, 0.95)
+                )),
+
+                Map.entry(Ruolo.CENTROCAMPISTA_OFFENSIVO, Map.ofEntries(
+                        Map.entry(Ruolo.SECONDA_PUNTA, 0.10),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_DX, 0.15),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_SX, 0.15),
+                        Map.entry(Ruolo.ALA_DX, 0.30),
+                        Map.entry(Ruolo.ALA_SX, 0.30),
+                        Map.entry(Ruolo.BOMBER, 0.35),
+                        Map.entry(Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.15),
+                        Map.entry(Ruolo.CENTROCAMPISTA_CENTRALE, 0.10),
+                        Map.entry(Ruolo.TERZINO_DX, 0.60),
+                        Map.entry(Ruolo.TERZINO_SX, 0.60),
+                        Map.entry(Ruolo.DIFENSORE_CENTRALE, 0.75),
+                        Map.entry(Ruolo.PORTIERE, 0.95)
+                )),
+                Map.entry(Ruolo.ALA_DX, Map.ofEntries(
+                        Map.entry(Ruolo.ALA_SX, 0.05),
+                        Map.entry(Ruolo.TERZINO_DX, 0.10),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_DX, 0.15),
+                        Map.entry(Ruolo.TERZINO_SX, 0.20),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_SX, 0.25),
+                        Map.entry(Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.30),
+                        Map.entry(Ruolo.CENTROCAMPISTA_CENTRALE, 0.30),
+                        Map.entry(Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.40),
+                        Map.entry(Ruolo.DIFENSORE_CENTRALE, 0.35),
+                        Map.entry(Ruolo.SECONDA_PUNTA, 0.45),
+                        Map.entry(Ruolo.BOMBER, 0.50),
+                        Map.entry(Ruolo.PORTIERE, 0.98)
+                )),
+                Map.entry(Ruolo.ALA_SX, Map.ofEntries(
+                        Map.entry(Ruolo.ALA_DX, 0.05),
+                        Map.entry(Ruolo.TERZINO_SX, 0.10),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_SX, 0.15),
+                        Map.entry(Ruolo.TERZINO_DX, 0.20),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_DX, 0.25),
+                        Map.entry(Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.30),
+                        Map.entry(Ruolo.CENTROCAMPISTA_CENTRALE, 0.30),
+                        Map.entry(Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.40),
+                        Map.entry(Ruolo.DIFENSORE_CENTRALE, 0.35),
+                        Map.entry(Ruolo.SECONDA_PUNTA, 0.45),
+                        Map.entry(Ruolo.BOMBER, 0.50),
+                        Map.entry(Ruolo.PORTIERE, 0.98)
+                )),
+                Map.entry(Ruolo.ATTACCANTE_ESTERNO_DX, Map.ofEntries(
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_SX, 0.05),
+                        Map.entry(Ruolo.SECONDA_PUNTA, 0.10),
+                        Map.entry(Ruolo.ALA_DX, 0.15),
+                        Map.entry(Ruolo.ALA_SX, 0.20),
+                        Map.entry(Ruolo.TERZINO_DX, 0.25),
+                        Map.entry(Ruolo.TERZINO_SX, 0.30),
+                        Map.entry(Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.20),
+                        Map.entry(Ruolo.CENTROCAMPISTA_CENTRALE, 0.40),
+                        Map.entry(Ruolo.BOMBER, 0.30),
+                        Map.entry(Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.50),
+                        Map.entry(Ruolo.DIFENSORE_CENTRALE, 0.70),
+                        Map.entry(Ruolo.PORTIERE, 0.98)
+                )),
+                Map.entry(Ruolo.ATTACCANTE_ESTERNO_SX, Map.ofEntries(
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_DX, 0.05),
+                        Map.entry(Ruolo.SECONDA_PUNTA, 0.10),
+                        Map.entry(Ruolo.ALA_SX, 0.15),
+                        Map.entry(Ruolo.ALA_DX, 0.20),
+                        Map.entry(Ruolo.TERZINO_SX, 0.25),
+                        Map.entry(Ruolo.TERZINO_DX, 0.30),
+                        Map.entry(Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.20),
+                        Map.entry(Ruolo.CENTROCAMPISTA_CENTRALE, 0.40),
+                        Map.entry(Ruolo.BOMBER, 0.30),
+                        Map.entry(Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.50),
+                        Map.entry(Ruolo.DIFENSORE_CENTRALE, 0.70),
+                        Map.entry(Ruolo.PORTIERE, 0.98)
+                )),
+                Map.entry(Ruolo.SECONDA_PUNTA, Map.ofEntries(
+                        Map.entry(Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.10),
+                        Map.entry(Ruolo.CENTROCAMPISTA_CENTRALE, 0.30),
+                        Map.entry(Ruolo.BOMBER, 0.20),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_DX, 0.15),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_SX, 0.15),
+                        Map.entry(Ruolo.ALA_DX, 0.25),
+                        Map.entry(Ruolo.ALA_SX, 0.25),
+                        Map.entry(Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.45),
+                        Map.entry(Ruolo.TERZINO_DX, 0.60),
+                        Map.entry(Ruolo.TERZINO_SX, 0.60),
+                        Map.entry(Ruolo.DIFENSORE_CENTRALE, 0.80),
+                        Map.entry(Ruolo.PORTIERE, 0.98)
+                )),
+                Map.entry(Ruolo.BOMBER, Map.ofEntries(
+                        Map.entry(Ruolo.SECONDA_PUNTA, 0.20),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_DX, 0.30),
+                        Map.entry(Ruolo.ATTACCANTE_ESTERNO_SX, 0.30),
+                        Map.entry(Ruolo.CENTROCAMPISTA_OFFENSIVO, 0.40),
+                        Map.entry(Ruolo.CENTROCAMPISTA_CENTRALE, 0.50),
+                        Map.entry(Ruolo.ALA_DX, 0.50),
+                        Map.entry(Ruolo.ALA_SX, 0.50),
+                        Map.entry(Ruolo.CENTROCAMPISTA_DIFENSIVO, 0.60),
+                        Map.entry(Ruolo.TERZINO_DX, 0.75),
+                        Map.entry(Ruolo.TERZINO_SX, 0.75),
+                        Map.entry(Ruolo.DIFENSORE_CENTRALE, 0.90),
+                        Map.entry(Ruolo.PORTIERE, 0.98)
+                ))
+
+
+
+
+                );
 
         Map<Ruolo, Double> malusMap = malusMatrix.get(ruoloReale);
 
