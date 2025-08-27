@@ -2,6 +2,7 @@ package pizzamafia.CMbackend.helpers;
 
 import pizzamafia.CMbackend.entities.Giocatore;
 import pizzamafia.CMbackend.entities.Titolari;
+import pizzamafia.CMbackend.enums.Modulo;
 import pizzamafia.CMbackend.enums.Ruolo;
 import pizzamafia.CMbackend.helpers.utility.ModuloUtils;
 
@@ -9,19 +10,11 @@ import java.util.*;
 
 public class SelezioneCpuHelper {
 
-    // Metodo principale: seleziona i migliori 11 per un modulo dato (per ora solo _4_4_2)
-    public static List<Titolari> generaTitolariDalModulo(List<Giocatore> rosa, String modulo) {
-        // Check valido solo per moduli supportati
-        try {
-            ModuloUtils.getRuoliPerModulo(modulo);
-        } catch (UnsupportedOperationException e) {
-            throw new IllegalArgumentException("Modulo non supportato: " + modulo);
-        }
+    // Metodo principale: seleziona i migliori 11 per un modulo dato
 
-
+    public static List<Titolari> generaTitolariDalModulo(List<Giocatore> rosa, Modulo modulo) {
         // === BLOCCO 1: definizione del modulo (ruoli richiesti con quantità) ===
         Map<Ruolo, Integer> ruoliRichiesti = ModuloUtils.getRuoliPerModulo(modulo);
-
 
         // Mappa ruoli alternativi per coprire eventuali mancanze
         Map<Ruolo, List<Ruolo>> ruoliAlternativi = getRuoliAlternativi();
@@ -71,6 +64,8 @@ public class SelezioneCpuHelper {
 
         return titolari;
     }
+
+
 
     // Crea un oggetto Titolari con valore effettivo calcolato
     private static Titolari buildTitolare(Giocatore g, Ruolo ruolo) {
