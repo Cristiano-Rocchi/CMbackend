@@ -14,9 +14,7 @@ import pizzamafia.CMbackend.repositories.SquadraRepository;
 import pizzamafia.CMbackend.services.FormazioneService;
 import pizzamafia.CMbackend.helpers.ValutazioneGiocatoreHelper;
 
-
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -29,7 +27,6 @@ public class FormazioneServiceImpl implements FormazioneService {
     private final GiocatoreRepository giocatoreRepository;
 
     // =================== CREATE ===================
-
     @Override
     public FormazioneRespDTO create(NewFormazioneDTO dto) {
         Partita partita = partitaRepository.findById(dto.partitaId())
@@ -41,7 +38,7 @@ public class FormazioneServiceImpl implements FormazioneService {
         Formazione formazione = Formazione.builder()
                 .partita(partita)
                 .squadra(squadra)
-                .modulo(dto.modulo())
+                .modulo(dto.modulo())   // dto.modulo() deve essere di tipo Modulo
                 .build();
 
         List<Titolari> titolari = dto.titolari().stream()
@@ -60,7 +57,6 @@ public class FormazioneServiceImpl implements FormazioneService {
                             .valoreEffettivo(valoreEffettivo)
                             .build();
                 })
-
                 .toList();
 
         formazione.setTitolari(titolari);
@@ -69,7 +65,6 @@ public class FormazioneServiceImpl implements FormazioneService {
     }
 
     // =================== FIND BY ID ===================
-
     @Override
     public FormazioneRespDTO findById(UUID id) {
         Formazione formazione = formazioneRepository.findById(id)
@@ -78,7 +73,6 @@ public class FormazioneServiceImpl implements FormazioneService {
     }
 
     // =================== FIND ALL ===================
-
     @Override
     public List<FormazioneRespDTO> findAll() {
         return formazioneRepository.findAll().stream()
@@ -87,13 +81,12 @@ public class FormazioneServiceImpl implements FormazioneService {
     }
 
     // =================== DELETE ===================
-
     @Override
     public void deleteById(UUID id) {
         formazioneRepository.deleteById(id);
     }
 
-    //TROVA SQUADRE
+    // Trova l'altra squadra
     public UUID trovaAltraSquadra(UUID idPartita, UUID idSquadraUtente) {
         Partita partita = partitaRepository.findById(idPartita)
                 .orElseThrow(() -> new RuntimeException("Partita non trovata"));
@@ -107,7 +100,7 @@ public class FormazioneServiceImpl implements FormazioneService {
         throw new RuntimeException("La squadra indicata non partecipa a questa partita.");
     }
 
-    //GENRA FORMAZIONI
+    // Genera formazione automatica CPU
     public void generaFormazioneAutomaticaCpu(UUID idPartita, UUID idSquadra) {
         Partita partita = partitaRepository.findById(idPartita)
                 .orElseThrow(() -> new RuntimeException("Partita non trovata"));
@@ -117,14 +110,17 @@ public class FormazioneServiceImpl implements FormazioneService {
 
         List<Giocatore> rosa = squadra.getGiocatori();
 
-        // 1. Ottieni i titolari migliori per il modulo 4-4-2
-        List<Titolari> titolari = SelezioneCpuHelper.generaTitolariDalModulo(rosa, "_4_4_2");
+        // ⚠️ scegli tu il modulo di default per la CPU, ad esempio 4-4-2 con ali
+        Modulo moduloCpu = Modulo._4_4_2_1;
 
-        // 2. Crea la formazione (prima del ciclo)
+        // 1. Ottieni i titolari migliori per quel modulo
+        List<Titolari> titolari = SelezioneCpuHelper.generaTitolariDalModulo(rosa, moduloCpu);
+
+        // 2. Crea la formazione
         Formazione formazione = Formazione.builder()
                 .partita(partita)
                 .squadra(squadra)
-                .modulo(Modulo.valueOf("_4_4_2"))
+                .modulo(moduloCpu)
                 .build();
 
         // 3. Applica malus e valore effettivo ai titolari
@@ -145,10 +141,7 @@ public class FormazioneServiceImpl implements FormazioneService {
         formazioneRepository.save(formazione);
     }
 
-
-
     // =================== MAPPING ===================
-
     private FormazioneRespDTO toRespDTO(Formazione f) {
         List<TitolareRespDTO> titolari = f.getTitolari().stream()
                 .map(t -> new TitolareRespDTO(
@@ -168,7 +161,4 @@ public class FormazioneServiceImpl implements FormazioneService {
                 titolari
         );
     }
-
-
 }
-

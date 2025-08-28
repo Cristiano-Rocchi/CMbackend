@@ -12,7 +12,7 @@ public class ValutazioneGiocatoreHelper {
     //===========VALORETECNICO GIOCATORE================
     // Questo metodo calcola il valore tecnico finale di un giocatore,
     // in base al ruolo assegnato e alle sue statistiche tecniche.
-    public int calcolaValoreTecnico(Map<String, Integer> attributi, Ruolo ruolo) {
+    public static int calcolaValoreTecnico(Ruolo ruolo, StatisticheTecnicheGiocatore stats) {
         // Ottiene i pesi specifici per il ruolo
         Map<String, Double> pesi = getPesiPerRuolo(ruolo);
 
@@ -23,7 +23,37 @@ public class ValutazioneGiocatoreHelper {
         for (Map.Entry<String, Double> entry : pesi.entrySet()) {
             String attributo = entry.getKey();
             double peso = entry.getValue();
-            int valore = attributi.getOrDefault(attributo, 0);
+
+            // recupera il valore dal POJO delle statistiche
+            int valore = switch (attributo) {
+                case "accelerazione" -> stats.getAccelerazione();
+                case "agilita" -> stats.getAgilita();
+                case "elevazione" -> stats.getElevazione();
+                case "forza" -> stats.getForza();
+                case "resistenza" -> stats.getResistenza();
+                case "scatto" -> stats.getScatto();
+                case "aggressivita" -> stats.getAggressivita();
+                case "carisma" -> stats.getCarisma();
+                case "coraggio" -> stats.getCoraggio();
+                case "creativita" -> stats.getCreativita();
+                case "determinazione" -> stats.getDeterminazione();
+                case "giocoDiSquadra" -> stats.getGiocoDiSquadra();
+                case "impegno" -> stats.getImpegno();
+                case "intuito" -> stats.getIntuito();
+                case "posizione" -> stats.getPosizione();
+                case "calciPiazzati" -> stats.getCalciPiazzati();
+                case "colpoDiTesta" -> stats.getColpoDiTesta();
+                case "contrasti" -> stats.getContrasti();
+                case "dribbling" -> stats.getDribbling();
+                case "finalizzazione" -> stats.getFinalizzazione();
+                case "marcatura" -> stats.getMarcatura();
+                case "riflessi" -> stats.getRiflessi();
+                case "tecnica" -> stats.getTecnica();
+                case "assist" -> stats.getAssist();
+                case "tiriDaLontano" -> stats.getTiriDaLontano();
+                case "inserimento" -> stats.getInserimento();
+                default -> 0;
+            };
 
             punteggioGrezzo += valore * peso;
             sommaPesi += peso;
@@ -36,8 +66,9 @@ public class ValutazioneGiocatoreHelper {
         return (int) Math.round(normalizzato);
     }
 
+
     //MAP DEI RUOLI CON PESI
-    private Map<String, Double> getPesiPerRuolo(Ruolo ruolo) {
+    private static Map<String, Double> getPesiPerRuolo(Ruolo ruolo) {
         switch (ruolo) {
             case PORTIERE:
                 return Map.ofEntries(

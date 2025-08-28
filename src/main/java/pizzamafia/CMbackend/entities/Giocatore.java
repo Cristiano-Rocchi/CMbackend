@@ -57,4 +57,6 @@ public class Giocatore {
     // =================== RELAZIONE con STATISTICHE ===================
     @OneToOne(mappedBy = "giocatore", cascade = CascadeType.ALL, orphanRemoval = true)
     private StatisticheTecnicheGiocatore statistiche;
+
+
 }

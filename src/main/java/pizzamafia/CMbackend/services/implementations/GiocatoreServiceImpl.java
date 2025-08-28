@@ -86,6 +86,7 @@ public class GiocatoreServiceImpl implements GiocatoreService {
         // Usa la tabella dei pesi per calcolare il valore finale in base al ruolo
         double valore = ValutazioneGiocatoreHelper.calcolaValoreTecnico(dto.ruolo(), stats);
 
+
         giocatore.setValoreTecnico((int) Math.round(valore));
 
         // =================== SALVATAGGIO ===================

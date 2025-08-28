@@ -3,10 +3,37 @@ package pizzamafia.CMbackend.helpers.azioni.giocofasce;
 import pizzamafia.CMbackend.enums.Modulo;
 import pizzamafia.CMbackend.enums.Ruolo;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Random;
 
 public class ModuliGiocoSulleFasceMap {
+    private static final Random RND = new Random();
+
+    /** Restituisce una variante valida (1..5) disponibile per il modulo passato. */
+    public static int scegliVariante(Modulo modulo) {
+        List<Integer> disponibili = new ArrayList<>();
+        if (GIOCOFASCE1_MAP.containsKey(modulo)) disponibili.add(1);
+        if (GIOCOFASCE2_MAP.containsKey(modulo)) disponibili.add(2);
+        if (GIOCOFASCE3_MAP.containsKey(modulo)) disponibili.add(3);
+        if (GIOCOFASCE4_MAP.containsKey(modulo)) disponibili.add(4);
+        if (GIOCOFASCE5_MAP.containsKey(modulo)) disponibili.add(5);
+        if (disponibili.isEmpty()) return 1; // fallback
+        return disponibili.get(RND.nextInt(disponibili.size()));
+    }
+
+    /** Lista ruoli per la variante indicata e il modulo dato. */
+    public static List<Ruolo> ruoliPer(Modulo modulo, int variante) {
+        return switch (variante) {
+            case 1 -> GIOCOFASCE1_MAP.getOrDefault(modulo, List.of());
+            case 2 -> GIOCOFASCE2_MAP.getOrDefault(modulo, List.of());
+            case 3 -> GIOCOFASCE3_MAP.getOrDefault(modulo, List.of());
+            case 4 -> GIOCOFASCE4_MAP.getOrDefault(modulo, List.of());
+            case 5 -> GIOCOFASCE5_MAP.getOrDefault(modulo, List.of());
+            default -> List.of();
+        };
+    }
 
     // 1.----------------- GIOCO SULLE FASCE 1 --------------------
     public static final Map<Modulo, List<Ruolo>> GIOCOFASCE1_MAP = Map.of(

@@ -37,7 +37,7 @@ public class FormazioneController {
         }
 
         // Validazione dei titolari rispetto al modulo selezionato
-        ModuloUtils.validaTitolariPerModulo(dto.modulo().name(), dto.titolari());
+        ModuloUtils.validaTitolariPerModulo(dto.modulo(), dto.titolari());
 
         // Salva la formazione della squadra utente
         formazioneService.create(dto);

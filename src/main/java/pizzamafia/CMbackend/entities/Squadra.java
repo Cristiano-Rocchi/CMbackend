@@ -44,4 +44,10 @@ public class Squadra {
     // =================== RELAZIONE con GIOCATORI ===================
     @OneToMany(mappedBy = "squadra", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Giocatore> giocatori;
+
+
+    // Relazione con Allenatore
+    @OneToOne
+    @JoinColumn(name = "allenatore_id", referencedColumnName = "id")
+    private Allenatore allenatore;
 }
