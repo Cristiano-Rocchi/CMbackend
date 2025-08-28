@@ -3,9 +3,12 @@ package pizzamafia.CMbackend.helpers.eventi;
 import pizzamafia.CMbackend.entities.*;
 import pizzamafia.CMbackend.enums.Ruolo;
 import pizzamafia.CMbackend.enums.TipoEvento;
+import pizzamafia.CMbackend.helpers.utility.DefensiveMatchup;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+
 public class DribblingHelper {
 
     private static final Random random = new Random();
@@ -32,13 +35,13 @@ public class DribblingHelper {
             List<Titolari> titolariDifesa,
             Ruolo ruoloAttaccante
     ) {
-        // =================== 1. Estrai i giocatori coinvolti ===================
+        // =================== 1) Attaccante coinvolto ===================
         List<Giocatore> candidatiAttaccanti = (ruoloAttaccante == null)
-                ? titolariAttacco.stream().map(Titolari::getGiocatore).toList()
+                ? titolariAttacco.stream().map(Titolari::getGiocatore).collect(Collectors.toList())
                 : titolariAttacco.stream()
                 .filter(t -> t.getRuolo() == ruoloAttaccante)
                 .map(Titolari::getGiocatore)
-                .toList();
+                .collect(Collectors.toList());
 
         if (candidatiAttaccanti.isEmpty()) {
             return EventoPartita.builder()
@@ -56,13 +59,21 @@ public class DribblingHelper {
         }
 
         Giocatore attaccante = candidatiAttaccanti.get(random.nextInt(candidatiAttaccanti.size()));
-        Giocatore difensore = titolariDifesa.get(random.nextInt(titolariDifesa.size())).getGiocatore();
 
-        // =================== 2. Ottieni le statistiche ===================
+        // Ruolo effettivo: se non specificato, deduci dai titolari
+        Ruolo ruoloEffAttaccante = (ruoloAttaccante != null)
+                ? ruoloAttaccante
+                : deduciRuoloDaTitolari(attaccante, titolariAttacco);
+
+        // =================== 2) Difensore plausibile (pressione sul portatore) ===================
+        Giocatore difensore = DefensiveMatchup.scegliPressatoreSuPortatore(
+                ruoloEffAttaccante, titolariDifesa, random
+        );
+
+        // =================== 3) Statistiche (INVARIATE) ===================
         StatisticheTecnicheGiocatore sa = attaccante.getStatistiche();
         StatisticheTecnicheGiocatore sd = difensore.getStatistiche();
 
-        // =================== 3. Calcola il punteggio di entrambi ===================
         double punteggioAttaccante = sa.getDribbling() * 0.5 +
                 sa.getAgilita() * 0.2 +
                 sa.getScatto() * 0.15 +
@@ -75,15 +86,13 @@ public class DribblingHelper {
                 sd.getAggressivita() * 0.1 +
                 random.nextInt(11); // bonus casuale
 
-        // =================== 4. Verifica se l'attaccante ha superato il difensore ===================
+        // =================== 4) Esiti (INVARIATI) ===================
         boolean superato = punteggioAttaccante > punteggioDifensore;
 
-        // =================== 5. Se superato, può fare fallo o subire il dribbling ===================
         if (superato) {
             int aggressivita = sd.getAggressivita();
             double bonus = (aggressivita - 50) / 200.0;
             double probabilitaFallo = 0.3 + Math.max(0, bonus);
-
             boolean fallo = random.nextDouble() < probabilitaFallo;
 
             if (fallo) {
@@ -115,7 +124,7 @@ public class DribblingHelper {
             }
         }
 
-        // =================== 6. Se NON superato → intercetto ===================
+        // Non superato → palla recuperata
         return EventoPartita.builder()
                 .minuto(minuto)
                 .secondo(secondo)
@@ -128,5 +137,16 @@ public class DribblingHelper {
                 .partita(partita)
                 .squadra(difensore.getSquadra())
                 .build();
+    }
+
+    // =========================
+    // Supporto: deduzione ruolo
+    // =========================
+    private static Ruolo deduciRuoloDaTitolari(Giocatore g, List<Titolari> titolari) {
+        return titolari.stream()
+                .filter(t -> t.getGiocatore().getId().equals(g.getId()))
+                .map(Titolari::getRuolo)
+                .findFirst()
+                .orElse(g.getRuolo());
     }
 }

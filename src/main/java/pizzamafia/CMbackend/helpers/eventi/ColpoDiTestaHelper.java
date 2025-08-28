@@ -3,6 +3,7 @@ package pizzamafia.CMbackend.helpers.eventi;
 import pizzamafia.CMbackend.entities.*;
 import pizzamafia.CMbackend.enums.Ruolo;
 import pizzamafia.CMbackend.enums.TipoEvento;
+import pizzamafia.CMbackend.helpers.utility.DefensiveMatchup;
 
 import java.util.List;
 import java.util.Random;
@@ -22,8 +23,10 @@ public class ColpoDiTestaHelper {
     ) {
         StatisticheTecnicheGiocatore sa = attaccante.getStatistiche();
 
-        // =================== 1. Scontro aereo con il difensore ===================
-        Giocatore difensore = titolariDifesa.get(random.nextInt(titolariDifesa.size())).getGiocatore();
+        // ===== 1) Scontro aereo in area: scegli il marcatore plausibile del destinatario =====
+        // Usiamo il ruolo naturale dell'attaccante per la mappa di matchup (BOMBER/SS/esterni, ecc.)
+        Ruolo ruoloAttaccante = attaccante.getRuolo();
+        Giocatore difensore = DefensiveMatchup.scegliIntercettoreSuDestinatario(ruoloAttaccante, titolariDifesa, random);
         StatisticheTecnicheGiocatore sd = difensore.getStatistiche();
 
         double punteggioAttaccante = sa.getColpoDiTesta() * 0.5 +
@@ -40,36 +43,30 @@ public class ColpoDiTestaHelper {
 
         if (punteggioDifensore > punteggioAttaccante) {
             return EventoPartita.builder()
-                    .minuto(minuto)
-                    .secondo(secondo)
+                    .minuto(minuto).secondo(secondo).durataStimata(3)
                     .tipoEvento(TipoEvento.INTERCETTO)
                     .giocatorePrincipale(difensore)
                     .giocatoreSecondario(attaccante)
                     .esito("ANTICIPATO")
                     .note("Il difensore anticipa l'attaccante nel colpo di testa")
-                    .durataStimata(3)
-                    .partita(partita)
-                    .squadra(squadraDifendente)
+                    .partita(partita).squadra(squadraDifendente)
                     .build();
         }
 
-        // =================== 2. Tiro fuori? ===================
+        // ===== 2) Tiro fuori? =====
         if (punteggioAttaccante < 60) {
             return EventoPartita.builder()
-                    .minuto(minuto)
-                    .secondo(secondo)
+                    .minuto(minuto).secondo(secondo).durataStimata(3)
                     .tipoEvento(TipoEvento.TIRO)
                     .giocatorePrincipale(attaccante)
                     .giocatoreSecondario(null)
                     .esito("FUORI")
                     .note("Colpo di testa impreciso")
-                    .durataStimata(3)
-                    .partita(partita)
-                    .squadra(squadraAttaccante)
+                    .partita(partita).squadra(squadraAttaccante)
                     .build();
         }
 
-        // =================== 3. Confronto con il portiere ===================
+        // ===== 3) Confronto con il portiere =====
         Giocatore portiere = titolariDifesa.stream()
                 .map(Titolari::getGiocatore)
                 .filter(g -> g.getRuolo() == Ruolo.PORTIERE)
@@ -87,16 +84,13 @@ public class ColpoDiTestaHelper {
         boolean parato = parata > punteggioAttaccante;
 
         return EventoPartita.builder()
-                .minuto(minuto)
-                .secondo(secondo)
+                .minuto(minuto).secondo(secondo).durataStimata(3)
                 .tipoEvento(parato ? TipoEvento.PARATA : TipoEvento.GOL)
                 .giocatorePrincipale(parato ? portiere : attaccante)
                 .giocatoreSecondario(parato ? attaccante : null)
                 .esito(parato ? "RIUSCITA" : "RETE")
                 .note(parato ? "Colpo di testa parato dal portiere" : "Colpo di testa in rete")
-                .durataStimata(3)
-                .partita(partita)
-                .squadra(parato ? squadraDifendente : squadraAttaccante)
+                .partita(partita).squadra(parato ? squadraDifendente : squadraAttaccante)
                 .build();
     }
 }
