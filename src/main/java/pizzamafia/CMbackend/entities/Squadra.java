@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,7 +44,9 @@ public class Squadra {
 
     // =================== RELAZIONE con GIOCATORI ===================
     @OneToMany(mappedBy = "squadra", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Giocatore> giocatori;
+    @Builder.Default
+    private List<Giocatore> giocatori = new ArrayList<>();
+
 
 
     // Relazione con Allenatore

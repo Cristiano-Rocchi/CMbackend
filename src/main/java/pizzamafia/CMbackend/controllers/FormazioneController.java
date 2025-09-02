@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/formazioni")
+@RequestMapping("/formazione")
 @RequiredArgsConstructor
 public class FormazioneController {
 

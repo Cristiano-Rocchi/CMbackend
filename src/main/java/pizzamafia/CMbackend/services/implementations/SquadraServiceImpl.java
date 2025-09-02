@@ -1,5 +1,6 @@
 package pizzamafia.CMbackend.services.implementations;
 
+import pizzamafia.CMbackend.entities.Giocatore;
 import pizzamafia.CMbackend.entities.Squadra;
 import pizzamafia.CMbackend.entities.Stadio;
 import pizzamafia.CMbackend.exceptions.NotFoundException;
@@ -92,14 +93,17 @@ public class SquadraServiceImpl implements SquadraService {
 
     // =================== MAPPING ===================
     private SquadraRespDTO mapToDTO(Squadra s) {
-        List<GiocatoreLiteDTO> giocatori = s.getGiocatori().stream()
-                .map(g -> new GiocatoreLiteDTO(
-                        g.getId(),
-                        g.getNome(),
-                        g.getCognome(),
-                        g.getValoreTecnico()
-                ))
-                .toList();
+        List<GiocatoreLiteDTO> giocatori =
+                (s.getGiocatori() == null ? List.<Giocatore>of() : s.getGiocatori())
+                        .stream()
+                        .map(g -> new GiocatoreLiteDTO(
+                                g.getId(),
+                                g.getNome(),
+                                g.getCognome(),
+                                g.getRuolo(),
+                                g.getValoreTecnico()
+                        ))
+                        .toList();
 
         return new SquadraRespDTO(
                 s.getId(),
@@ -112,6 +116,7 @@ public class SquadraServiceImpl implements SquadraService {
                 giocatori
         );
     }
+
     //====LITE MAPPING====
     private SquadraLiteRespDTO mapToLiteDTO(Squadra s) {
         return new SquadraLiteRespDTO(
