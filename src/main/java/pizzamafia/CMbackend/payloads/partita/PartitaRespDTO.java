@@ -14,5 +14,7 @@ public record PartitaRespDTO(
         String competizione,
         List<MarcatoreRespDTO> marcatori,
         List<TitolareRespDTO> titolariCasa,
-        List<TitolareRespDTO> titolariTrasferta
+        List<TitolareRespDTO> titolariTrasferta,
+        // === Timeline completa della partita ===
+        List<EventoPartitaRespDTO> eventi
 ) {}

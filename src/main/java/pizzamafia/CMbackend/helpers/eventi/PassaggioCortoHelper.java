@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  */
 public class PassaggioCortoHelper {
 
-    // RNG condiviso: evita shadowing e garantisce riproducibilità se incapsulato a livello superiore
+
     private static final Random random = new Random();
 
     // ==============================
@@ -104,6 +104,9 @@ public class PassaggioCortoHelper {
                 sp.getGiocoDiSquadra() * 0.20 +
                 sp.getCarisma() * 0.10 +
                 random.nextInt(11);
+        // Bias dolce a favore del passatore (SOLO per passaggio corto)
+        punteggioPassatore += bonusPassaggioCorto(ruoloEffPassatore);
+
 
         // Valutazione difendente: pesi diversi per pressione vs intercetto
         double punteggioDifensore = pressioneSulPortatore
@@ -168,4 +171,32 @@ public class PassaggioCortoHelper {
                 .findFirst()
                 .orElse(g.getRuolo()); // fallback: ruolo naturale del giocatore
     }
+
+    // ==========================================
+    // Bonus "bias" per il passaggio corto (ruolo)
+    // ------------------------------------------
+    // i corti sono più sicuri per chi imposta da dietro.
+
+    // ==========================================
+    private static int bonusPassaggioCorto(Ruolo ruolo) {
+        switch (ruolo) {
+            case PORTIERE:                   return 10; // impostazione corta molto sicura
+            case DIFENSORE_CENTRALE:         return 10;
+            case TERZINO_DX:
+            case TERZINO_SX:                 return 9;
+            case CENTROCAMPISTA_DIFENSIVO:   return 8;
+            case CENTROCAMPISTA_CENTRALE:    return 7;
+            case CENTROCAMPISTA_OFFENSIVO:   return 7;
+            case ALA_DX:
+            case ALA_SX:                     return 6;
+            case ATTACCANTE_ESTERNO_DX:
+            case ATTACCANTE_ESTERNO_SX:      return 5;
+            case SECONDA_PUNTA:              return 4;
+            case BOMBER:                     return 4;
+            default:                         return 0;
+        }
+    }
+
 }
+
+

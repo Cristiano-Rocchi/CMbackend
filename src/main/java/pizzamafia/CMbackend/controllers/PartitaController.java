@@ -3,15 +3,16 @@ package pizzamafia.CMbackend.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pizzamafia.CMbackend.entities.EventoPartita;
 import pizzamafia.CMbackend.entities.Formazione;
 import pizzamafia.CMbackend.entities.Partita;
-import pizzamafia.CMbackend.payloads.partita.MarcatoreRespDTO;
-import pizzamafia.CMbackend.payloads.partita.PartitaRespDTO;
-import pizzamafia.CMbackend.payloads.partita.TitolareRespDTO;
+import pizzamafia.CMbackend.payloads.partita.*;
+import pizzamafia.CMbackend.repositories.EventoPartitaRepository;
 import pizzamafia.CMbackend.repositories.FormazioneRepository;
 import pizzamafia.CMbackend.repositories.TitolariRepository;
 import pizzamafia.CMbackend.services.PartitaService;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -25,6 +26,9 @@ public class PartitaController {
     private final TitolariRepository titolariRepository;
 
     private final FormazioneRepository formazioneRepository;
+
+    private final EventoPartitaRepository eventoPartitaRepository;
+
 
     // =================== CREATE ===================
 
@@ -122,6 +126,16 @@ public class PartitaController {
                 .toList()
                 : List.of();
 
+        // [ADD] Eventi della partita -> ordinati -> mappati in DTO
+        List<EventoPartitaRespDTO> eventi = eventoPartitaRepository.findByPartitaId(p.getId()).stream()
+                .sorted(Comparator
+                        .comparingInt(EventoPartita::getMinuto)
+                        .thenComparingInt(EventoPartita::getSecondo)
+                        .thenComparing(e -> e.getId().toString()))
+                .map(EventoPartitaMapper::toRespDTO)
+                .toList();
+
+
         return new PartitaRespDTO(
                 p.getId(),
                 p.getSquadraCasa().getNome(),
@@ -132,7 +146,8 @@ public class PartitaController {
                 p.getCompetizione().toString(),
                 marcatori,
                 titolariCasa,
-                titolariTrasferta
+                titolariTrasferta,
+                eventi
         );
     }
 
