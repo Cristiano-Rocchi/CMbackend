@@ -3,6 +3,7 @@ package pizzamafia.CMbackend.helpers.azioni.pallalunga;
 import pizzamafia.CMbackend.entities.*;
 import pizzamafia.CMbackend.enums.Ruolo;
 import pizzamafia.CMbackend.helpers.eventi.*;
+import pizzamafia.CMbackend.helpers.utility.MomentumBonusManager;
 import pizzamafia.CMbackend.helpers.utility.TempoPartitaManager;
 
 import java.util.ArrayList;
@@ -31,6 +32,7 @@ public class PallaLungaHelper {
     ) {
         List<EventoPartita> eventi = new ArrayList<>();
         TempoPartitaManager tempo = new TempoPartitaManager(minuto);
+        MomentumBonusManager.clearForAction(partita, squadraAttaccante);
 
         // ===== 1. Passaggio corto (difensore → centrocampista) =====
         EventoPartita p1 = PassaggioCortoHelper.genera(
@@ -38,7 +40,10 @@ public class PallaLungaHelper {
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
                 ruoli.get(0), ruoli.get(1));
         eventi.add(p1);
-        if (!p1.getEsito().equals("RIUSCITO")) return eventi;
+        if (!p1.getEsito().equals("RIUSCITO")){
+            MomentumBonusManager.clearForAction(partita, squadraAttaccante);
+            return eventi;
+        }
         tempo.avanzaDi(4);
 
         // ===== 2. Passaggio lungo (centrocampista → attaccante) =====
@@ -47,7 +52,10 @@ public class PallaLungaHelper {
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
                 ruoli.get(1), ruoli.get(2));
         eventi.add(p2);
-        if (!p2.getEsito().equals("RIUSCITO")) return eventi;
+        if (!p2.getEsito().equals("RIUSCITO")){
+            MomentumBonusManager.clearForAction(partita, squadraAttaccante);
+            return eventi;
+        }
         tempo.avanzaDi(6);
 
         // ===== 3. Dribbling (attaccante) =====
@@ -56,7 +64,10 @@ public class PallaLungaHelper {
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
                 ruoli.get(2));
         eventi.add(d1);
-        if (!d1.getEsito().equals("RIUSCITO")) return eventi;
+        if (!d1.getEsito().equals("RIUSCITO")){
+            MomentumBonusManager.clearForAction(partita, squadraAttaccante);
+            return eventi;
+        }
         tempo.avanzaDi(5);
 
         // ===== 4. Dribbling (attaccante) =====
@@ -65,7 +76,10 @@ public class PallaLungaHelper {
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
                 ruoli.get(2));
         eventi.add(d2);
-        if (!d2.getEsito().equals("RIUSCITO")) return eventi;
+        if (!d2.getEsito().equals("RIUSCITO")){
+            MomentumBonusManager.clearForAction(partita, squadraAttaccante);
+            return eventi;
+        }
         tempo.avanzaDi(5);
 
         // ===== 5. Tiro (attaccante) =====
@@ -76,6 +90,8 @@ public class PallaLungaHelper {
                 tiratore, titolariDifesa);
         eventi.add(tiro);
         tempo.avanzaDi(tiro.getDurataStimata());
+
+        MomentumBonusManager.clearForAction(partita, squadraAttaccante);
 
         return eventi;
     }
@@ -101,6 +117,7 @@ public class PallaLungaHelper {
     ) {
         List<EventoPartita> eventi = new ArrayList<>();
         TempoPartitaManager tempo = new TempoPartitaManager(minuto);
+        MomentumBonusManager.clearForAction(partita, squadraAttaccante);
 
         // ===== 1. Passaggio corto (difensore → centrocampista) =====
         EventoPartita p1 = PassaggioCortoHelper.genera(
@@ -108,7 +125,10 @@ public class PallaLungaHelper {
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
                 ruoli.get(0), ruoli.get(1));
         eventi.add(p1);
-        if (!p1.getEsito().equals("RIUSCITO")) return eventi;
+        if (!p1.getEsito().equals("RIUSCITO")) {
+            MomentumBonusManager.clearForAction(partita, squadraAttaccante);
+            return eventi;
+        }
         tempo.avanzaDi(4);
 
         // ===== 2. Passaggio lungo (centrocampista → attaccante) =====
@@ -117,7 +137,10 @@ public class PallaLungaHelper {
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
                 ruoli.get(1), ruoli.get(2));
         eventi.add(p2);
-        if (!p2.getEsito().equals("RIUSCITO")) return eventi;
+        if (!p2.getEsito().equals("RIUSCITO")) {
+            MomentumBonusManager.clearForAction(partita, squadraAttaccante);
+            return eventi;
+        }
         tempo.avanzaDi(6);
 
         // ===== 3. Dribbling (attaccante) =====
@@ -126,7 +149,10 @@ public class PallaLungaHelper {
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
                 ruoli.get(2));
         eventi.add(d1);
-        if (!d1.getEsito().equals("RIUSCITO")) return eventi;
+        if (!d1.getEsito().equals("RIUSCITO"))  {
+            MomentumBonusManager.clearForAction(partita, squadraAttaccante);
+            return eventi;
+        }
         tempo.avanzaDi(5);
 
         // ===== 4. Cross (attaccante → bomber) =====
@@ -135,7 +161,10 @@ public class PallaLungaHelper {
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
                 ruoli.get(2), ruoli.get(3));
         eventi.add(cross);
-        if (!cross.getEsito().equals("RIUSCITO")) return eventi;
+        if (!cross.getEsito().equals("RIUSCITO"))  {
+            MomentumBonusManager.clearForAction(partita, squadraAttaccante);
+            return eventi;
+        }
         tempo.avanzaDi(3);
 
         // ===== 5. Colpo di testa (bomber) =====
@@ -146,6 +175,8 @@ public class PallaLungaHelper {
                 colpitore, titolariDifesa);
         eventi.add(testa);
         tempo.avanzaDi(testa.getDurataStimata());
+
+        MomentumBonusManager.clearForAction(partita, squadraAttaccante);
 
         return eventi;
     }
@@ -170,6 +201,7 @@ public class PallaLungaHelper {
     ) {
         List<EventoPartita> eventi = new ArrayList<>();
         TempoPartitaManager tempo = new TempoPartitaManager(minuto);
+        MomentumBonusManager.clearForAction(partita, squadraAttaccante);
 
         // ===== 1. Passaggio corto (difensore → centrocampista) =====
         EventoPartita p1 = PassaggioCortoHelper.genera(
@@ -177,7 +209,10 @@ public class PallaLungaHelper {
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
                 ruoli.get(0), ruoli.get(1));
         eventi.add(p1);
-        if (!p1.getEsito().equals("RIUSCITO")) return eventi;
+        if (!p1.getEsito().equals("RIUSCITO"))  {
+            MomentumBonusManager.clearForAction(partita, squadraAttaccante);
+            return eventi;
+        }
         tempo.avanzaDi(4);
 
         // ===== 2. Dribbling (centrocampista) =====
@@ -186,7 +221,10 @@ public class PallaLungaHelper {
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
                 ruoli.get(1));
         eventi.add(d1);
-        if (!d1.getEsito().equals("RIUSCITO")) return eventi;
+        if (!d1.getEsito().equals("RIUSCITO"))  {
+            MomentumBonusManager.clearForAction(partita, squadraAttaccante);
+            return eventi;
+        }
         tempo.avanzaDi(5);
 
         // ===== 3. Passaggio lungo (centrocampista → attaccante) =====
@@ -195,7 +233,10 @@ public class PallaLungaHelper {
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
                 ruoli.get(1), ruoli.get(2));
         eventi.add(p2);
-        if (!p2.getEsito().equals("RIUSCITO")) return eventi;
+        if (!p2.getEsito().equals("RIUSCITO"))  {
+            MomentumBonusManager.clearForAction(partita, squadraAttaccante);
+            return eventi;
+        }
         tempo.avanzaDi(6);
 
         // ===== 4. Dribbling (attaccante) =====
@@ -204,7 +245,10 @@ public class PallaLungaHelper {
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
                 ruoli.get(2));
         eventi.add(d2);
-        if (!d2.getEsito().equals("RIUSCITO")) return eventi;
+        if (!d2.getEsito().equals("RIUSCITO"))  {
+            MomentumBonusManager.clearForAction(partita, squadraAttaccante);
+            return eventi;
+        }
         tempo.avanzaDi(5);
 
         // ===== 5. Tiro (attaccante) =====
@@ -215,6 +259,8 @@ public class PallaLungaHelper {
                 tiratore, titolariDifesa);
         eventi.add(tiro);
         tempo.avanzaDi(tiro.getDurataStimata());
+
+        MomentumBonusManager.clearForAction(partita, squadraAttaccante);
 
         return eventi;
     }
@@ -239,6 +285,7 @@ public class PallaLungaHelper {
     ) {
         List<EventoPartita> eventi = new ArrayList<>();
         TempoPartitaManager tempo = new TempoPartitaManager(minuto);
+        MomentumBonusManager.clearForAction(partita, squadraAttaccante);
 
         // ===== 1. Dribbling (centrocampista) =====
         EventoPartita d1 = DribblingHelper.genera(
@@ -246,7 +293,10 @@ public class PallaLungaHelper {
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
                 ruoli.get(0));
         eventi.add(d1);
-        if (!d1.getEsito().equals("RIUSCITO")) return eventi;
+        if (!d1.getEsito().equals("RIUSCITO"))  {
+            MomentumBonusManager.clearForAction(partita, squadraAttaccante);
+            return eventi;
+        }
         tempo.avanzaDi(5);
 
         // ===== 2. Passaggio lungo (centrocampista → attaccante) =====
@@ -255,7 +305,10 @@ public class PallaLungaHelper {
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
                 ruoli.get(0), ruoli.get(1));
         eventi.add(p1);
-        if (!p1.getEsito().equals("RIUSCITO")) return eventi;
+        if (!p1.getEsito().equals("RIUSCITO"))  {
+            MomentumBonusManager.clearForAction(partita, squadraAttaccante);
+            return eventi;
+        }
         tempo.avanzaDi(6);
 
         // ===== 3. Dribbling (attaccante) =====
@@ -264,7 +317,10 @@ public class PallaLungaHelper {
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
                 ruoli.get(1));
         eventi.add(d2);
-        if (!d2.getEsito().equals("RIUSCITO")) return eventi;
+        if (!d2.getEsito().equals("RIUSCITO"))  {
+            MomentumBonusManager.clearForAction(partita, squadraAttaccante);
+            return eventi;
+        }
         tempo.avanzaDi(5);
 
         // ===== 4. Dribbling (attaccante) =====
@@ -273,7 +329,10 @@ public class PallaLungaHelper {
                 partita, squadraAttaccante, titolariAttacco, titolariDifesa,
                 ruoli.get(1));
         eventi.add(d3);
-        if (!d3.getEsito().equals("RIUSCITO")) return eventi;
+        if (!d3.getEsito().equals("RIUSCITO"))  {
+            MomentumBonusManager.clearForAction(partita, squadraAttaccante);
+            return eventi;
+        }
         tempo.avanzaDi(5);
 
         // ===== 5. Tiro (attaccante) =====
@@ -284,6 +343,8 @@ public class PallaLungaHelper {
                 tiratore, titolariDifesa);
         eventi.add(tiro);
         tempo.avanzaDi(tiro.getDurataStimata());
+
+        MomentumBonusManager.clearForAction(partita, squadraAttaccante);
 
         return eventi;
     }

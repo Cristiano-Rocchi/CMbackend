@@ -4,6 +4,7 @@ import pizzamafia.CMbackend.entities.*;
 import pizzamafia.CMbackend.enums.Ruolo;
 import pizzamafia.CMbackend.enums.TipoEvento;
 import pizzamafia.CMbackend.helpers.utility.DefensiveMatchup;
+import pizzamafia.CMbackend.helpers.utility.MomentumBonusManager;
 
 import java.util.List;
 import java.util.Random;
@@ -106,6 +107,9 @@ public class PassaggioCortoHelper {
                 random.nextInt(11);
         // Bias dolce a favore del passatore (SOLO per passaggio corto)
         punteggioPassatore += bonusPassaggioCorto(ruoloEffPassatore);
+        // Momentum cumulativo per l'azione: applica il bonus
+        punteggioPassatore += MomentumBonusManager.peek(partita, squadraAttaccante);
+
 
 
         // Valutazione difendente: pesi diversi per pressione vs intercetto
@@ -124,6 +128,9 @@ public class PassaggioCortoHelper {
         // ---------- 4) Esiti ----------
         // Passaggio riuscito
         if (punteggioPassatore > punteggioDifensore) {
+            //Evento riuscito -> accumula momentum per l'azione (+2)
+            MomentumBonusManager.addSuccess(partita, squadraAttaccante);
+
             return EventoPartita.builder()
                     .minuto(minuto).secondo(secondo).durataStimata(4)
                     .tipoEvento(TipoEvento.PASSAGGIO)
@@ -148,6 +155,7 @@ public class PassaggioCortoHelper {
                     .partita(partita).squadra(difensore.getSquadra())
                     .build();
         }
+
 
         // Errore di misura
         return EventoPartita.builder()
@@ -180,19 +188,19 @@ public class PassaggioCortoHelper {
     // ==========================================
     private static int bonusPassaggioCorto(Ruolo ruolo) {
         switch (ruolo) {
-            case PORTIERE:                   return 10; // impostazione corta molto sicura
-            case DIFENSORE_CENTRALE:         return 10;
+            case PORTIERE:                   return 10;
+            case DIFENSORE_CENTRALE:         return 8;
             case TERZINO_DX:
-            case TERZINO_SX:                 return 9;
-            case CENTROCAMPISTA_DIFENSIVO:   return 8;
-            case CENTROCAMPISTA_CENTRALE:    return 7;
-            case CENTROCAMPISTA_OFFENSIVO:   return 7;
+            case TERZINO_SX:                 return 7;
+            case CENTROCAMPISTA_DIFENSIVO:   return 7;
+            case CENTROCAMPISTA_CENTRALE:    return 6;
+            case CENTROCAMPISTA_OFFENSIVO:   return 5;
             case ALA_DX:
-            case ALA_SX:                     return 6;
+            case ALA_SX:                     return 4;
             case ATTACCANTE_ESTERNO_DX:
-            case ATTACCANTE_ESTERNO_SX:      return 5;
-            case SECONDA_PUNTA:              return 4;
-            case BOMBER:                     return 4;
+            case ATTACCANTE_ESTERNO_SX:      return 4;
+            case SECONDA_PUNTA:              return 3;
+            case BOMBER:                     return 2;
             default:                         return 0;
         }
     }

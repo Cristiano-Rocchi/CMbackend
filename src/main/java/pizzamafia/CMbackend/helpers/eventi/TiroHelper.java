@@ -4,6 +4,7 @@ import pizzamafia.CMbackend.entities.*;
 import pizzamafia.CMbackend.enums.Ruolo;
 import pizzamafia.CMbackend.enums.TipoEvento;
 import pizzamafia.CMbackend.helpers.utility.DefensiveMatchup;
+import pizzamafia.CMbackend.helpers.utility.MomentumBonusManager;
 
 import java.util.List;
 import java.util.Random;
@@ -39,6 +40,8 @@ public class TiroHelper {
                 + st.getIntuito()   * 0.20
                 + st.getDribbling() * 0.20
                 + random.nextInt(11);
+        // Momentum cumulativo per l'azione
+        stabilitaTiratore += MomentumBonusManager.peek(partita, squadraAttaccante);
 
         double contestDifensore =    sd.getContrasti()   * 0.35
                 + sd.getMarcatura()   * 0.25
@@ -63,13 +66,15 @@ public class TiroHelper {
         }
 
         // ============================================================
-        // 1) Calcolo punteggio del tiro (INVARIATO)
-        // ============================================================
+        // 1) Calcolo punteggio del tiro
+        //        // ============================================================
         double punteggioTiro = st.getFinalizzazione() * 0.5 +
                 st.getIntuito() * 0.2 +
                 st.getTiriDaLontano() * 0.15 +
                 st.getPosizione() * 0.15 +
                 random.nextInt(11); // +0–10
+        // Momentum cumulativo per l'azione
+        punteggioTiro += MomentumBonusManager.peek(partita, squadraAttaccante);
 
         // ============================================================
         // 2) Tiro fuori (INVARIATO)

@@ -4,6 +4,7 @@ import pizzamafia.CMbackend.entities.*;
 import pizzamafia.CMbackend.enums.Ruolo;
 import pizzamafia.CMbackend.enums.TipoEvento;
 import pizzamafia.CMbackend.helpers.utility.DefensiveMatchup;
+import pizzamafia.CMbackend.helpers.utility.MomentumBonusManager;
 
 import java.util.List;
 import java.util.Random;
@@ -99,6 +100,9 @@ public class PassaggioLungoHelper {
                 sp.getGiocoDiSquadra() * 0.15 +
                 sp.getCarisma() * 0.15 +
                 random.nextInt(11);
+        // Momentum cumulativo per l'azione
+        punteggioPassatore += MomentumBonusManager.peek(partita, squadraAttaccante);
+
 
         double punteggioDifensore = sd.getPosizione() * 0.4 +
                 sd.getIntuito() * 0.3 +
@@ -108,6 +112,8 @@ public class PassaggioLungoHelper {
 
         // ---------- 4) Esiti ----------
         if (punteggioPassatore > punteggioDifensore) {
+            // Evento riuscito -> accumula momentum per l'azione
+            MomentumBonusManager.addSuccess(partita, squadraAttaccante);
             return EventoPartita.builder()
                     .minuto(minuto).secondo(secondo).durataStimata(6)
                     .tipoEvento(TipoEvento.PASSAGGIO)

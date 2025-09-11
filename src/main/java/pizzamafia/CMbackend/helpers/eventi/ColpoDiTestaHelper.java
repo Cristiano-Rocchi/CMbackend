@@ -4,6 +4,7 @@ import pizzamafia.CMbackend.entities.*;
 import pizzamafia.CMbackend.enums.Ruolo;
 import pizzamafia.CMbackend.enums.TipoEvento;
 import pizzamafia.CMbackend.helpers.utility.DefensiveMatchup;
+import pizzamafia.CMbackend.helpers.utility.MomentumBonusManager;
 
 import java.util.List;
 import java.util.Random;
@@ -34,6 +35,9 @@ public class ColpoDiTestaHelper {
                 sa.getPosizione() * 0.2 +
                 sa.getIntuito() * 0.1 +
                 random.nextInt(11);
+        // Momentum cumulativo per l'azione
+        punteggioAttaccante += MomentumBonusManager.peek(partita, squadraAttaccante);
+
 
         double punteggioDifensore = sd.getMarcatura() * 0.4 +
                 sd.getPosizione() * 0.3 +

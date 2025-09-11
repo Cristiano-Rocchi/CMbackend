@@ -4,6 +4,7 @@ import pizzamafia.CMbackend.entities.*;
 import pizzamafia.CMbackend.enums.Ruolo;
 import pizzamafia.CMbackend.enums.TipoEvento;
 import pizzamafia.CMbackend.helpers.utility.DefensiveMatchup;
+import pizzamafia.CMbackend.helpers.utility.MomentumBonusManager;
 
 import java.util.List;
 import java.util.Random;
@@ -87,6 +88,9 @@ public class CrossHelper {
                 sa.getCreativita() * 0.2 +
                 sa.getAssist() * 0.15 +
                 random.nextInt(11);
+        // Momentum cumulativo per l'azione
+        punteggioCross += MomentumBonusManager.peek(partita, squadraAttaccante);
+
 
         double punteggioDifensore = sd.getPosizione() * 0.4 +
                 sd.getIntuito() * 0.3 +
@@ -96,6 +100,9 @@ public class CrossHelper {
 
         // ===== 4) Esito =====
         if (punteggioCross > punteggioDifensore) {
+            // Evento riuscito -> accumula momentum per l'azione
+            MomentumBonusManager.addSuccess(partita, squadraAttaccante);
+
             // Cross parte ed arriva al destinatario → dopo questo evento chiamerai ColpoDiTestaHelper
             return EventoPartita.builder()
                     .minuto(minuto).secondo(secondo).durataStimata(3)

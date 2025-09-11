@@ -4,6 +4,7 @@ import pizzamafia.CMbackend.entities.*;
 import pizzamafia.CMbackend.enums.Ruolo;
 import pizzamafia.CMbackend.enums.TipoEvento;
 import pizzamafia.CMbackend.helpers.utility.DefensiveMatchup;
+import pizzamafia.CMbackend.helpers.utility.MomentumBonusManager;
 
 import java.util.List;
 import java.util.Random;
@@ -79,6 +80,9 @@ public class DribblingHelper {
                 sa.getScatto() * 0.15 +
                 sa.getIntuito() * 0.15 +
                 random.nextInt(11); // bonus casuale
+        // Momentum cumulativo per l'azione
+        punteggioAttaccante += MomentumBonusManager.peek(partita, squadraAttaccante);
+
 
         double punteggioDifensore = sd.getMarcatura() * 0.4 +
                 sd.getContrasti() * 0.3 +
@@ -90,6 +94,8 @@ public class DribblingHelper {
         boolean superato = punteggioAttaccante > punteggioDifensore;
 
         if (superato) {
+            // Evento riuscito -> accumula momentum per l'azione
+            MomentumBonusManager.addSuccess(partita, squadraAttaccante);
             int aggressivita = sd.getAggressivita();
             double bonus = (aggressivita - 50) / 200.0;
             double probabilitaFallo = 0.3 + Math.max(0, bonus);
