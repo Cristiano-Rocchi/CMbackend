@@ -70,7 +70,7 @@ public record NewStatisticheTecnicheGiocatoreDTO(
         Integer dribbling,
 
         @NotNull @Min(1) @Max(99)
-        Integer finalizazione,
+        Integer finalizzazione,
 
         @NotNull @Min(1) @Max(99)
         Integer marcatura,

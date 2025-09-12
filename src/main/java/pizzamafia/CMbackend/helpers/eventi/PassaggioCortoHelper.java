@@ -148,7 +148,6 @@ public class PassaggioCortoHelper {
                     .minuto(minuto).secondo(secondo).durataStimata(4)
                     .tipoEvento(TipoEvento.INTERCETTO)
                     .giocatorePrincipale(difensore)
-                    // se è pressione, ruba su passatore; se intercetto, potresti voler loggare destinatario.
                     .giocatoreSecondario(passatore)
                     .esito("PALLA RECUPERATA")
                     .note(pressioneSulPortatore ? "Recupero in pressione sul portatore" : "Intercetto su linea di passaggio")
@@ -188,19 +187,19 @@ public class PassaggioCortoHelper {
     // ==========================================
     private static int bonusPassaggioCorto(Ruolo ruolo) {
         switch (ruolo) {
-            case PORTIERE:                   return 10;
-            case DIFENSORE_CENTRALE:         return 8;
+            case PORTIERE:                   return 20;
+            case DIFENSORE_CENTRALE:         return 10;
             case TERZINO_DX:
-            case TERZINO_SX:                 return 7;
-            case CENTROCAMPISTA_DIFENSIVO:   return 7;
-            case CENTROCAMPISTA_CENTRALE:    return 6;
-            case CENTROCAMPISTA_OFFENSIVO:   return 5;
+            case TERZINO_SX:                 return 9;
+            case CENTROCAMPISTA_DIFENSIVO:   return 9;
+            case CENTROCAMPISTA_CENTRALE:    return 8;
+            case CENTROCAMPISTA_OFFENSIVO:   return 7;
             case ALA_DX:
-            case ALA_SX:                     return 4;
+            case ALA_SX:                     return 6;
             case ATTACCANTE_ESTERNO_DX:
-            case ATTACCANTE_ESTERNO_SX:      return 4;
-            case SECONDA_PUNTA:              return 3;
-            case BOMBER:                     return 2;
+            case ATTACCANTE_ESTERNO_SX:      return 6;
+            case SECONDA_PUNTA:              return 5;
+            case BOMBER:                     return 4;
             default:                         return 0;
         }
     }

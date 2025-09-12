@@ -71,7 +71,7 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                 .colpoDiTesta(s.colpoDiTesta())
                 .contrasti(s.contrasti())
                 .dribbling(s.dribbling())
-                .finalizzazione(s.finalizazione())
+                .finalizzazione(s.finalizzazione())
                 .marcatura(s.marcatura())
                 .riflessi(s.riflessi())
                 .tecnica(s.tecnica())
@@ -221,7 +221,7 @@ public class GiocatoreServiceImpl implements GiocatoreService {
         s.setColpoDiTesta(dtoStats.colpoDiTesta());
         s.setContrasti(dtoStats.contrasti());
         s.setDribbling(dtoStats.dribbling());
-        s.setFinalizzazione(dtoStats.finalizazione());
+        s.setFinalizzazione(dtoStats.finalizzazione());
         s.setMarcatura(dtoStats.marcatura());
         s.setRiflessi(dtoStats.riflessi());
         s.setTecnica(dtoStats.tecnica());

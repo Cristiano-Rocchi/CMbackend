@@ -69,11 +69,11 @@ public class SimulazionePartitaHelper {
         int numeroAzioni;
         double dominance = Math.abs(forzaCasa - forzaTrasferta);
         if (dominance > 20) {
-            numeroAzioni = random.nextDouble() < 0.7 ? 2 : 1;
+            numeroAzioni = random.nextDouble() < 0.7 ? 4 : 2;
         } else if (dominance > 10) {
-            numeroAzioni = random.nextDouble() < 0.6 ? 1 : 0;
+            numeroAzioni = random.nextDouble() < 0.6 ? 2 : 1;
         } else {
-            numeroAzioni = random.nextDouble() < 0.4 ? 1 : 0;
+            numeroAzioni = random.nextDouble() < 0.4 ? 2 : 1;
         }
 
         // =================== 4. Genera le azioni ===================
