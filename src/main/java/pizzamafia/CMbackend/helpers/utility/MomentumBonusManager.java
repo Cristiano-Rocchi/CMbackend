@@ -12,7 +12,7 @@ public final class MomentumBonusManager {
     // ==============================
     // Configurazione globale
     // ==============================
-    private static final int BONUS_PER_SUCCESS = 2000; // VALORE BONUS
+    private static final int BONUS_PER_SUCCESS = 2; // VALORE BONUS
 
     // key = partitaId:squadraId
     private static final Map<String, Integer> map = new ConcurrentHashMap<>();

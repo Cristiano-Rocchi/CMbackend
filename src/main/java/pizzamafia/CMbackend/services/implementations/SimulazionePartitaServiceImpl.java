@@ -2,6 +2,7 @@ package pizzamafia.CMbackend.services.implementations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional; // <--- IMPORT
 import pizzamafia.CMbackend.entities.*;
 import pizzamafia.CMbackend.enums.TipoEvento;
 import pizzamafia.CMbackend.exceptions.NotFoundException;
@@ -25,6 +26,7 @@ public class SimulazionePartitaServiceImpl implements SimulazionePartitaService 
     private final EventoPartitaService eventoPartitaService;
 
     // =================== SIMULAZIONE PARTITA ===================
+    @Transactional // <--- AGGIUNTO
     @Override
     public Partita simula(UUID partitaId) {
         // 1. Recupera la partita
@@ -47,22 +49,34 @@ public class SimulazionePartitaServiceImpl implements SimulazionePartitaService 
         List<Titolari> titolariCasa = titolariRepository.findByFormazioneId(formazioneCasa.getId());
         List<Titolari> titolariTrasferta = titolariRepository.findByFormazioneId(formazioneTrasferta.getId());
 
-        // 4. Simula la partita
+        // 4. Pulisci eventuali eventi precedenti della stessa partita  <--- AGGIUNTO
+        eventoPartitaRepository.deleteByPartitaId(partitaId);
+
+        // 5. Simula la partita
         List<EventoPartita> eventi = SimulazionePartitaHelper.simulaPartita(partita, titolariCasa, titolariTrasferta);
 
-        // 5. Salva gli eventi
+        // 6. Salva gli eventi
         eventoPartitaRepository.saveAll(eventi);
 
-        // 6. Conta i gol per squadra
+        // 7. Conta i gol per squadra
+        UUID casaId = partita.getSquadraCasa().getId();
+        UUID trasfertaId = partita.getSquadraTrasferta().getId();
+
         long golCasa = eventi.stream()
-                .filter(e -> e.getTipoEvento() == TipoEvento.GOL && e.getSquadra().equals(partita.getSquadraCasa()))
+                .filter(e -> e.getTipoEvento() == TipoEvento.GOL)
+                .filter(e -> "RETE".equals(e.getEsito()))
+                .filter(e -> e.getSquadra() != null && e.getSquadra().getId() != null)
+                .filter(e -> e.getSquadra().getId().equals(casaId))
                 .count();
 
         long golTrasferta = eventi.stream()
-                .filter(e -> e.getTipoEvento() == TipoEvento.GOL && e.getSquadra().equals(partita.getSquadraTrasferta()))
+                .filter(e -> e.getTipoEvento() == TipoEvento.GOL)
+                .filter(e -> "RETE".equals(e.getEsito()))
+                .filter(e -> e.getSquadra() != null && e.getSquadra().getId() != null)
+                .filter(e -> e.getSquadra().getId().equals(trasfertaId))
                 .count();
 
-        // 7. Aggiorna il risultato nella partita
+        // 8. Aggiorna il risultato nella partita
         partita.setGoalCasa((int) golCasa);
         partita.setGoalTrasferta((int) golTrasferta);
         partitaRepository.save(partita);
