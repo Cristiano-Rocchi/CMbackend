@@ -78,11 +78,11 @@ public class ValutazioneGiocatoreHelper {
                         Map.entry("intuito",     3.2),
                         Map.entry("agilita",     2.4),
                         Map.entry("carisma",     2.0),
+                        Map.entry("coraggio",    1.8),
 
                         // [B] SUPPORTO — impatto alto ma secondario
                         Map.entry("elevazione",  1.5),
                         Map.entry("determinazione", 1.3),
-                        Map.entry("coraggio",    1.3),
                         Map.entry("forza",       1.0),
                         Map.entry("impegno",     1.0),
 
@@ -113,8 +113,10 @@ public class ValutazioneGiocatoreHelper {
                         Map.entry("marcatura",       2.10),
                         Map.entry("contrasti",       1.90),
                         Map.entry("posizione",       2.00),
+                        Map.entry("carisma",         1.70),
                         Map.entry("colpoDiTesta",    1.60),
                         Map.entry("intuito",         1.60),
+                        Map.entry("determinazione",       1.7),
 
                         // [B] SUPPORTO — impatto alto ma secondario
                         Map.entry("elevazione",      1.45),
@@ -128,7 +130,6 @@ public class ValutazioneGiocatoreHelper {
                         Map.entry("resistenza",      0.25),
                         Map.entry("giocoDiSquadra",  0.30),
                         Map.entry("tecnica",         0.15),
-                        Map.entry("carisma",         0.15),
                         Map.entry("accelerazione",   0.03),
                         Map.entry("agilita",         0.03),
 
@@ -149,16 +150,18 @@ public class ValutazioneGiocatoreHelper {
                         Map.entry("scatto",        2.4),
                         Map.entry("resistenza",    2.3),
                         Map.entry("contrasti",     2.2),
-                        Map.entry("assist",        2.2),
-                        Map.entry("tecnica",       2.1),
-                        Map.entry("marcatura",     1.9),
+                        Map.entry("assist",        1.9),
+                        Map.entry("marcatura",     2.2),
+                        Map.entry("posizione",     2.1),
                         Map.entry("carisma",       1.8),
+                        Map.entry("determinazione",       2.0),
+
 
 
                         // [B] SUPPORTO — impatto alto ma secondario
                         Map.entry("dribbling",     1.7),
+                        Map.entry("tecnica",       1.7),
                         Map.entry("intuito",       1.3),
-                        Map.entry("posizione",     1.5),
                         Map.entry("impegno",       1.1),
                         Map.entry("agilita",       0.9),
                         Map.entry("giocoDiSquadra",0.9),
@@ -188,6 +191,7 @@ public class ValutazioneGiocatoreHelper {
                         Map.entry("dribbling",     2.0),
                         Map.entry("tecnica",       2.3),
                         Map.entry("carisma",       1.6),
+                        Map.entry("determinazione",       1.8),
 
                         // [B] SUPPORTO — impatto alto ma secondario
                         Map.entry("contrasti",     1.4),
@@ -222,29 +226,29 @@ public class ValutazioneGiocatoreHelper {
             case CENTROCAMPISTA_DIFENSIVO:
                 return Map.ofEntries(
                         // [A] PILASTRO — fondamentali
-                        Map.entry("posizione",        2.8),
-                        Map.entry("giocoDiSquadra",   2.6),
-                        Map.entry("assist",           2.5),
-                        Map.entry("tecnica",          2.3),
+                        Map.entry("posizione",        3.2),
+                        Map.entry("giocoDiSquadra",   2.7),
+                        Map.entry("tecnica",          1.9),
+                        Map.entry("carisma",          2.3),
                         Map.entry("intuito",          2.1),
                         Map.entry("marcatura",        1.9),
-                        Map.entry("contrasti",        1.9),
+                        Map.entry("contrasti",        2.1),
+                        Map.entry("determinazione",       2.1),
+                        Map.entry("resistenza",       1.7),
+                        Map.entry("aggressivita",     1.7),
 
                         // [B] SUPPORTO — impatto alto ma secondario
-                        Map.entry("resistenza",       1.4),
-                        Map.entry("determinazione",   1.3),
+                        Map.entry("assist",           0.8),
                         Map.entry("impegno",          1.2),
-                        Map.entry("creativita",       1.1),
-                        Map.entry("coraggio",         1.0),
-                        Map.entry("carisma",          0.9),
-                        Map.entry("aggressivita",     0.8),
-                        Map.entry("dribbling",        0.7),
-                        Map.entry("forza",            0.6),
+                        Map.entry("creativita",       1.0),
+                        Map.entry("coraggio",         1.2),
+                        Map.entry("dribbling",        0.6),
+                        Map.entry("forza",            1.0),
                         Map.entry("scatto",           0.5),
-                        Map.entry("accelerazione",    0.4),
 
                         // [C] MARGINALI — pesano poco
                         Map.entry("agilita",          0.3),
+                        Map.entry("accelerazione",    0.3),
                         Map.entry("inserimento",      0.2),
                         Map.entry("tiriDaLontano",    0.2),
                         Map.entry("colpoDiTesta",     0.2),
@@ -265,9 +269,9 @@ public class ValutazioneGiocatoreHelper {
                         Map.entry("assist",           1.9),
                         Map.entry("creativita",       2.4),
                         Map.entry("posizione",        2.3),
-                        Map.entry("carisma",          1.8),
+                        Map.entry("carisma",          2.5),
                         Map.entry("resistenza",       1.8),
-                        Map.entry("inserimento",      1.2),
+                        Map.entry("inserimento",      1.4),
 
                         // [B] SUPPORTO — impatto alto ma secondario
                         Map.entry("dribbling",        1.0),
@@ -301,12 +305,12 @@ public class ValutazioneGiocatoreHelper {
             case CENTROCAMPISTA_OFFENSIVO:
                 return Map.ofEntries(
                         // [A] PILASTRO — fondamentali
-                        Map.entry("creativita",       2.5),
-                        Map.entry("tecnica",          2.9),
-                        Map.entry("assist",           2.8),
-                        Map.entry("dribbling",        2.2),
-                        Map.entry("inserimento",      2.3),
-                        Map.entry("posizione",        2.1),
+                        Map.entry("creativita",       3.2),
+                        Map.entry("tecnica",          3.0),
+                        Map.entry("assist",           2.5),
+                        Map.entry("dribbling",        2.5),
+                        Map.entry("inserimento",      2.4),
+                        Map.entry("posizione",        1.9),
                         Map.entry("carisma",          2.0),
                         Map.entry("tiriDaLontano",    1.8),
                         Map.entry("calciPiazzati",    1.6),
@@ -316,8 +320,9 @@ public class ValutazioneGiocatoreHelper {
                         Map.entry("agilita",          1.4),
                         Map.entry("resistenza",       1.2),
                         Map.entry("coraggio",         1.7),
+                        Map.entry("impegno",          1.1),
                         Map.entry("finalizzazione",   1.0),
-                        Map.entry("scatto",           0.9),
+                        Map.entry("scatto",           0.8),
                         Map.entry("accelerazione",    0.5),
                         Map.entry("determinazione",   0.9),
                         Map.entry("intuito",          0.8),
@@ -342,28 +347,30 @@ public class ValutazioneGiocatoreHelper {
                         Map.entry("accelerazione", 3.4),
                         Map.entry("scatto",        3.2),
                         Map.entry("dribbling",     2.7),
-                        Map.entry("finalizzazione",2.5),
-                        Map.entry("assist",        2.4), 
-                        Map.entry("tecnica",       2.3),
+                        Map.entry("coraggio",      2.8),
+                        Map.entry("finalizzazione",2.4),
+                        Map.entry("assist",        2.3),
+                        Map.entry("tecnica",       2.1),
+                        Map.entry("carisma",          2.0),
                         Map.entry("inserimento",   2.0),
                         Map.entry("tiriDaLontano", 1.7),
 
                         // [B] SUPPORTO — impatto alto ma secondario
                         Map.entry("agilita",       1.2),
+                        Map.entry("resistenza",    1.2),
+                        Map.entry("impegno",       1.0),
                         Map.entry("creativita",    1.0),
                         Map.entry("posizione",     1.0),
                         Map.entry("giocoDiSquadra",0.8),
                         Map.entry("determinazione",0.8),
-                        Map.entry("coraggio",      0.8),
                         Map.entry("forza",         0.5),
-                        Map.entry("resistenza",    0.4),
+
 
                         // [C] MARGINALI — pesano poco
                         Map.entry("calciPiazzati", 0.3),
                         Map.entry("colpoDiTesta",  0.2),
                         Map.entry("elevazione",    0.2),
                         Map.entry("intuito",       0.2),
-                        Map.entry("impegno",       0.2),
 
                         // [D] IRRILEVANTI — fuori dal calcolo
                         Map.entry("aggressivita",  0.0),
@@ -407,7 +414,8 @@ public class ValutazioneGiocatoreHelper {
                         // [D] IRRILEVANTI — fuori dal calcolo
                         Map.entry("contrasti",        0.0),
                         Map.entry("marcatura",        0.0),
-                        Map.entry("riflessi",         0.0)
+                        Map.entry("riflessi",         0.0),
+                        Map.entry("aggressivita",  0.0)
                 );
 
             case BOMBER:
