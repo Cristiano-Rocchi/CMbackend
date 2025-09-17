@@ -36,6 +36,8 @@ public class GiocatoreServiceImpl implements GiocatoreService {
         Squadra squadra = squadraRepository.findById(dto.squadraId())
                 .orElseThrow(() -> new NotFoundException("Squadra con ID " + dto.squadraId() + " non trovata."));
 
+        System.out.println("DEBUG DTO tiriDaLontano = " + dto.statisticheTecniche().tiriDaLontano());
+
         // Costruisco l'entità Giocatore senza valore tecnico ancora calcolato
         Giocatore giocatore = Giocatore.builder()
                 .nome(dto.nome())
@@ -46,8 +48,11 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                 .piede(dto.piede())
                 .ruolo(dto.ruolo())
                 .squadra(squadra)
-                .valoreTecnico(0) // placeholder, lo calcoliamo dopo
+                .valoreTecnico(0)
                 .build();
+
+
+
 
         // Creo l'entità StatisticheTecnicheGiocatore e la collego al giocatore
         NewStatisticheTecnicheGiocatoreDTO s = dto.statisticheTecniche();
@@ -58,6 +63,7 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                 .forza(s.forza())
                 .resistenza(s.resistenza())
                 .scatto(s.scatto())
+                .inserimento(s.inserimento())
                 .aggressivita(s.aggressivita())
                 .carisma(s.carisma())
                 .coraggio(s.coraggio())
@@ -81,6 +87,8 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                 .build();
 
         giocatore.setStatistiche(stats);
+
+        System.out.println("DEBUG ENTITY tiriDaLontano = " + stats.getTiriDaLontano());
 
         // =================== CALCOLO VALORE TECNICO ===================
         // Usa la tabella dei pesi per calcolare il valore finale in base al ruolo
@@ -112,6 +120,7 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                         stats.getForza(),
                         stats.getResistenza(),
                         stats.getScatto(),
+                        stats.getInserimento(),
                         stats.getAggressivita(),
                         stats.getCarisma(),
                         stats.getCoraggio(),
@@ -130,8 +139,7 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                         stats.getRiflessi(),
                         stats.getTecnica(),
                         stats.getAssist(),
-                        stats.getTiriDaLontano(),
-                        stats.getInserimento()
+                        stats.getTiriDaLontano()
 
 
                 )
@@ -208,6 +216,7 @@ public class GiocatoreServiceImpl implements GiocatoreService {
         s.setForza(dtoStats.forza());
         s.setResistenza(dtoStats.resistenza());
         s.setScatto(dtoStats.scatto());
+        s.setInserimento(dtoStats.inserimento());
         s.setAggressivita(dtoStats.aggressivita());
         s.setCarisma(dtoStats.carisma());
         s.setCoraggio(dtoStats.coraggio());
@@ -227,6 +236,7 @@ public class GiocatoreServiceImpl implements GiocatoreService {
         s.setTecnica(dtoStats.tecnica());
         s.setAssist(dtoStats.assist());
         s.setTiriDaLontano(dtoStats.tiriDaLontano());
+
 
         // Ricalcola il valore tecnico in base al nuovo ruolo + statistiche
         double valore = ValutazioneGiocatoreHelper.calcolaValoreTecnico(dto.ruolo(), s);
@@ -297,6 +307,7 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                 stats.getForza(),
                 stats.getResistenza(),
                 stats.getScatto(),
+                stats.getInserimento(),
                 stats.getAggressivita(),
                 stats.getCarisma(),
                 stats.getCoraggio(),
@@ -315,8 +326,7 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                 stats.getRiflessi(),
                 stats.getTecnica(),
                 stats.getAssist(),
-                stats.getTiriDaLontano(),
-                stats.getInserimento()
+                stats.getTiriDaLontano()
 
         );
 

@@ -32,6 +32,7 @@ public class ValutazioneGiocatoreHelper {
                 case "forza" -> stats.getForza();
                 case "resistenza" -> stats.getResistenza();
                 case "scatto" -> stats.getScatto();
+                case "inserimento" -> stats.getInserimento();
                 case "aggressivita" -> stats.getAggressivita();
                 case "carisma" -> stats.getCarisma();
                 case "coraggio" -> stats.getCoraggio();
@@ -51,7 +52,6 @@ public class ValutazioneGiocatoreHelper {
                 case "tecnica" -> stats.getTecnica();
                 case "assist" -> stats.getAssist();
                 case "tiriDaLontano" -> stats.getTiriDaLontano();
-                case "inserimento" -> stats.getInserimento();
                 default -> 0;
             };
 
@@ -92,108 +92,155 @@ public class ValutazioneGiocatoreHelper {
 
             case DIFENSORE_CENTRALE:
                 return Map.ofEntries(
-                        Map.entry("marcatura", 1.5),
-                        Map.entry("contrasti", 1.3),
-                        Map.entry("posizione", 1.4),
-                        Map.entry("colpoDiTesta", 1.2),
-                        Map.entry("elevazione", 1.0),
-                        Map.entry("aggressivita", 0.9),
-                        Map.entry("intuito", 0.8),
-                        Map.entry("carisma", 1.3),
-                        Map.entry("determinazione", 0.8),
-                        Map.entry("impegno", 0.7),
-                        Map.entry("coraggio", 0.7),
-                        Map.entry("resistenza", 0.6),
-                        Map.entry("giocoDiSquadra", 0.6),
-                        Map.entry("tecnica", 0.4),
-                        Map.entry("scatto", 0.4),
-                        Map.entry("agilita", 0.3),
-                        Map.entry("accelerazione", 0.3),
-                        Map.entry("riflessi", 0.25)
+                        // [A] PILASTRO — fondamentali
+                        Map.entry("marcatura",       2.10),
+                        Map.entry("contrasti",       1.90),
+                        Map.entry("posizione",       2.00),
+                        Map.entry("colpoDiTesta",    1.60),
+                        Map.entry("intuito",         1.60),
+
+                        // [B] SUPPORTO — impatto alto ma secondario
+                        Map.entry("elevazione",      1.45),
+                        Map.entry("forza",           1.10),
+                        Map.entry("impegno",         1.30),
+                        Map.entry("coraggio",        1.30),
+                        Map.entry("aggressivita",    1.00),
+                        Map.entry("scatto",          0.70),
+
+                        // [C] MARGINALI — pesano poco
+                        Map.entry("resistenza",      0.25),
+                        Map.entry("giocoDiSquadra",  0.30),
+                        Map.entry("tecnica",         0.15),
+                        Map.entry("carisma",         0.15),
+                        Map.entry("accelerazione",   0.03),
+                        Map.entry("agilita",         0.03),
+
+                        // [D] IRRILEVANTI — fuori dal calcolo
+                        Map.entry("inserimento",     0.00),
+                        Map.entry("calciPiazzati",   0.00),
+                        Map.entry("assist",          0.00),
+                        Map.entry("tiriDaLontano",   0.00),
+                        Map.entry("dribbling",       0.00),
+                        Map.entry("finalizzazione",  0.00),
+                        Map.entry("riflessi",        0.00),
+                        Map.entry("creativita",      0.00)
                 );
             case TERZINO_DX, TERZINO_SX:
                 return Map.ofEntries(
-                        Map.entry("accelerazione", 1.4),
-                        Map.entry("resistenza", 1.4),
-                        Map.entry("scatto", 1.3),
-                        Map.entry("contrasti", 1.1),
-                        Map.entry("posizione", 1.1),
-                        Map.entry("marcatura", 1.0),
-                        Map.entry("impegno", 1.0),
-                        Map.entry("determinazione", 1.0),
-                        Map.entry("assist", 1.0),
-                        Map.entry("carisma", 1.0),
-                        Map.entry("agilita", 0.8),
-                        Map.entry("inserimento", 0.8),
-                        Map.entry("coraggio", 0.7),
-                        Map.entry("aggressivita", 0.6),
-                        Map.entry("giocoDiSquadra", 0.6),
-                        Map.entry("intuito", 0.4),
-                        Map.entry("forza", 0.4),
-                        Map.entry("dribbling", 0.4),
-                        Map.entry("riflessi", 0.3),
-                        Map.entry("tiriDaLontano", 0.3),
-                        Map.entry("calciPiazzati", 0.3),
-                        Map.entry("creativita", 0.2)
+                        // [A] PILASTRO — fondamentali
+                        Map.entry("accelerazione", 2.8),
+                        Map.entry("scatto",        2.4),
+                        Map.entry("resistenza",    2.3),
+                        Map.entry("contrasti",     2.2),
+                        Map.entry("assist",        2.2),
+                        Map.entry("tecnica",       2.1),
+                        Map.entry("marcatura",     1.9),
+
+
+                        // [B] SUPPORTO — impatto alto ma secondario
+                        Map.entry("dribbling",     1.7),
+                        Map.entry("intuito",       1.3),
+                        Map.entry("posizione",     1.5),
+                        Map.entry("impegno",       1.1),
+                        Map.entry("agilita",       0.9),
+                        Map.entry("giocoDiSquadra",0.9),
+                        Map.entry("coraggio",      0.8),
+                        Map.entry("aggressivita",  0.8),
+                        Map.entry("forza",         0.6),
+                        Map.entry("inserimento",   0.5),
+                        Map.entry("carisma",       0.3),
+
+                        // [C] MARGINALI — pesano poco
+                        Map.entry("tiriDaLontano", 0.1),
+                        Map.entry("calciPiazzati", 0.1),
+                        Map.entry("creativita",    0.1),
+                        Map.entry("riflessi",      0.1),
+
+                        // [D] IRRILEVANTI — fuori dal calcolo
+                        Map.entry("colpoDiTesta",  0.0),
+                        Map.entry("elevazione",    0.0),
+                        Map.entry("finalizzazione",0.0)
                 );
+
+
+
             case CENTROCAMPISTA_DIFENSIVO:
                 return Map.ofEntries(
-                        Map.entry("contrasti", 1.5),
-                        Map.entry("marcatura", 1.35),
-                        Map.entry("posizione", 1.35),
-                        Map.entry("resistenza", 1.4),
-                        Map.entry("forza", 1.2),
-                        Map.entry("aggressivita", 1.25),
-                        Map.entry("impegno", 1.2),
-                        Map.entry("determinazione", 1.1),
-                        Map.entry("carisma", 1.1),
-                        Map.entry("giocoDiSquadra", 1.0),
-                        Map.entry("coraggio", 1.0),
-                        Map.entry("tiriDaLontano", 0.6),
-                        Map.entry("tecnica", 0.5),
-                        Map.entry("intuito", 0.5),
-                        Map.entry("scatto", 0.5),
-                        Map.entry("agilita", 0.4),
-                        Map.entry("colpoDiTesta", 0.35),
-                        Map.entry("riflessi", 0.35),
-                        Map.entry("dribbling", 0.3),
-                        Map.entry("assist", 0.3),
-                        Map.entry("accelerazione", 0.3),
-                        Map.entry("calciPiazzati", 0.2),
-                        Map.entry("creativita", 0.2),
-                        Map.entry("elevazione", 0.2),
-                        Map.entry("inserimento", 0.2),
-                        Map.entry("finalizzazione", 0.1)
+                        // [A] PILASTRO — fondamentali
+                        Map.entry("posizione",        2.8),
+                        Map.entry("giocoDiSquadra",   2.6),
+                        Map.entry("assist",           2.5),
+                        Map.entry("tecnica",          2.3),
+                        Map.entry("intuito",          2.1),
+                        Map.entry("marcatura",        1.9),
+                        Map.entry("contrasti",        1.9),
+
+                        // [B] SUPPORTO — impatto alto ma secondario
+                        Map.entry("resistenza",       1.4),
+                        Map.entry("determinazione",   1.3),
+                        Map.entry("impegno",          1.2),
+                        Map.entry("creativita",       1.1),
+                        Map.entry("coraggio",         1.0),
+                        Map.entry("carisma",          0.9),
+                        Map.entry("aggressivita",     0.8),
+                        Map.entry("dribbling",        0.7),
+                        Map.entry("forza",            0.6),
+                        Map.entry("scatto",           0.5),
+                        Map.entry("accelerazione",    0.4),
+
+                        // [C] MARGINALI — pesano poco
+                        Map.entry("agilita",          0.3),
+                        Map.entry("inserimento",      0.2),
+                        Map.entry("tiriDaLontano",    0.2),
+                        Map.entry("colpoDiTesta",     0.2),
+                        Map.entry("elevazione",       0.2),
+                        Map.entry("calciPiazzati",    0.2),
+
+                        // [D] IRRILEVANTI — fuori dal calcolo
+                        Map.entry("finalizzazione",   0.0),
+                        Map.entry("riflessi",         0.0)
                 );
+
+
             case CENTROCAMPISTA_CENTRALE:
                 return Map.ofEntries(
-                        Map.entry("resistenza", 1.4),
-                        Map.entry("giocoDiSquadra", 1.4),
-                        Map.entry("posizione", 1.3),
-                        Map.entry("tecnica", 1.25),
-                        Map.entry("impegno", 1.25),
-                        Map.entry("determinazione", 1.2),
-                        Map.entry("intuito", 1.1),
-                        Map.entry("creativita", 1.1),
-                        Map.entry("carisma", 1.1),
-                        Map.entry("inserimento", 1.15),
-                        Map.entry("assist", 0.8),
-                        Map.entry("scatto", 1.0),
-                        Map.entry("forza", 0.9),
-                        Map.entry("contrasti", 1.0),
-                        Map.entry("marcatura", 0.65),
-                        Map.entry("tiriDaLontano", 0.6),
-                        Map.entry("coraggio", 0.6),
-                        Map.entry("accelerazione", 0.6),
-                        Map.entry("dribbling", 0.6),
-                        Map.entry("riflessi", 0.5),
-                        Map.entry("calciPiazzati", 0.5),
-                        Map.entry("colpoDiTesta", 0.45),
-                        Map.entry("agilita", 0.7),
-                        Map.entry("elevazione", 0.4),
-                        Map.entry("aggressivita", 0.4),
-                        Map.entry("finalizzazione", 0.4)
+                        // [A] PILASTRO — fondamentali
+                        Map.entry("giocoDiSquadra",   3.0),
+                        Map.entry("tecnica",          2.8),
+                        Map.entry("assist",           2.7),
+                        Map.entry("creativita",       2.5),
+                        Map.entry("posizione",        2.4),
+                        Map.entry("dribbling",        1.8),
+                        Map.entry("resistenza",       1.7),
+                        Map.entry("inserimento",      1.5),
+
+                        // [B] SUPPORTO — impatto alto ma secondario
+                        Map.entry("determinazione",   1.3),
+                        Map.entry("impegno",          1.2),
+                        Map.entry("intuito",          1.1),
+                        Map.entry("tiriDaLontano",    1.0),
+                        Map.entry("agilita",          1.0),
+                        Map.entry("scatto",           0.9),
+                        Map.entry("accelerazione",    0.9),
+                        Map.entry("carisma",          0.9),
+                        Map.entry("coraggio",         0.9),
+                        Map.entry("contrasti",        0.8),
+                        Map.entry("marcatura",        0.6),
+                        Map.entry("forza",            0.5),
+                        Map.entry("aggressivita",     0.5),
+
+                        // [C] MARGINALI — pesano poco
+                        Map.entry("calciPiazzati",    0.3),
+                        Map.entry("finalizzazione",   0.2),
+                        Map.entry("elevazione",       0.2),
+                        Map.entry("colpoDiTesta",     0.2),
+
+                        // [D] IRRILEVANTI — fuori dal calcolo
+                        Map.entry("riflessi",         0.0)
                 );
+
+
+
             case CENTROCAMPISTA_OFFENSIVO:
                 return Map.ofEntries(
                         Map.entry("creativita", 1.35),
