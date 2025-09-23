@@ -1,35 +1,38 @@
 package pizzamafia.CMbackend.payloads.giocatore;
 
 public record StatisticheTecnicheGiocatoreRespDTO(
-        //FISICI
-        Integer accelerazione,
-        Integer agilita,
-        Integer elevazione,
-        Integer forza,
-        Integer resistenza,
-        Integer scatto,
-        Integer inserimento,
-        //MENTALI
-        Integer aggressivita,
-        Integer carisma,
-        Integer coraggio,
-        Integer creativita,
-        Integer determinazione,
-        Integer giocoDiSquadra,
-        Integer impegno,
-        Integer intuito,
-        Integer posizione,
-        //TECNICI
-        Integer calciPiazzati,
-        Integer colpoDiTesta,
-        Integer contrasti,
-        Integer dribbling,
-        Integer finalizzazione,
-        Integer marcatura,
-        Integer riflessi,
+        //TECNICHE
         Integer tecnica,
+        Integer equilibrio,
+        Integer colpoDiTesta,
+        Integer tiro,
         Integer assist,
-        Integer tiriDaLontano
+        Integer finalizzazione,
+        Integer dribbling,
+        Integer visione,
+        Integer calciPiazzati,
+        Integer cross,
+        Integer contrasti,
+        Integer marcatura,
+        Integer intercettazione,
+
+        //MENTALI
+        Integer carisma,
+        Integer concentrazione,
+        Integer coraggio,
+        Integer leadership,
+        Integer letturaDelGioco,
+        Integer giocoDiSquadra,
+        Integer creativita,
+        Integer freddezza,
+        Integer aggressivita,
+
+        //FISICHE
+        Integer accelerazione,
+        Integer scatto,
+        Integer elevazione,
+        Integer forzaFisica,
+        Integer Resistenza
 
 
         ) {}

@@ -19,88 +19,98 @@ public class StatisticheTecnicheGiocatore {
     private UUID id;
 
     // =================== STATISTICHE ===================
-    //=========FISICI========
-    @Column(nullable = false)
-    private int accelerazione;
 
-    @Column(nullable = false)
-    private int agilita;
-
-    @Column(nullable = false)
-    private int elevazione;
-
-    @Column(nullable = false)
-    private int forza;
-
-    @Column(nullable = false)
-    private int resistenza;
-
-    @Column(nullable = false)
-    private int scatto;
-
-    @Column(nullable = false)
-    private int inserimento;
-
-    //=========MENTALI=======
-
-    @Column(nullable = false)
-    private int aggressivita;
-
-    @Column(nullable = false)
-    private int carisma;
-
-    @Column(nullable = false)
-    private int coraggio;
-
-    @Column(nullable = false)
-    private int creativita;
-
-    @Column(nullable = false)
-    private int determinazione;
-
-    @Column(nullable = false)
-    private int giocoDiSquadra;
-
-    @Column(nullable = false)
-    private int impegno;
-
-    @Column(nullable = false)
-    private int intuito;
-
-    @Column(nullable = false)
-    private int posizione;
-
-    //=========TECNICI=======
-
-    @Column(nullable = false)
-    private int calciPiazzati;
-
-    @Column(nullable = false)
-    private int colpoDiTesta;
-
-    @Column(nullable = false)
-    private int contrasti;
-
-    @Column(nullable = false)
-    private int dribbling;
-
-    @Column(nullable = false)
-    private int finalizzazione;
-
-    @Column(nullable = false)
-    private int marcatura;
-
-    @Column(nullable = false)
-    private int riflessi;
+    //=========TECNICHE=======
 
     @Column(nullable = false)
     private int tecnica;
 
     @Column(nullable = false)
+    private int equilibrio;
+
+    @Column(nullable = false)
+    private int colpoDiTesta;
+
+    @Column(nullable = false)
+    private int tiro;
+
+    @Column(nullable = false)
     private int assist;
 
     @Column(nullable = false)
-    private int tiriDaLontano;
+    private int finalizzazione;
+
+    @Column(nullable = false)
+    private int dribbling;
+
+    @Column(nullable = false)
+    private int visione;
+
+    @Column(nullable = false)
+    private int calciPiazzati;
+
+    @Column(nullable = false)
+    private int cross;
+
+    @Column(nullable = false)
+    private int contrasti;
+
+    @Column(nullable = false)
+    private int marcatura;
+
+    @Column(nullable = false)
+    private int intercettazione;
+
+    //=========MENTALI=======
+
+    @Column(nullable = false)
+    private int carisma;
+
+    @Column(nullable = false)
+    private int concentrazione;
+
+    @Column(nullable = false)
+    private int coraggio;
+
+    @Column(nullable = false)
+    private int leadership;
+
+    @Column(nullable = false)
+    private int letturaDelGioco;
+
+    @Column(nullable = false)
+    private int giocoDiSquadra;
+
+    @Column(nullable = false)
+    private int creativita;
+
+    @Column(nullable = false)
+    private int freddezza;
+
+    @Column(nullable = false)
+    private int aggressivita;
+
+    //=========FISICHE========
+
+    @Column(nullable = false)
+    private int accelerazione;
+
+    @Column(nullable = false)
+    private int scatto;
+
+    @Column(nullable = false)
+    private int elevazione;
+
+    @Column(nullable = false)
+    private int forzaFisica;
+
+    @Column(nullable = false)
+    private int resistenza;
+
+
+
+
+
 
     // =================== RELAZIONI ===================
     @OneToOne
