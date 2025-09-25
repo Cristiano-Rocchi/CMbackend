@@ -100,10 +100,10 @@ public class PassaggioCortoHelper {
         StatisticheTecnicheGiocatore sd = difensore.getStatistiche();
 
         // Valutazione qualità passaggio (rimane invariata)
-        double punteggioPassatore = sp.getTecnica() * 0.45 +
-                sp.getCreativita() * 0.25 +
-                sp.getGiocoDiSquadra() * 0.20 +
-                sp.getCarisma() * 0.10 +
+        double punteggioPassatore = sp.getTecnica() * 0.35 +
+                sp.getVisione() * 0.25 +
+                sp.getLetturaDelGioco() * 0.20 +
+                sp.getGiocoDiSquadra() * 0.10 +
                 random.nextInt(11);
         // Bias dolce a favore del passatore (SOLO per passaggio corto)
         punteggioPassatore += bonusPassaggioCorto(ruoloEffPassatore);
@@ -114,15 +114,15 @@ public class PassaggioCortoHelper {
 
         // Valutazione difendente: pesi diversi per pressione vs intercetto
         double punteggioDifensore = pressioneSulPortatore
-                ? (sd.getPosizione() * 0.30 +
-                sd.getIntuito()   * 0.25 +
-                sd.getAggressivita() * 0.25 +
-                sd.getContrasti() * 0.20 +
+                ? (sd.getContrasti() * 0.40 +
+                sd.getAggressivita()   * 0.25 +
+                sd.getLetturaDelGioco() * 0.20 +
+                sd.getIntercettazione() * 0.05 +
                 random.nextInt(11))
-                : (sd.getPosizione() * 0.50 +
-                sd.getIntuito()   * 0.35 +
-                sd.getContrasti() * 0.10 +
-                sd.getAggressivita() * 0.05 +
+                : (sd.getIntercettazione() * 0.50 +
+                sd.getLetturaDelGioco()   * 0.35 +
+                sd.getConcentrazione() * 0.10 +
+                sd.getContrasti() * 0.05 +
                 random.nextInt(11));
 
         // ---------- 4) Esiti ----------

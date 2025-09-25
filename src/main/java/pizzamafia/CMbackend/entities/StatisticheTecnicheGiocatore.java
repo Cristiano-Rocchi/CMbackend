@@ -107,6 +107,24 @@ public class StatisticheTecnicheGiocatore {
     @Column(nullable = false)
     private int resistenza;
 
+    //========PORTIERE=======
+
+    @Column(nullable = false)
+    private int tuffo;
+
+    @Column(nullable = false)
+    private int riflessi;
+
+    @Column(nullable = false)
+    private int posizione;
+
+    @Column(nullable = false)
+    private int uscite;
+
+    @Column(nullable = false)
+    private int presa;
+
+
 
 
 

@@ -95,19 +95,19 @@ public class PassaggioLungoHelper {
         StatisticheTecnicheGiocatore sp = passatore.getStatistiche();
         StatisticheTecnicheGiocatore sd = difensore.getStatistiche();
 
-        double punteggioPassatore = sp.getTecnica() * 0.4 +
-                sp.getCreativita() * 0.3 +
-                sp.getGiocoDiSquadra() * 0.15 +
-                sp.getCarisma() * 0.15 +
+        double punteggioPassatore = sp.getVisione() * 0.4 +
+                sp.getTecnica() * 0.3 +
+                sp.getLetturaDelGioco() * 0.25 +
+                sp.getCreativita() * 0.05 +
                 random.nextInt(11);
         // Momentum cumulativo per l'azione
         punteggioPassatore += MomentumBonusManager.peek(partita, squadraAttaccante);
 
 
-        double punteggioDifensore = sd.getPosizione() * 0.4 +
-                sd.getIntuito() * 0.3 +
-                sd.getAggressivita() * 0.2 +
-                sd.getContrasti() * 0.1 +
+        double punteggioDifensore = sd.getContrasti() * 0.4 +
+                sd.getLetturaDelGioco() * 0.3 +
+                sd.getAggressivita() * 0.25 +
+                sd.getIntercettazione() * 0.05 +
                 random.nextInt(11);
 
         // ---------- 4) Esiti ----------

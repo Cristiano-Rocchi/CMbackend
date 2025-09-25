@@ -91,7 +91,23 @@ public record NewStatisticheTecnicheGiocatoreDTO(
         Integer forzaFisica,
 
         @NotNull @Min(1) @Max(99)
-        Integer resistenza
+        Integer resistenza,
+
+        //=========PORTIERE=========
+        @NotNull @Min(1) @Max(99)
+        Integer tuffo,
+
+        @NotNull @Min(1) @Max(99)
+        Integer riflessi,
+
+        @NotNull @Min(1) @Max(99)
+        Integer posizione,
+
+        @NotNull @Min(1) @Max(99)
+        Integer uscite,
+
+        @NotNull @Min(1) @Max(99)
+        Integer presa
 
 
 

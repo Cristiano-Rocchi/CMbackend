@@ -86,6 +86,12 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                 .elevazione(s.elevazione())
                 .forzaFisica(s.forzaFisica())
                 .resistenza(s.resistenza())
+                //Portiere
+                .tuffo(s.tuffo())
+                .riflessi(s.riflessi())
+                .posizione(s.posizione())
+                .uscite(s.uscite())
+                .presa(s.presa())
                 .giocatore(giocatore)
                 .build();
 
@@ -145,7 +151,13 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                         stats.getScatto(),
                         stats.getElevazione(),
                         stats.getForzaFisica(),
-                        stats.getResistenza()
+                        stats.getResistenza(),
+                        //Portiere
+                        stats.getTuffo(),
+                        stats.getRiflessi(),
+                        stats.getPosizione(),
+                        stats.getUscite(),
+                        stats.getPresa()
 
 
                 )
@@ -245,6 +257,12 @@ public class GiocatoreServiceImpl implements GiocatoreService {
         s.setElevazione(dtoStats.elevazione());
         s.setForzaFisica(dtoStats.forzaFisica());
         s.setResistenza(dtoStats.resistenza());
+        //Portiere
+        s.setTuffo(dtoStats.tuffo());
+        s.setRiflessi(dtoStats.riflessi());
+        s.setPosizione(dtoStats.posizione());
+        s.setUscite(dtoStats.uscite());
+        s.setPresa(dtoStats.presa());
 
 
 
@@ -340,7 +358,13 @@ public class GiocatoreServiceImpl implements GiocatoreService {
                 stats.getScatto(),
                 stats.getElevazione(),
                 stats.getForzaFisica(),
-                stats.getResistenza()
+                stats.getResistenza(),
+                //Portiere
+                stats.getTuffo(),
+                stats.getRiflessi(),
+                stats.getPosizione(),
+                stats.getUscite(),
+                stats.getPresa()
 
 
         );

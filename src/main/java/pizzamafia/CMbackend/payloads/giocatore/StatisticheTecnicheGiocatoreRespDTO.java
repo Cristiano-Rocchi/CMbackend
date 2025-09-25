@@ -32,7 +32,15 @@ public record StatisticheTecnicheGiocatoreRespDTO(
         Integer scatto,
         Integer elevazione,
         Integer forzaFisica,
-        Integer Resistenza
+        Integer Resistenza,
+
+        //PORTIERE
+        Integer tuffo,
+        Integer riflessi,
+        Integer posizione,
+        Integer uscite,
+        Integer presa
+
 
 
         ) {}
