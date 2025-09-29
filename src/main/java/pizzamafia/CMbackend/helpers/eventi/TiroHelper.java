@@ -35,18 +35,16 @@ public class TiroHelper {
         StatisticheTecnicheGiocatore sd = difensore.getStatistiche();
 
         // Confronto "pre-tiro": capacità di creare spazio vs capacità di contrasto
-        double stabilitaTiratore =   st.getTecnica()   * 0.30
-                + st.getPosizione() * 0.30
-                + st.getIntuito()   * 0.20
-                + st.getDribbling() * 0.20
+        double stabilitaTiratore =   st.getLetturaDelGioco()   * 0.50
+                + st.getTecnica() * 0.30
+                + st.getEquilibrio() * 0.20
                 + random.nextInt(11);
         // Momentum cumulativo per l'azione
         stabilitaTiratore += MomentumBonusManager.peek(partita, squadraAttaccante);
 
-        double contestDifensore =    sd.getContrasti()   * 0.35
-                + sd.getMarcatura()   * 0.25
-                + sd.getPosizione()   * 0.20
-                + sd.getAggressivita()* 0.20
+        double contestDifensore =    sd.getMarcatura()   * 0.50
+                + sd.getContrasti()   * 0.30
+                + sd.getLetturaDelGioco() * 0.20
                 + random.nextInt(11);
 
         // Se il difensore vince chiaramente il duello, il tiro viene murato (intercetto/contrasto)
@@ -68,10 +66,10 @@ public class TiroHelper {
         // ============================================================
         // 1) Calcolo punteggio del tiro
         //        // ============================================================
-        double punteggioTiro = st.getFinalizzazione() * 0.5 +
-                st.getIntuito() * 0.2 +
-                st.getTiriDaLontano() * 0.15 +
-                st.getPosizione() * 0.15 +
+        double punteggioTiro = st.getFinalizzazione() * 0.4 +
+                st.getTiro() * 0.20 +
+                st.getLetturaDelGioco() * 0.20 +
+                st.getFreddezza() * 0.20 +
                 random.nextInt(11); // +0–10
         // Momentum cumulativo per l'azione
         punteggioTiro += MomentumBonusManager.peek(partita, squadraAttaccante);
@@ -108,10 +106,9 @@ public class TiroHelper {
         // ============================================================
         // 4) Punteggio parata (INVARIATO)
         // ============================================================
-        double parata = sp.getRiflessi() * 0.45 +
-                sp.getIntuito() * 0.25 +
-                sp.getPosizione() * 0.2 +
-                sp.getAgilita() * 0.1 +
+        double parata = sp.getTuffo() * 0.50 +
+                sp.getRiflessi() * 0.30 +
+                sp.getPosizione() * 0.20 +
                 random.nextInt(11); // +0–10
 
         boolean parato = parata > punteggioTiro;

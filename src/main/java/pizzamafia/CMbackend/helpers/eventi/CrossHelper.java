@@ -83,19 +83,19 @@ public class CrossHelper {
         StatisticheTecnicheGiocatore sa = crossatore.getStatistiche();
         StatisticheTecnicheGiocatore sd = difensore.getStatistiche();
 
-        double punteggioCross = sa.getTecnica() * 0.4 +
-                sa.getGiocoDiSquadra() * 0.25 +
-                sa.getCreativita() * 0.2 +
-                sa.getAssist() * 0.15 +
+        double punteggioCross = sd.getCross() * 0.6 +
+                sd.getAssist() * 0.2 +
+                sd.getLetturaDelGioco() * 0.15 +
+                sd.getConcentrazione() * 0.05 +
                 random.nextInt(11);
         // Momentum cumulativo per l'azione
         punteggioCross += MomentumBonusManager.peek(partita, squadraAttaccante);
 
 
-        double punteggioDifensore = sd.getPosizione() * 0.4 +
-                sd.getIntuito() * 0.3 +
+        double punteggioDifensore = sd.getIntercettazione() * 0.4 +
+                sd.getLetturaDelGioco() * 0.2 +
+                sd.getContrasti() * 0.2 +
                 sd.getAggressivita() * 0.2 +
-                sd.getContrasti() * 0.1 +
                 random.nextInt(11);
 
         // ===== 4) Esito =====
@@ -103,7 +103,7 @@ public class CrossHelper {
             // Evento riuscito -> accumula momentum per l'azione
             MomentumBonusManager.addSuccess(partita, squadraAttaccante);
 
-            // Cross parte ed arriva al destinatario → dopo questo evento chiamerai ColpoDiTestaHelper
+            // Cross parte ed arriva al destinatario → dopo questo evento chiamo ColpoDiTestaHelper
             return EventoPartita.builder()
                     .minuto(minuto).secondo(secondo).durataStimata(3)
                     .tipoEvento(TipoEvento.PASSAGGIO)

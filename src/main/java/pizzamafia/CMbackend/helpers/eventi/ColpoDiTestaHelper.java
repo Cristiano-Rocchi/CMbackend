@@ -22,30 +22,18 @@ public class ColpoDiTestaHelper {
             Giocatore attaccante,
             List<Titolari> titolariDifesa
     ) {
-        StatisticheTecnicheGiocatore sa = attaccante.getStatistiche();
-
-        // ===== 1) Scontro aereo in area: scegli il marcatore plausibile del destinatario =====
-        // Usiamo il ruolo naturale dell'attaccante per la mappa di matchup (BOMBER/SS/esterni, ecc.)
+        // ===== 1) Duello aereo con il difensore sul destinatario =====
         Ruolo ruoloAttaccante = attaccante.getRuolo();
-        Giocatore difensore = DefensiveMatchup.scegliIntercettoreSuDestinatario(ruoloAttaccante, titolariDifesa, random);
+        Giocatore difensore = DefensiveMatchup
+                .scegliIntercettoreSuDestinatario(ruoloAttaccante, titolariDifesa, random);
+        StatisticheTecnicheGiocatore sa = attaccante.getStatistiche();
         StatisticheTecnicheGiocatore sd = difensore.getStatistiche();
 
-        double punteggioAttaccante = sa.getColpoDiTesta() * 0.5 +
-                sa.getElevazione() * 0.2 +
-                sa.getPosizione() * 0.2 +
-                sa.getIntuito() * 0.1 +
-                random.nextInt(11);
-        // Momentum cumulativo per l'azione
-        punteggioAttaccante += MomentumBonusManager.peek(partita, squadraAttaccante);
+        double punteggioAttaccanteDuello = scoreDuelAereoAttaccante(sa)
+                + MomentumBonusManager.peek(partita, squadraAttaccante);
+        double punteggioDifensoreDuello = scoreDuelAereoDifensore(sd);
 
-
-        double punteggioDifensore = sd.getMarcatura() * 0.4 +
-                sd.getPosizione() * 0.3 +
-                sd.getAggressivita() * 0.2 +
-                sd.getContrasti() * 0.1 +
-                random.nextInt(11);
-
-        if (punteggioDifensore > punteggioAttaccante) {
+        if (punteggioDifensoreDuello > punteggioAttaccanteDuello) {
             return EventoPartita.builder()
                     .minuto(minuto).secondo(secondo).durataStimata(3)
                     .tipoEvento(TipoEvento.INTERCETTO)
@@ -57,8 +45,12 @@ public class ColpoDiTestaHelper {
                     .build();
         }
 
-        // ===== 2) Tiro fuori? =====
-        if (punteggioAttaccante < 60) {
+        // ===== 2)confronto col portiere con set statistiche dedicato =====
+        double pericolositaTesta = scoreTestaVsPortiereAttaccante(sa)
+                + MomentumBonusManager.peek(partita, squadraAttaccante);
+
+        // ===== 3) Possibile "tiro fuori" se pericolosità bassa =====
+        if (pericolositaTesta < 60) {
             return EventoPartita.builder()
                     .minuto(minuto).secondo(secondo).durataStimata(3)
                     .tipoEvento(TipoEvento.TIRO)
@@ -70,7 +62,7 @@ public class ColpoDiTestaHelper {
                     .build();
         }
 
-        // ===== 3) Confronto con il portiere =====
+        // ===== 4) Confronto con il portiere (calcolo indipendente dal duello) =====
         Giocatore portiere = titolariDifesa.stream()
                 .map(Titolari::getGiocatore)
                 .filter(g -> g.getRuolo() == Ruolo.PORTIERE)
@@ -78,14 +70,9 @@ public class ColpoDiTestaHelper {
                 .orElse(titolariDifesa.get(0).getGiocatore());
 
         StatisticheTecnicheGiocatore sp = portiere.getStatistiche();
+        double parata = scoreParataPortiere(sp);
 
-        double parata = sp.getRiflessi() * 0.45 +
-                sp.getIntuito() * 0.25 +
-                sp.getPosizione() * 0.2 +
-                sp.getAgilita() * 0.1 +
-                random.nextInt(11);
-
-        boolean parato = parata > punteggioAttaccante;
+        boolean parato = parata > pericolositaTesta;
 
         return EventoPartita.builder()
                 .minuto(minuto).secondo(secondo).durataStimata(3)
@@ -96,5 +83,41 @@ public class ColpoDiTestaHelper {
                 .note(parato ? "Colpo di testa parato dal portiere" : "Colpo di testa in rete")
                 .partita(partita).squadra(parato ? squadraDifendente : squadraAttaccante)
                 .build();
+    }
+
+    // =========================== HELPER SCORES ===========================
+
+    // Duello aereo (attaccante vs difensore)
+    private static double scoreDuelAereoAttaccante(StatisticheTecnicheGiocatore s) {
+        return s.getElevazione() * 0.3 +
+                s.getLetturaDelGioco()   * 0.3 +
+                s.getColpoDiTesta()    * 0.3 +
+                s.getEquilibrio()      * 0.1 +
+                random.nextInt(11);
+    }
+
+    private static double scoreDuelAereoDifensore(StatisticheTecnicheGiocatore s) {
+        return s.getMarcatura()   * 0.3 +
+                s.getLetturaDelGioco()   * 0.3 +
+                s.getContrasti() * 0.3 +
+                s.getEquilibrio()   * 0.1 +
+                random.nextInt(11);
+    }
+
+    // Confronto col portiere: pericolosità del colpo di testa (NUOVO set di stats)
+    private static double scoreTestaVsPortiereAttaccante(StatisticheTecnicheGiocatore s) {
+        return s.getColpoDiTesta()   * 0.5 +
+                s.getLetturaDelGioco()        * 0.2 +
+                s.getFinalizzazione()  * 0.3 +
+                random.nextInt(11);
+    }
+
+    // Capacità di parata del portiere
+    private static double scoreParataPortiere(StatisticheTecnicheGiocatore s) {
+        return s.getRiflessi() * 0.45 +
+                s.getTuffo()  * 0.25 +
+                s.getPosizione()* 0.20 +
+                s.getConcentrazione()  * 0.10 +
+                random.nextInt(11);
     }
 }

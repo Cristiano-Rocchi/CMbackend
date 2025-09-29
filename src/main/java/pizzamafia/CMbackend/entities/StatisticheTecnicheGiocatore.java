@@ -124,6 +124,8 @@ public class StatisticheTecnicheGiocatore {
     @Column(nullable = false)
     private int presa;
 
+    //=========VARIABILI=========
+
 
 
 

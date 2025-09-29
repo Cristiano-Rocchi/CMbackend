@@ -71,22 +71,21 @@ public class DribblingHelper {
                 ruoloEffAttaccante, titolariDifesa, random
         );
 
-        // =================== 3) Statistiche (INVARIATE) ===================
+        // =================== 3) Statistiche ===================
         StatisticheTecnicheGiocatore sa = attaccante.getStatistiche();
         StatisticheTecnicheGiocatore sd = difensore.getStatistiche();
 
-        double punteggioAttaccante = sa.getDribbling() * 0.5 +
-                sa.getAgilita() * 0.2 +
-                sa.getScatto() * 0.15 +
-                sa.getIntuito() * 0.15 +
+        double punteggioAttaccante = sa.getDribbling() * 0.6 +
+                sa.getCoraggio() * 0.2 +
+                sa.getEquilibrio() * 0.1 +
                 random.nextInt(11); // bonus casuale
         // Momentum cumulativo per l'azione
         punteggioAttaccante += MomentumBonusManager.peek(partita, squadraAttaccante);
 
 
-        double punteggioDifensore = sd.getMarcatura() * 0.4 +
-                sd.getContrasti() * 0.3 +
-                sd.getPosizione() * 0.2 +
+        double punteggioDifensore = sd.getContrasti() * 0.5 +
+                sd.getLetturaDelGioco() * 0.2 +
+                sd.getEquilibrio() * 0.1 +
                 sd.getAggressivita() * 0.1 +
                 random.nextInt(11); // bonus casuale
 

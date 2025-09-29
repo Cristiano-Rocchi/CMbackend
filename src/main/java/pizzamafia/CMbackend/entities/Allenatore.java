@@ -31,7 +31,6 @@ public class Allenatore {
     @Column(nullable = false)
     private IdeaDiGioco ideaDiGioco;
 
-    // Relazione inversa (opzionale, ma utile se vuoi navigare da Allenatore → Squadra)
     @OneToOne(mappedBy = "allenatore")
     private Squadra squadra;
 }
