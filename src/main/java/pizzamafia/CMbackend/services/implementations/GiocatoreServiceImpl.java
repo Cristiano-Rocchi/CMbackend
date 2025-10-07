@@ -3,7 +3,6 @@ package pizzamafia.CMbackend.services.implementations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pizzamafia.CMbackend.entities.*;
-import pizzamafia.CMbackend.enums.Ruolo;
 import pizzamafia.CMbackend.exceptions.NotFoundException;
 import pizzamafia.CMbackend.payloads.giocatore.GiocatoreRespDTO;
 import pizzamafia.CMbackend.payloads.giocatore.NewGiocatoreDTO;
@@ -12,11 +11,10 @@ import pizzamafia.CMbackend.payloads.giocatore.StatisticheTecnicheGiocatoreRespD
 import pizzamafia.CMbackend.repositories.GiocatoreRepository;
 import pizzamafia.CMbackend.repositories.SquadraRepository;
 import pizzamafia.CMbackend.services.GiocatoreService;
-import pizzamafia.CMbackend.helpers.ValutazioneGiocatoreHelper;
-import pizzamafia.CMbackend.helpers.ValutazioneSquadraHelper;
+import pizzamafia.CMbackend.helpers.valutazioni.ValutazioneGiocatoreHelper;
+import pizzamafia.CMbackend.helpers.valutazioni.ValutazioneSquadraHelper;
 
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;

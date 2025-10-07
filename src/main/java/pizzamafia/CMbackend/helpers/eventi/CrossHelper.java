@@ -70,7 +70,7 @@ public class CrossHelper {
         Ruolo ruoloEffDestinatario = (ruoloDestinatario != null) ? ruoloDestinatario : deduciRuoloDaTitolari(destinatario, titolariAttacco);
 
         // ===== 2) Scelta difendente plausibile =====
-        // Qui modelliamo il "prima dell'arrivo in area":
+        // modelliamo il "prima dell'arrivo in area":
         // - 70%: pressione sul crossatore (blocco del cross)
         // - 30%: intercetto sulla traiettoria (prima che raggiunga il destinatario)
         boolean pressioneSulCrossatore = random.nextDouble() < 0.70;

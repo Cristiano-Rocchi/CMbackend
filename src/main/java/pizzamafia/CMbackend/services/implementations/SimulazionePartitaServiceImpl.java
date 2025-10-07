@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.Transactional; // <--- IMPORT
 import pizzamafia.CMbackend.entities.*;
 import pizzamafia.CMbackend.enums.TipoEvento;
 import pizzamafia.CMbackend.exceptions.NotFoundException;
-import pizzamafia.CMbackend.helpers.SimulazionePartitaHelper;
+import pizzamafia.CMbackend.helpers.partita.SimulazionePartitaHelper;
 
 import pizzamafia.CMbackend.repositories.*;
 import pizzamafia.CMbackend.services.EventoPartitaService;

@@ -1,4 +1,4 @@
-package pizzamafia.CMbackend.helpers;
+package pizzamafia.CMbackend.helpers.valutazioni;
 
 import pizzamafia.CMbackend.entities.Giocatore;
 

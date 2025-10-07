@@ -12,7 +12,13 @@ import java.util.stream.Collectors;
 
 public class TiroHelper {
 
-    private static final Random random = new Random();
+    // RNG di default
+    private static Random random = new Random();
+
+    // Setter per test (puoi usarlo in JUnit per forzare il seed)
+    public static void setRandomForTest(Random r) {
+        random = r;
+    }
 
     public static EventoPartita genera(
             int minuto,
@@ -47,7 +53,7 @@ public class TiroHelper {
                 + sd.getLetturaDelGioco() * 0.20
                 + random.nextInt(11);
 
-        // Se il difensore vince chiaramente il duello, il tiro viene murato (intercetto/contrasto)
+        // Se il difensore vince il duello, il tiro viene murato
         if (contestDifensore - stabilitaTiratore >= 8) {
             return EventoPartita.builder()
                     .minuto(minuto)

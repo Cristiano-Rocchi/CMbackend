@@ -7,7 +7,14 @@ import java.util.Random;
 
 public class PunizioneDirettaHelper {
 
-    private static final Random random = new Random();
+    // RNG di default
+    private static Random random = new Random();
+
+    // Setter per test (puoi usarlo in JUnit per forzare il seed)
+    public static void setRandomForTest(Random r) {
+        random = r;
+    }
+
 
     /**
      * Evento "Punizione Diretta" (solo calcolo esito).
@@ -33,14 +40,14 @@ public class PunizioneDirettaHelper {
                 safe(sa.getCalciPiazzati()) * 0.45 +
                         safe(sa.getTiro())          * 0.35 +
                         safe(sa.getConcentrazione())* 0.20 +
-                        random.nextInt(11); // random
+                        random.nextInt(21); // random
 
         // ===== punteggio parata (portiere) =====
         double parata =
                 safe(sp.getTuffo())    * 0.50 +
                         safe(sp.getPosizione())* 0.30 +
                         safe(sp.getRiflessi()) * 0.20 +
-                        random.nextInt(11); // random
+                        random.nextInt(31); // random
 
         boolean parato = parata > punteggioTiro;
 

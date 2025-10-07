@@ -1,4 +1,4 @@
-package pizzamafia.CMbackend.helpers;
+package pizzamafia.CMbackend.helpers.partita;
 
 import lombok.Getter;
 import lombok.Setter;

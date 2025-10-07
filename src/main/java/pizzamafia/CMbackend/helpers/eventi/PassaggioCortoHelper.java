@@ -99,7 +99,7 @@ public class PassaggioCortoHelper {
         StatisticheTecnicheGiocatore sp = passatore.getStatistiche();
         StatisticheTecnicheGiocatore sd = difensore.getStatistiche();
 
-        // Valutazione qualità passaggio (rimane invariata)
+        // Valutazione qualità passaggio
         double punteggioPassatore = sp.getTecnica() * 0.35 +
                 sp.getVisione() * 0.25 +
                 sp.getLetturaDelGioco() * 0.20 +
@@ -195,7 +195,7 @@ public class PassaggioCortoHelper {
             case CENTROCAMPISTA_CENTRALE:    return 8;
             case CENTROCAMPISTA_OFFENSIVO:   return 7;
             case ALA_DX:
-            case ALA_SX:                     return 6;
+            case ALA_SX:                     return 8;
             case ATTACCANTE_ESTERNO_DX:
             case ATTACCANTE_ESTERNO_SX:      return 6;
             case SECONDA_PUNTA:              return 5;

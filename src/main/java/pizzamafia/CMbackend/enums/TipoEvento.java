@@ -14,6 +14,8 @@ public enum TipoEvento {
     ERRORE_PASSAGGIO,
     INTERCETTO,
     FALLO,
+
+    //==========CARTELLINI==============
     AMMONIZIONE,
     ESPULSIONE,
 

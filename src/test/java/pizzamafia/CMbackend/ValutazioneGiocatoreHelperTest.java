@@ -3,7 +3,7 @@ package pizzamafia.CMbackend;
 import org.junit.jupiter.api.Test;
 import pizzamafia.CMbackend.entities.Giocatore;
 import pizzamafia.CMbackend.enums.Ruolo;
-import pizzamafia.CMbackend.helpers.ValutazioneGiocatoreHelper;
+import pizzamafia.CMbackend.helpers.valutazioni.ValutazioneGiocatoreHelper;
 
 import static org.junit.jupiter.api.Assertions.*;
 

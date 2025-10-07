@@ -6,14 +6,14 @@ import pizzamafia.CMbackend.entities.*;
 import pizzamafia.CMbackend.enums.MentalitaTattica;
 import pizzamafia.CMbackend.enums.Modulo;
 import pizzamafia.CMbackend.enums.Ruolo;
-import pizzamafia.CMbackend.helpers.SelezioneCpuHelper;
+import pizzamafia.CMbackend.helpers.partita.SelezioneCpuHelper;
 import pizzamafia.CMbackend.payloads.partita.*;
 import pizzamafia.CMbackend.repositories.FormazioneRepository;
 import pizzamafia.CMbackend.repositories.GiocatoreRepository;
 import pizzamafia.CMbackend.repositories.PartitaRepository;
 import pizzamafia.CMbackend.repositories.SquadraRepository;
 import pizzamafia.CMbackend.services.FormazioneService;
-import pizzamafia.CMbackend.helpers.ValutazioneGiocatoreHelper;
+import pizzamafia.CMbackend.helpers.valutazioni.ValutazioneGiocatoreHelper;
 
 import java.util.HashSet;
 import java.util.List;

@@ -1,4 +1,4 @@
-package pizzamafia.CMbackend.helpers;
+package pizzamafia.CMbackend.helpers.partita;
 
 import pizzamafia.CMbackend.entities.*;
 import pizzamafia.CMbackend.enums.Modulo;
