@@ -14,7 +14,7 @@ public class DribblingHelper {
 
     private static final Random random = new Random();
 
-    // === Versione standard (compatibile con esistente) ===
+    // === Versione standard ===
     public static EventoPartita genera(
             int minuto,
             int secondo,
@@ -77,14 +77,14 @@ public class DribblingHelper {
 
         double punteggioAttaccante = sa.getDribbling() * 0.6 +
                 sa.getCoraggio() * 0.2 +
-                sa.getEquilibrio() * 0.1 +
+                sa.getEquilibrio() * 0.2 +
                 random.nextInt(11); // bonus casuale
         // Momentum cumulativo per l'azione
         punteggioAttaccante += MomentumBonusManager.peek(partita, squadraAttaccante);
 
 
         double punteggioDifensore = sd.getContrasti() * 0.5 +
-                sd.getLetturaDelGioco() * 0.2 +
+                sd.getLetturaDelGioco() * 0.3 +
                 sd.getEquilibrio() * 0.1 +
                 sd.getAggressivita() * 0.1 +
                 random.nextInt(11); // bonus casuale

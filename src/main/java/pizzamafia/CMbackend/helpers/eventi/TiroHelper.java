@@ -99,7 +99,7 @@ public class TiroHelper {
         }
 
         // ============================================================
-        // 3) Portiere avversario (INVARIATO)
+        // 3) Portiere avversario
         // ============================================================
         Giocatore portiere = titolariDifesa.stream()
                 .map(Titolari::getGiocatore)
@@ -110,7 +110,7 @@ public class TiroHelper {
         StatisticheTecnicheGiocatore sp = portiere.getStatistiche();
 
         // ============================================================
-        // 4) Punteggio parata (INVARIATO)
+        // 4) Punteggio parata
         // ============================================================
         double parata = sp.getTuffo() * 0.50 +
                 sp.getRiflessi() * 0.30 +
@@ -120,7 +120,7 @@ public class TiroHelper {
         boolean parato = parata > punteggioTiro;
 
         // ============================================================
-        // 5) Esito finale (INVARIATO): PARATA o GOL
+        // 5) Esito finale: PARATA o GOL
         // ============================================================
         return EventoPartita.builder()
                 .minuto(minuto)

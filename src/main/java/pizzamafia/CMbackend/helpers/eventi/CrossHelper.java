@@ -79,7 +79,7 @@ public class CrossHelper {
                 ? DefensiveMatchup.scegliPressatoreSuPortatore(ruoloEffCrossatore, titolariDifesa, random)
                 : DefensiveMatchup.scegliIntercettoreSuDestinatario(ruoloEffDestinatario, titolariDifesa, random);
 
-        // ===== 3) Statistiche (INVARIATE) =====
+        // ===== 3) Statistiche=====
         StatisticheTecnicheGiocatore sa = crossatore.getStatistiche();
         StatisticheTecnicheGiocatore sd = difensore.getStatistiche();
 

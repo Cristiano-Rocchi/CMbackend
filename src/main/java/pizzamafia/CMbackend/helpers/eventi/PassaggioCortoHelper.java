@@ -15,14 +15,9 @@ import java.util.stream.Collectors;
  * --------------------
  * Genera un evento di passaggio corto tra due giocatori della squadra in attacco.
  *
- * Novità:
- * - Difendente scelto in modo plausibile con DefensiveMatchup:
- *   * ~35%: esce in PRESSIONE sul PORTATORE (passatore)
- *   * ~65%: marca/intercetta in zona DESTINATARIO
- * - Pesi difensivi leggermente diversi tra pressione e intercetto.
+ * Versione semplificata: la difesa agisce SOLO con intercetto sul destinatario.
  */
 public class PassaggioCortoHelper {
-
 
     private static final Random random = new Random();
 
@@ -87,43 +82,34 @@ public class PassaggioCortoHelper {
         Ruolo ruoloEffPassatore = (ruoloPassatore != null) ? ruoloPassatore : deduciRuoloDaTitolari(passatore, titolariAttacco);
         Ruolo ruoloEffDestinatario = (ruoloDestinatario != null) ? ruoloDestinatario : deduciRuoloDaTitolari(destinatario, titolariAttacco);
 
-        // ---------- 2) Scelta difendente plausibile ----------
-        // 35% pressione sul portatore, altrimenti marcatura/intercetto sul destinatario
-        boolean pressioneSulPortatore = random.nextDouble() < 0.35;
-
-        Giocatore difensore = pressioneSulPortatore
-                ? DefensiveMatchup.scegliPressatoreSuPortatore(ruoloEffPassatore, titolariDifesa, random)
-                : DefensiveMatchup.scegliIntercettoreSuDestinatario(ruoloEffDestinatario, titolariDifesa, random);
+        // ---------- 2) Scelta difendente: SOLO INTERCETTO su DESTINATARIO ----------
+        Giocatore difensore = DefensiveMatchup
+                .scegliIntercettoreSuDestinatario(ruoloEffDestinatario, titolariDifesa, random);
 
         // ---------- 3) Statistiche ----------
         StatisticheTecnicheGiocatore sp = passatore.getStatistiche();
         StatisticheTecnicheGiocatore sd = difensore.getStatistiche();
 
         // Valutazione qualità passaggio
-        double punteggioPassatore = sp.getTecnica() * 0.35 +
-                sp.getVisione() * 0.25 +
-                sp.getLetturaDelGioco() * 0.20 +
-                sp.getGiocoDiSquadra() * 0.10 +
+        double punteggioPassatore = sp.getTecnica()          * 0.35 +
+                sp.getVisione()          * 0.25 +
+                sp.getLetturaDelGioco()  * 0.20 +
+                sp.getGiocoDiSquadra()   * 0.10 +
                 random.nextInt(11);
+
         // Bias dolce a favore del passatore (SOLO per passaggio corto)
         punteggioPassatore += bonusPassaggioCorto(ruoloEffPassatore);
+
         // Momentum cumulativo per l'azione: applica il bonus
         punteggioPassatore += MomentumBonusManager.peek(partita, squadraAttaccante);
 
-
-
-        // Valutazione difendente: pesi diversi per pressione vs intercetto
-        double punteggioDifensore = pressioneSulPortatore
-                ? (sd.getContrasti() * 0.40 +
-                sd.getAggressivita()   * 0.25 +
-                sd.getLetturaDelGioco() * 0.20 +
-                sd.getIntercettazione() * 0.05 +
-                random.nextInt(11))
-                : (sd.getIntercettazione() * 0.50 +
-                sd.getLetturaDelGioco()   * 0.35 +
-                sd.getConcentrazione() * 0.10 +
-                sd.getContrasti() * 0.05 +
-                random.nextInt(11));
+        // Valutazione difendente
+        double punteggioDifensore =
+                sd.getIntercettazione()   * 0.50 +
+                        sd.getLetturaDelGioco()   * 0.35 +
+                        sd.getConcentrazione()    * 0.10 +
+                        sd.getContrasti()         * 0.05 +
+                        random.nextInt(11);
 
         // ---------- 4) Esiti ----------
         // Passaggio riuscito
@@ -150,11 +136,10 @@ public class PassaggioCortoHelper {
                     .giocatorePrincipale(difensore)
                     .giocatoreSecondario(passatore)
                     .esito("PALLA RECUPERATA")
-                    .note(pressioneSulPortatore ? "Recupero in pressione sul portatore" : "Intercetto su linea di passaggio")
+                    .note("Intercetto su linea di passaggio")
                     .partita(partita).squadra(difensore.getSquadra())
                     .build();
         }
-
 
         // Errore di misura
         return EventoPartita.builder()
@@ -181,9 +166,6 @@ public class PassaggioCortoHelper {
 
     // ==========================================
     // Bonus "bias" per il passaggio corto (ruolo)
-    // ------------------------------------------
-    // i corti sono più sicuri per chi imposta da dietro.
-
     // ==========================================
     private static int bonusPassaggioCorto(Ruolo ruolo) {
         switch (ruolo) {
@@ -203,7 +185,4 @@ public class PassaggioCortoHelper {
             default:                         return 0;
         }
     }
-
 }
-
-
